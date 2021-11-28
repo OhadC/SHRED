@@ -1,6 +1,6 @@
+import _ from "lodash";
 import { waitForElementToDisplay } from "../../../shared/dom-helpers";
 import { StreamingServiceSong } from "../../../shared/shared.model";
-import { pipe } from "../../../shared/utils";
 import { DomApi } from "../helpers/dom-api";
 import { MusicStreamingServiceConfig } from "./music-streaming-api.model";
 import { spotifyConfig } from "./music-streaming-service-configs/spotify-config";
@@ -94,17 +94,17 @@ export class MusicStreamingApi {
             return;
         }
 
-        const removeMatches = pipe(removeMatch(remasteredMatch), removeMatch(AlbumMatch));
+        const removeMatches = _.flow(removeMatch(remasteredMatch), removeMatch(AlbumMatch));
 
         return removeMatches(title);
     }
 }
 
-const remasteredMatch = /(\(.*remaster.*\))|(remaster(rd)?)/gi;
+const remasteredMatch = /(\(.*remaster.*\))|(remaster(ed)?)/gi;
 const AlbumMatch = /(\(.*Album.*\))/gi;
 
-const removeMatch = (regexp: string | RegExp) => (text: string): string => {
+const removeMatch = _.curry((regexp: string | RegExp, text: string): string => {
     const stringContainRemaster = text.match(regexp);
 
     return stringContainRemaster?.length ? text!.replace(stringContainRemaster[0], "") : text;
-};
+});

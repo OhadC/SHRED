@@ -1,6 +1,6 @@
+import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { times } from "../../../../shared/utils";
 import { songDifficultySorted, songDifficultyToNumberMap } from "../../helpers/song-difficulty-number";
 import { SongDifficulty } from "../../models";
 
@@ -9,7 +9,7 @@ export const DifficultyBar = ({ songDifficulty }: { songDifficulty: SongDifficul
 
     return (
         <StyledDifficultyBar title={songDifficulty}>
-            {times(difficultyAsNumber, (index) => (
+            {_.times(difficultyAsNumber, (index) => (
                 <div key={index}></div>
             ))}
         </StyledDifficultyBar>
