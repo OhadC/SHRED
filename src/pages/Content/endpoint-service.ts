@@ -1,4 +1,4 @@
-import { browser } from "webextension-polyfill-ts";
+import { browser, Runtime } from "webextension-polyfill-ts";
 import {
     ContentScriptEndpoint,
     ContentScriptRequest,
@@ -7,6 +7,9 @@ import {
     GetCurrentViewSongsResponse,
 } from "../../shared/shared.model";
 import { MusicStreamingApi } from "./music-streaming-api/music-streaming-api";
+import { getContentScriptLogger } from "./util/content-script-logger";
+
+const logger = getContentScriptLogger("EndpointService");
 
 export class EndpointService {
     constructor(private musicStreamingApi: MusicStreamingApi) {}
@@ -16,22 +19,22 @@ export class EndpointService {
     }
 
     private subscribeToBrowserMessages() {
-        browser.runtime.onMessage.addListener((request: ContentScriptRequest, sender) => {
-            console.log("SHRED content-script request", { request, sender });
+        browser.runtime.onMessage.addListener((request: ContentScriptRequest, sender: Runtime.MessageSender) => {
+            logger.log("request", { request, sender });
 
-            return this.handleEndpointRequest(request, sender)
+            return this.handleEndpointRequest(request)
                 .then((data: any) => {
                     const response: ContentScriptResponse<any> = { requestId: request.requestId, data };
 
-                    console.log("SHRED content-script response", { response });
+                    logger.log("response", { response, request });
 
                     return response;
                 })
-                .catch((error) => console.info("SHRED content-script error", error));
+                .catch((error) => logger.error("error", { error, request }));
         });
     }
 
-    private handleEndpointRequest(request: ContentScriptRequest, sender) {
+    private handleEndpointRequest(request: ContentScriptRequest) {
         switch (request.endpoint) {
             case ContentScriptEndpoint.GetCurrentPlayingSong:
                 return this.getCurrentPlayingSong();

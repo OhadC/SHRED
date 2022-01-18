@@ -1,13 +1,13 @@
-import { MusicStreamingServiceConfig } from "../music-streaming-api.model";
+import { MusicStreamingServiceConfig, MusicStreamingServiceConfigCurrentViewSongsSelectors } from "../music-streaming-api.model";
 
-const sharedTableSelectors = {
+const sharedTableSelectors: MusicStreamingServiceConfigCurrentViewSongsSelectors = {
     songsTable: `[role="grid"]`,
     songRowDomElements: `[data-testid="tracklist-row"]`,
     titleDomElement: `[role="gridcell"]:nth-child(2) > div > div`,
     artistDomElement: `[role="gridcell"]:nth-child(2) a[href^="/artist/"]`,
 };
 
-export const spotifyConfig: MusicStreamingServiceConfig = {
+export const SPOTIFY_CONFIG: MusicStreamingServiceConfig = {
     urlMatch: "open.spotify.com/",
     currentPlayingSong: {
         selectors: {
@@ -20,21 +20,15 @@ export const spotifyConfig: MusicStreamingServiceConfig = {
         views: [
             {
                 urlMatch: "/playlist/",
-                selectors: {
-                    ...sharedTableSelectors,
-                },
+                selectors: { ...sharedTableSelectors },
             },
             {
                 urlMatch: "/album/",
-                selectors: {
-                    ...sharedTableSelectors,
-                },
+                selectors: { ...sharedTableSelectors },
             },
             {
                 urlMatch: "/artist/",
-                selectors: {
-                    ...sharedTableSelectors,
-                },
+                selectors: { ...sharedTableSelectors },
             },
         ],
     },

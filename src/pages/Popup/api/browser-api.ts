@@ -1,5 +1,8 @@
 import { browser, Runtime, Tabs } from "webextension-polyfill-ts";
 import { ContentScriptRequest, ContentScriptResponse, ContentScriptEndpoint, ContentScriptEvents } from "../../../shared/shared.model";
+import { getPopupLogger } from "../util/popup-logger";
+
+const logger = getPopupLogger("BrowserApi");
 
 class BrowserApi {
     private nextRequestId = 1;
@@ -11,7 +14,7 @@ class BrowserApi {
     sendMessageToTab<T>(tabId: number, endpoint: ContentScriptEndpoint, data?: any): Promise<ContentScriptResponse<T>> {
         const request: ContentScriptRequest = { endpoint, data, requestId: this.nextRequestId++ };
 
-        return browser.tabs.sendMessage(tabId, request).catch((error) => console.error("SHRED BrowserApi.sendMessageToTab error", error));
+        return browser.tabs.sendMessage(tabId, request).catch((error) => logger.error("sendMessageToTab error", error));
     }
 
     subscribeToActiveTabUrlChanges(callback: (tabId: number, changeInfo: Tabs.OnUpdatedChangeInfoType, tab: Tabs.Tab) => void): () => void {

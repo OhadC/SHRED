@@ -10,12 +10,14 @@ export interface MusicStreamingServiceConfig {
     currentViewSongs: {
         views: {
             urlMatch: string;
-            selectors: {
-                songsTable: string;
-                songRowDomElements: string;
-                titleDomElement: string;
-                artistDomElement: string;
-            };
+            selectors: MusicStreamingServiceConfigCurrentViewSongsSelectors;
         }[];
     };
+}
+
+export interface MusicStreamingServiceConfigCurrentViewSongsSelectors {
+    songsTable: string;
+    songRowDomElements: string;
+    titleDomElement: string;
+    artistDomElement: string;
 }

@@ -1,6 +1,9 @@
 import { browser } from "webextension-polyfill-ts";
 import { ContentScriptEvents } from "../../shared/shared.model";
 import { MusicStreamingApi } from "./music-streaming-api/music-streaming-api";
+import { getContentScriptLogger } from "./util/content-script-logger";
+
+const logger = getContentScriptLogger("EventService");
 
 export class EventService {
     constructor(private musicStreamingApi: MusicStreamingApi) {}
@@ -21,13 +24,13 @@ export class EventService {
             });
             resizeObserver.observe(currentPlayingSongTitleContainerElement);
         } catch (error) {
-            console.info("SHRED content-script error", error);
+            logger.error("subscribeToCurrentPlayingSongChanges error", error);
         }
     }
 
     private sendEvent(event: ContentScriptEvents) {
-        console.log("SHRED content-script event", { event });
+        logger.log("sendEvent", { event });
 
-        browser.runtime.sendMessage({ event }).catch((error) => console.info("SHRED content-script EventService.sendEvent error", error));
+        browser.runtime.sendMessage({ event }).catch((error) => logger.error("sendEvent error", error));
     }
 }

@@ -1,17 +1,17 @@
-import { MusicStreamingServiceConfig } from "../music-streaming-api.model";
+import { MusicStreamingServiceConfig, MusicStreamingServiceConfigCurrentViewSongsSelectors } from "../music-streaming-api.model";
 
-const sharedTableSelectors = {
+const sharedTableSelectors: Omit<MusicStreamingServiceConfigCurrentViewSongsSelectors, "songsTable"> = {
     songRowDomElements: `[data-test="tracklist-row"]`,
     titleDomElement: `[data-test="table-row-title"] [data-test="table-cell-title"]`,
     artistDomElement: `[data-test="track-row-artist"]`,
 };
 
-const artistTopTracksTableSelectors = {
+const artistTopTracksTableSelectors: MusicStreamingServiceConfigCurrentViewSongsSelectors = {
     ...sharedTableSelectors,
     songsTable: `[data-track--source-type="artist"][data-type="media-table"] [role="rowgroup"]`,
 };
 
-export const tidalConfig: MusicStreamingServiceConfig = {
+export const TIDAL_CONFIG: MusicStreamingServiceConfig = {
     urlMatch: "listen.tidal.com/",
     currentPlayingSong: {
         selectors: {
@@ -38,11 +38,11 @@ export const tidalConfig: MusicStreamingServiceConfig = {
             },
             {
                 urlMatch: "/artist/",
-                selectors: artistTopTracksTableSelectors,
+                selectors: { ...artistTopTracksTableSelectors },
             },
             {
                 urlMatch: "/view/pages/single-module-page/",
-                selectors: artistTopTracksTableSelectors,
+                selectors: { ...artistTopTracksTableSelectors },
             },
         ],
     },

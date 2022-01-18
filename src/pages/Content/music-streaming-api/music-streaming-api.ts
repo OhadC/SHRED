@@ -3,10 +3,10 @@ import { waitForElementToDisplay } from "../../../shared/dom-helpers";
 import { StreamingServiceSong } from "../../../shared/shared.model";
 import { DomApi } from "../helpers/dom-api";
 import { MusicStreamingServiceConfig } from "./music-streaming-api.model";
-import { spotifyConfig } from "./music-streaming-service-configs/spotify-config";
-import { tidalConfig } from "./music-streaming-service-configs/tidal-config";
+import { SPOTIFY_CONFIG } from "./music-streaming-service-configs/spotify-config";
+import { TIDAL_CONFIG } from "./music-streaming-service-configs/tidal-config";
 
-const musicStreamingServiceConfigs = [tidalConfig, spotifyConfig];
+const MUSIC_STREAMING_SERVICE_CONFIGS: MusicStreamingServiceConfig[] = [TIDAL_CONFIG, SPOTIFY_CONFIG];
 
 export class MusicStreamingApi {
     private musicStreamingConfig: MusicStreamingServiceConfig | undefined;
@@ -84,7 +84,7 @@ export class MusicStreamingApi {
     }
 
     private getMusicStreamingConfig(): MusicStreamingServiceConfig | undefined {
-        return musicStreamingServiceConfigs.find((musicStreamingConfig) =>
+        return MUSIC_STREAMING_SERVICE_CONFIGS.find((musicStreamingConfig) =>
             this.domApi.getCurrentUrl().includes(musicStreamingConfig.urlMatch)
         );
     }

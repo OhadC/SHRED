@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { StreamingServiceSong } from "../../../shared/shared.model";
 import { contentScriptApi } from "../api/content-scripts-api";
 import { getSongInfoFromSongsterr } from "../api/songsterr";
 import { CurrentTabContext } from "../CurrentTab.context";
@@ -15,12 +16,11 @@ export function useCurrentPlayingSong(): CurrentPlayingSongData {
         const currentTabId = currentTab?.id;
 
         if (currentTabId !== undefined) {
-            return contentScriptApi.subscribeToCurrentPlayingSongFromTab(currentTabId, () =>
-                contentScriptApi
-                    .getCurrentPlayingSongFromTab(currentTabId)
-                    .then(async (song) => song && ((await getSongInfoFromSongsterr(song.title, song.artist)) ?? song))
-                    .then(setCurrentPlayingSong)
-            );
+            return contentScriptApi.subscribeToCurrentPlayingSongFromTab(currentTabId, async (song?: StreamingServiceSong) => {
+                const songInfo: SongInfo | undefined = (song && (await getSongInfoFromSongsterr(song.title, song.artist))) ?? song;
+
+                setCurrentPlayingSong(songInfo);
+            });
         }
     }, [currentTab]);
 
