@@ -1,5 +1,11 @@
 import { browser, Runtime, Tabs } from "webextension-polyfill-ts";
-import { ContentScriptRequest, ContentScriptResponse, ContentScriptEndpoint, ContentScriptEvents } from "../../../shared/shared.model";
+import {
+    ContentScriptEndpoint,
+    ContentScriptEventMessage,
+    ContentScriptEvents,
+    ContentScriptRequest,
+    ContentScriptResponse,
+} from "../../../shared/shared.model";
 import { getPopupLogger } from "../util/popup-logger";
 
 const logger = getPopupLogger("BrowserApi");
@@ -38,10 +44,13 @@ class BrowserApi {
         return unsubscribeFunction;
     }
 
-    subscribeToCurrentPlayingSongChanged(callback: (tabId: number, tab: Tabs.Tab) => void): () => void {
-        const onMessageCallback = (message: any, sender: Runtime.MessageSender) => {
-            if (message?.event === ContentScriptEvents.CurrentPlayingSongChanged && sender.tab?.active) {
-                callback(sender.tab.id!, sender.tab);
+    subscribeToEvent<T>(
+        event: ContentScriptEvents,
+        callback: (eventMessage: ContentScriptEventMessage<T>, tabId: number, tab: Tabs.Tab) => void
+    ): () => void {
+        const onMessageCallback = (message: ContentScriptEventMessage<T>, sender: Runtime.MessageSender) => {
+            if (message?.event === event && sender.tab?.active) {
+                callback(message, sender.tab.id!, sender.tab);
             }
         };
 

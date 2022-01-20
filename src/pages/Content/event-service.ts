@@ -1,5 +1,5 @@
 import { browser } from "webextension-polyfill-ts";
-import { ContentScriptEvents } from "../../shared/shared.model";
+import { ContentScriptEventMessage, ContentScriptEvents } from "../../shared/shared.model";
 import { MusicStreamingApi } from "./music-streaming-api/music-streaming-api";
 import { getContentScriptLogger } from "./util/content-script-logger";
 
@@ -20,7 +20,7 @@ export class EventService {
             }
 
             const resizeObserver = new ResizeObserver((entries) => {
-                this.sendEvent(ContentScriptEvents.CurrentPlayingSongChanged);
+                this.sendEventMessage(ContentScriptEvents.CurrentPlayingSongChanged, undefined);
             });
             resizeObserver.observe(currentPlayingSongTitleContainerElement);
         } catch (error) {
@@ -28,9 +28,10 @@ export class EventService {
         }
     }
 
-    private sendEvent(event: ContentScriptEvents) {
-        logger.log("sendEvent", { event });
+    private sendEventMessage<T>(event: ContentScriptEvents, data: T) {
+        const message: ContentScriptEventMessage<T> = { event, data };
 
-        browser.runtime.sendMessage({ event }).catch((error) => logger.error("sendEvent error", error));
+        logger.log("sendEvent", message);
+        browser.runtime.sendMessage(message).catch((error) => logger.error("sendEvent error", error));
     }
 }

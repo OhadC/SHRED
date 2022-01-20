@@ -3,6 +3,7 @@ import {
     GetCurrentViewSongsResponse,
     ContentScriptEndpoint,
     StreamingServiceSong,
+    ContentScriptEvents,
 } from "../../../shared/shared.model";
 import { browserApi } from "./browser-api";
 
@@ -33,12 +34,17 @@ class ContentScriptApi {
             });
 
         getCurrentPlayingSong();
-        const unsubscriveToCurrentPlayingSongChanges = browserApi.subscribeToCurrentPlayingSongChanged(getCurrentPlayingSong);
+        const unsubscriveToCurrentPlayingSongChanges = browserApi.subscribeToEvent(
+            ContentScriptEvents.CurrentPlayingSongChanged,
+            getCurrentPlayingSong
+        );
 
-        return () => {
+        const unsubscribeFunction = () => {
             isUnsubscribed = true;
             unsubscriveToCurrentPlayingSongChanges();
         };
+
+        return unsubscribeFunction;
     }
 }
 
