@@ -15,7 +15,7 @@ export const TIDAL_CONFIG: MusicStreamingServiceConfig = {
     urlMatch: "listen.tidal.com/",
     currentPlayingSong: {
         selectors: {
-            containerDomElement: `[data-test="left-column-footer-player"]`,
+            containerDomElement: `[data-test="left-column-footer-player"] > *:nth-child(2)`,
             titleDomElement: `[data-test="footer-track-title"] a`,
             artistsDomElement: `[class^="mediaArtists"] a`,
         },

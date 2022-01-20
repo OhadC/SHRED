@@ -69,7 +69,7 @@ export class MusicStreamingApi {
         });
     }
 
-    public async getCurrentPlayingSongTitleContainerElement(): Promise<Element | undefined> {
+    public async getCurrentPlayingSongContainerElement(): Promise<Element | undefined> {
         const selectors = this.musicStreamingConfig?.currentPlayingSong.selectors;
         if (!selectors) {
             return;
@@ -78,9 +78,8 @@ export class MusicStreamingApi {
         await waitForElementToDisplay(selectors.containerDomElement);
 
         const containerDomElement = this.domApi.querySelector(selectors.containerDomElement);
-        const titleDomElement = containerDomElement?.querySelector<HTMLElement>(selectors.titleDomElement);
 
-        return titleDomElement ?? undefined;
+        return containerDomElement ?? undefined;
     }
 
     private getMusicStreamingConfig(): MusicStreamingServiceConfig | undefined {

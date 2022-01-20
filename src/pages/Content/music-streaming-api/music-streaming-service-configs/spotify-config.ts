@@ -11,7 +11,7 @@ export const SPOTIFY_CONFIG: MusicStreamingServiceConfig = {
     urlMatch: "open.spotify.com/",
     currentPlayingSong: {
         selectors: {
-            containerDomElement: `[data-testid="now-playing-widget"]`,
+            containerDomElement: `[data-testid="now-playing-widget"] > *:nth-child(2)`,
             titleDomElement: `[data-testid="context-item-info-title"]`,
             artistsDomElement: `[data-testid="context-item-info-subtitles"]`,
         },

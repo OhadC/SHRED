@@ -14,15 +14,15 @@ export class EventService {
 
     private async subscribeToCurrentPlayingSongChanges() {
         try {
-            const currentPlayingSongTitleContainerElement = await this.musicStreamingApi.getCurrentPlayingSongTitleContainerElement();
-            if (!currentPlayingSongTitleContainerElement) {
+            const currentPlayingSongContainerElement = await this.musicStreamingApi.getCurrentPlayingSongContainerElement();
+            if (!currentPlayingSongContainerElement) {
                 return;
             }
 
             const resizeObserver = new ResizeObserver((entries) => {
                 this.sendEvent(ContentScriptEvents.CurrentPlayingSongChanged);
             });
-            resizeObserver.observe(currentPlayingSongTitleContainerElement);
+            resizeObserver.observe(currentPlayingSongContainerElement);
         } catch (error) {
             logger.error("subscribeToCurrentPlayingSongChanges error", error);
         }
