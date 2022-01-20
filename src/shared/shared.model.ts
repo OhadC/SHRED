@@ -23,6 +23,11 @@ export interface ContentScriptResponse<T> {
     requestId?: number;
 }
 
+export interface ContentScriptEventMessage<T> {
+    event: ContentScriptEvents;
+    data: T;
+}
+
 export type GetCurrentPlayingSongResponse = StreamingServiceSong | undefined;
 
 export type GetCurrentViewSongsResponse = StreamingServiceSong[] | undefined;
