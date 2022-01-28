@@ -26,15 +26,17 @@ export class MusicStreamingApi {
         const containerDomElement = this.domApi.querySelector(selectors.containerDomElement);
         const titleDomElement = containerDomElement?.querySelector<HTMLElement>(selectors.titleDomElement);
         const title = this.leanTitle(titleDomElement?.innerText);
-        const artistsDomElement = containerDomElement?.querySelectorAll<HTMLElement>(selectors.artistsDomElement);
-        const artist = artistsDomElement?.[0]?.innerText as string;
-
-        if (title) {
-            return {
-                title,
-                artist,
-            };
+        if (!title) {
+            return;
         }
+
+        const artistsDomElement = containerDomElement?.querySelector<HTMLElement>(selectors.artistsDomElement);
+        const artist = artistsDomElement?.innerText;
+
+        return {
+            title,
+            artist,
+        };
     }
 
     public async getCurrentViewSongs(): Promise<StreamingServiceSong[] | undefined> {
@@ -56,16 +58,18 @@ export class MusicStreamingApi {
 
         return songRowDomElements.flatMap((songRowDomElement) => {
             const titleDomElement = songRowDomElement.querySelector<HTMLElement>(selectors.titleDomElement);
-            const artistDomElement = songRowDomElement.querySelector<HTMLElement>(selectors.artistDomElement);
-
             const title = this.leanTitle(titleDomElement?.innerText);
+            if (!title) {
+                return [];
+            }
 
-            return title
-                ? {
-                      title: this.leanTitle(titleDomElement?.innerText)!,
-                      artist: artistDomElement?.innerText,
-                  }
-                : [];
+            const artistsDomElement = songRowDomElement.querySelector<HTMLElement>(selectors.artistDomElement);
+            const artist = artistsDomElement?.innerText;
+
+            return {
+                title,
+                artist,
+            };
         });
     }
 
