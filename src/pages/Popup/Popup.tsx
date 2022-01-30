@@ -15,8 +15,11 @@ export const PopupComponent: React.FunctionComponent = () => (
 );
 
 const PopupContainer = styled.div`
-    max-height: calc(600px - 2 * 0.8em); // 600px is chrome limitation
+    --popup-container-padding: 0.875em;
+
+    max-height: calc(600px - 2 * var(--popup-container-padding)); // 600px is chrome limitation
     overflow-y: scroll;
-    padding: 0.8em;
-    padding-inline-end: max(calc(0.8em - 10px), 2px);
+    padding: var(--popup-container-padding);
+    padding-inline-end: max(calc(var(--popup-container-padding) - var(--scrollbar-width)), 2px);
+    font-size: 1em;
 `;

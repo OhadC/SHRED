@@ -17,5 +17,5 @@ export const SongList = ({ songList, title }: { songList: SongInfo[]; title?: st
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.6em;
+    gap: 0.875em;
 `;
