@@ -1,22 +1,18 @@
 import _ from "lodash";
-import { waitForElementToDisplay } from "../../../shared/dom-helpers";
-import { StreamingServiceSong } from "../../../shared/shared.model";
-import { DomApi } from "../helpers/dom-api";
-import { MusicStreamingServiceConfig } from "./music-streaming-api.model";
-import { SPOTIFY_CONFIG } from "./music-streaming-service-configs/spotify-config";
-import { TIDAL_CONFIG } from "./music-streaming-service-configs/tidal-config";
+import { waitForElementToDisplay } from "../../../../shared/dom-helpers";
+import { StreamingServiceSong } from "../../../../shared/shared.model";
+import { DomApi } from "../../helpers/dom-api";
+import { getContentScriptLogger } from "../../util/content-script-logger";
+import { MusicStreamingApi } from "../music-streaming-api.model";
+import { SelectorBasedMusicStreamingServiceConfig } from "./selector-based-music-streaming-api.model";
 
-const MUSIC_STREAMING_SERVICE_CONFIGS: MusicStreamingServiceConfig[] = [TIDAL_CONFIG, SPOTIFY_CONFIG];
+const logger = getContentScriptLogger("SelectorBasedMusicStreamingApi");
 
-export class MusicStreamingApi {
-    private musicStreamingConfig: MusicStreamingServiceConfig | undefined;
-
-    constructor(private domApi: DomApi) {
-        this.musicStreamingConfig = this.getMusicStreamingConfig();
-    }
+export class SelectorBasedMusicStreamingApi implements MusicStreamingApi {
+    constructor(private domApi: DomApi, private config: SelectorBasedMusicStreamingServiceConfig) {}
 
     public async getCurrentPlayingSong(): Promise<StreamingServiceSong | undefined> {
-        const selectors = this.musicStreamingConfig?.currentPlayingSong.selectors;
+        const selectors = this.config.currentPlayingSong.selectors;
         if (!selectors) {
             return;
         }
@@ -40,9 +36,7 @@ export class MusicStreamingApi {
     }
 
     public async getCurrentViewSongs(): Promise<StreamingServiceSong[] | undefined> {
-        const currentViewConfig = this.musicStreamingConfig?.currentViewSongs.views.find((view) =>
-            this.domApi.getCurrentUrl().includes(view.urlMatch)
-        );
+        const currentViewConfig = this.config.currentViewSongs.views.find((view) => this.domApi.getCurrentUrl().includes(view.urlMatch));
         const selectors = currentViewConfig?.selectors;
         if (!selectors) {
             return;
@@ -73,8 +67,25 @@ export class MusicStreamingApi {
         });
     }
 
-    public async getCurrentPlayingSongContainerElement(): Promise<Element | undefined> {
-        const selectors = this.musicStreamingConfig?.currentPlayingSong.selectors;
+    public subscribeToCurrentPlayingSongChanges(callback: () => any): void {
+        this.getCurrentPlayingSongContainerElement()
+            .then((currentPlayingSongContainerElement) => {
+                if (!currentPlayingSongContainerElement) {
+                    return;
+                }
+
+                const resizeObserver = new ResizeObserver((entries) => {
+                    callback();
+                });
+                resizeObserver.observe(currentPlayingSongContainerElement);
+            })
+            .catch((error) => {
+                logger.error("subscribeToCurrentPlayingSongChanges error", error);
+            });
+    }
+
+    private async getCurrentPlayingSongContainerElement(): Promise<Element | undefined> {
+        const selectors = this.config.currentPlayingSong.selectors;
         if (!selectors) {
             return;
         }
@@ -84,12 +95,6 @@ export class MusicStreamingApi {
         const containerDomElement = this.domApi.querySelector(selectors.containerDomElement);
 
         return containerDomElement ?? undefined;
-    }
-
-    private getMusicStreamingConfig(): MusicStreamingServiceConfig | undefined {
-        return MUSIC_STREAMING_SERVICE_CONFIGS.find((musicStreamingConfig) =>
-            this.domApi.getCurrentUrl().includes(musicStreamingConfig.urlMatch)
-        );
     }
 
     private leanTitle(title?: string): string | undefined {
