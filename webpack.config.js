@@ -5,6 +5,7 @@ var webpack = require("webpack"),
     CopyWebpackPlugin = require("copy-webpack-plugin"),
     HtmlWebpackPlugin = require("html-webpack-plugin"),
     TerserPlugin = require("terser-webpack-plugin");
+var { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const ASSET_PATH = process.env.ASSET_PATH || "/";
 
@@ -33,8 +34,8 @@ var options = {
         notHotReload: ["contentScript"],
     },
     output: {
-        path: path.resolve(__dirname, "build"),
         filename: "[name].bundle.js",
+        path: path.resolve(__dirname, "build"),
         clean: true,
         publicPath: ASSET_PATH,
     },
@@ -61,13 +62,14 @@ var options = {
             },
             {
                 test: new RegExp(".(" + fileExtensions.join("|") + ")$"),
-                loader: "file-loader",
-                options: {
-                    name: "[path][name].[ext]",
-                    context: "src",
-                    esModule: false,
-                },
+                type: "asset/resource",
                 exclude: /node_modules/,
+                // loader: "file-loader",
+                // options: {
+                //     name: "[path][name].[ext]",
+                //     context: "src",
+                //     esModule: false,
+                // },
             },
             {
                 test: /\.html$/,
@@ -94,6 +96,7 @@ var options = {
         extensions: fileExtensions.map((extension) => "." + extension).concat([".js", ".jsx", ".ts", ".tsx", ".css"]),
     },
     plugins: [
+        new CleanWebpackPlugin({ verbose: false }),
         new webpack.ProgressPlugin(),
         // expose and write the allowed env vars on the compiled bundle
         new webpack.EnvironmentPlugin(["NODE_ENV"]),
