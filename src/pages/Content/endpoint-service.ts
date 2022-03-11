@@ -6,7 +6,7 @@ import {
     GetCurrentPlayingSongResponse,
     GetCurrentViewSongsResponse,
 } from "../../shared/shared.model";
-import { MusicStreamingApi } from "./music-streaming-api/music-streaming-api";
+import { MusicStreamingApi } from "./music-streaming-api/music-streaming-api.model";
 import { getContentScriptLogger } from "./util/content-script-logger";
 
 const logger = getContentScriptLogger("EndpointService");
