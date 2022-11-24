@@ -18,7 +18,7 @@ export function useResizeOberver<T extends HTMLElement>(
 
     useEffect(() => {
         if (target && hasCallback) {
-            const resizeObserver = new ResizeObserver((entries) => {
+            const resizeObserver = new ResizeObserver(entries => {
                 callbackRef.current(entries[0]);
             });
 

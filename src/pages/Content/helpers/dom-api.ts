@@ -3,8 +3,8 @@ export class DomApi {
         return document.URL;
     }
 
-    querySelector(selector: string): Element | null {
-        return document.querySelector(selector);
+    querySelector<T extends Element = Element>(selector: string): T | null {
+        return document.querySelector<T>(selector);
     }
 
     querySelectorAll(selector: string): NodeListOf<Element> {

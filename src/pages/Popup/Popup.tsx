@@ -1,17 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import { CurrentTabContextProvider } from "./CurrentTab.context";
+import { CurrentTabContextProvider } from "./shared-contexts/CurrentTab.context";
 import { DynamicHeightTransition } from "./shared-components/DynamicHeightTransition";
 import { SongsView } from "./SongsView/SongsView";
+import { LocaleContextProvider } from "./shared-contexts/Locale.context";
 
 export const PopupComponent: React.FunctionComponent = () => (
-    <CurrentTabContextProvider>
-        <PopupContainer>
-            <DynamicHeightTransition>
-                <SongsView />
-            </DynamicHeightTransition>
-        </PopupContainer>
-    </CurrentTabContextProvider>
+    <LocaleContextProvider>
+        <CurrentTabContextProvider>
+            <PopupContainer>
+                <DynamicHeightTransition>
+                    <SongsView />
+                </DynamicHeightTransition>
+            </PopupContainer>
+        </CurrentTabContextProvider>
+    </LocaleContextProvider>
 );
 
 const PopupContainer = styled.div`

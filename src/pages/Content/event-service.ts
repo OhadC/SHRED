@@ -18,6 +18,6 @@ export class EventService {
         const message: ContentScriptEventMessage<T> = { event, data };
 
         logger.log("sendEvent", message);
-        browser.runtime.sendMessage(message).catch((error) => logger.error("sendEvent error", error));
+        browser.runtime.sendMessage(message).catch(error => logger.error("sendEvent error", error));
     }
 }

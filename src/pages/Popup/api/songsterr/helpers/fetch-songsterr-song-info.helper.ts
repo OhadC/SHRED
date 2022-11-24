@@ -8,7 +8,7 @@ export async function fetchSongsterrSongInfo(title: string, artist?: string): Pr
     const songsterrSongInfos = await tryToFetchSong(title, artist);
 
     if (songsterrSongInfos) {
-        const songsterrSongInfo = songsterrSongInfos.find((info) => isSimilar(info, title, artist));
+        const songsterrSongInfo = songsterrSongInfos.find(info => isSimilar(info, title, artist));
 
         songsterrSongInfo && addClientProperties(songsterrSongInfo);
 
@@ -32,9 +32,7 @@ async function tryToFetchSong(title: string, artist?: string): Promise<Songsterr
 }
 
 async function fetchPattern(pattern: string, numberOfResults = 5): Promise<SongsterrSongInfo[]> {
-    const songInfos = await fetch(`https://www.songsterr.com/api/songs?pattern=${pattern}&size=${numberOfResults}`).then((res) =>
-        res.json()
-    );
+    const songInfos = await fetch(`https://www.songsterr.com/api/songs?pattern=${pattern}&size=${numberOfResults}`).then(res => res.json());
 
     return songInfos;
 }

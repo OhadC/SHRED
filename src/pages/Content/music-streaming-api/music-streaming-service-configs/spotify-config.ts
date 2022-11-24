@@ -35,7 +35,12 @@ export const SPOTIFY_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStrea
                 },
                 {
                     urlMatch: "/artist/",
-                    selectors: { ...sharedTableSelectors },
+                    selectors: {
+                        ...sharedTableSelectors,
+                        titleDomElement: `[role="gridcell"]:nth-child(2) > div > div`,
+                        artistDomElement: `h1`,
+                        isArtistFromRow: false,
+                    },
                 },
             ],
         },

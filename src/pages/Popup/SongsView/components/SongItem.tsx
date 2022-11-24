@@ -29,12 +29,12 @@ const StyledSongItem = styled.a<{ isLink: boolean }>`
     grid-template-areas: "title difficulty" "artist tuning";
     grid-gap: 0.5em;
 
-    background: hsla(0, 0%, 100%, ${(p) => 4 * (p.isLink ? 2 : 1)}%);
+    background: hsla(0, 0%, 100%, ${p => 4 * (p.isLink ? 2 : 1)}%);
     padding: 0.875em;
     border-radius: 0.875em;
 
     &:hover {
-        background: hsla(0, 0%, 100%, ${(p) => 6 * (p.isLink ? 2 : 1)}%);
+        background: hsla(0, 0%, 100%, ${p => 6 * (p.isLink ? 2 : 1)}%);
     }
 `;
 

@@ -1,14 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StreamingServiceSong } from "../../../shared/shared.model";
 import { contentScriptApi } from "../api/content-scripts-api";
 import { getSongInfoFromSongsterr } from "../api/songsterr";
-import { CurrentTabContext } from "../CurrentTab.context";
+import { useCurrentTab } from "../shared-contexts/CurrentTab.context";
 import { SongInfo } from "../models";
 
 type CurrentPlayingSongData = SongInfo | undefined;
 
 export function useCurrentPlayingSong(): CurrentPlayingSongData {
-    const currentTab = useContext(CurrentTabContext);
+    const currentTab = useCurrentTab();
 
     const [currentPlayingSong, setCurrentPlayingSong] = useState<CurrentPlayingSongData>();
 

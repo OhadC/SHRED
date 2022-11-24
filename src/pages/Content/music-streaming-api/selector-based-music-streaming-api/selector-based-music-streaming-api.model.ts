@@ -19,4 +19,5 @@ export interface MusicStreamingServiceConfigCurrentViewSongsSelectors {
     songRowDomElements: string;
     titleDomElement: string;
     artistDomElement: string;
+    isArtistFromRow?: boolean; // default is true
 }

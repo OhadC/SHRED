@@ -10,7 +10,7 @@ export class MusicStreamingApiFactory {
 
     public getMusicStreamingApi<ClassBasedConfig>(): MusicStreamingApi | undefined {
         const musicStreamingApiConfig: MusicStreamingServiceConfig<ClassBasedConfig> | undefined = MUSIC_STREAMING_SERVICE_CONFIGS.find(
-            (musicStreamingConfig) => this.domApi.getCurrentUrl().includes(musicStreamingConfig.urlMatch)
+            musicStreamingConfig => this.domApi.getCurrentUrl().includes(musicStreamingConfig.urlMatch)
         );
 
         if (musicStreamingApiConfig) {
