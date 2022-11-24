@@ -36,7 +36,7 @@ export class SelectorBasedMusicStreamingApi implements MusicStreamingApi {
     }
 
     public async getCurrentViewSongs(): Promise<StreamingServiceSong[] | undefined> {
-        const currentViewConfig = this.config.currentViewSongs.views.find((view) => this.domApi.getCurrentUrl().includes(view.urlMatch));
+        const currentViewConfig = this.config.currentViewSongs.views.find(view => this.domApi.getCurrentUrl().includes(view.urlMatch));
         const selectors = currentViewConfig?.selectors;
         if (!selectors) {
             return;
@@ -50,14 +50,15 @@ export class SelectorBasedMusicStreamingApi implements MusicStreamingApi {
             return;
         }
 
-        return songRowDomElements.flatMap((songRowDomElement) => {
+        return songRowDomElements.flatMap(songRowDomElement => {
             const titleDomElement = songRowDomElement.querySelector<HTMLElement>(selectors.titleDomElement);
             const title = this.leanTitle(titleDomElement?.innerText);
             if (!title) {
                 return [];
             }
 
-            const artistsDomElement = songRowDomElement.querySelector<HTMLElement>(selectors.artistDomElement);
+            const artistElementParent = selectors.isArtistFromRow ? songRowDomElement : this.domApi;
+            const artistsDomElement = artistElementParent.querySelector<HTMLElement>(selectors.artistDomElement);
             const artist = artistsDomElement?.innerText;
 
             return {
@@ -69,17 +70,17 @@ export class SelectorBasedMusicStreamingApi implements MusicStreamingApi {
 
     public subscribeToCurrentPlayingSongChanges(callback: () => any): void {
         this.getCurrentPlayingSongContainerElement()
-            .then((currentPlayingSongContainerElement) => {
+            .then(currentPlayingSongContainerElement => {
                 if (!currentPlayingSongContainerElement) {
                     return;
                 }
 
-                const resizeObserver = new ResizeObserver((entries) => {
+                const resizeObserver = new ResizeObserver(entries => {
                     callback();
                 });
                 resizeObserver.observe(currentPlayingSongContainerElement);
             })
-            .catch((error) => {
+            .catch(error => {
                 logger.error("subscribeToCurrentPlayingSongChanges error", error);
             });
     }

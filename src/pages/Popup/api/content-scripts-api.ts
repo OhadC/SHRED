@@ -11,13 +11,13 @@ class ContentScriptApi {
     getCurrentPlayingSongFromTab(tabId: number): Promise<StreamingServiceSong | undefined> {
         return browserApi
             .sendMessageToTab<GetCurrentPlayingSongResponse>(tabId, ContentScriptEndpoint.GetCurrentPlayingSong)
-            .then((response) => response?.data);
+            .then(response => response?.data);
     }
 
     getCurrentViewSongsFromTab(tabId: number): Promise<StreamingServiceSong[] | undefined> {
         return browserApi
             .sendMessageToTab<GetCurrentViewSongsResponse>(tabId, ContentScriptEndpoint.GetCurrentViewSongs)
-            .then((response) => response?.data);
+            .then(response => response?.data);
     }
 
     subscribeToCurrentPlayingSongFromTab(
@@ -27,7 +27,7 @@ class ContentScriptApi {
         let isUnsubscribed = false;
 
         const getCurrentPlayingSong = () =>
-            this.getCurrentPlayingSongFromTab(tabId).then((currentPlayingSong) => {
+            this.getCurrentPlayingSongFromTab(tabId).then(currentPlayingSong => {
                 if (!isUnsubscribed) {
                     callback(currentPlayingSong);
                 }

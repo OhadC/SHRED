@@ -1,22 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import { CurrentTabContextProvider } from "./CurrentTab.context";
+import { CurrentTabContextProvider } from "./shared-contexts/CurrentTab.context";
 import { DynamicHeightTransition } from "./shared-components/DynamicHeightTransition";
 import { SongsView } from "./SongsView/SongsView";
+import { LocaleContextProvider } from "./shared-contexts/Locale.context";
 
 export const PopupComponent: React.FunctionComponent = () => (
-    <CurrentTabContextProvider>
-        <PopupContainer>
-            <DynamicHeightTransition>
-                <SongsView />
-            </DynamicHeightTransition>
-        </PopupContainer>
-    </CurrentTabContextProvider>
+    <LocaleContextProvider>
+        <CurrentTabContextProvider>
+            <PopupContainer>
+                <DynamicHeightTransition>
+                    <SongsView />
+                </DynamicHeightTransition>
+            </PopupContainer>
+        </CurrentTabContextProvider>
+    </LocaleContextProvider>
 );
 
 const PopupContainer = styled.div`
-    max-height: calc(600px - 2 * 0.8em); // 600px is chrome limitation
+    --popup-container-padding: 0.875em;
+
+    max-height: calc(600px - 2 * var(--popup-container-padding)); // 600px is chrome limitation
     overflow-y: scroll;
-    padding: 0.8em;
-    padding-inline-end: max(calc(0.8em - 10px), 2px);
+    padding: var(--popup-container-padding);
+    padding-inline-end: max(calc(var(--popup-container-padding) - var(--scrollbar-width)), 2px);
+    font-size: 1em;
 `;

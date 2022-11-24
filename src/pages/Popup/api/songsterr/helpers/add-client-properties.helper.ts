@@ -25,8 +25,8 @@ const bassGuitarInstrumentIds = new Set([
 function getDefaultTrackIndex(innerSongInfo: SongsterrSongInfo): number {
     return (
         innerSongInfo.defaultTrack ??
-        findIndexWithUndefined(innerSongInfo.tracks, (track) => guitarInstrumentIds.has(track.instrumentId)) ??
-        findIndexWithUndefined(innerSongInfo.tracks, (track) => bassGuitarInstrumentIds.has(track.instrumentId)) ??
+        findIndexWithUndefined(innerSongInfo.tracks, track => guitarInstrumentIds.has(track.instrumentId)) ??
+        findIndexWithUndefined(innerSongInfo.tracks, track => bassGuitarInstrumentIds.has(track.instrumentId)) ??
         0
     );
 }

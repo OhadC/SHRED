@@ -3,13 +3,17 @@ import React from "react";
 import styled from "styled-components";
 import { songDifficultySorted, songDifficultyToNumberMap } from "../../helpers/song-difficulty-number";
 import { SongDifficulty } from "../../models";
+import { useSongsViewTranslations } from "../SongsView.translations";
 
 export const DifficultyBar = ({ songDifficulty }: { songDifficulty: SongDifficulty }) => {
+    const translations = useSongsViewTranslations();
+
     const difficultyAsNumber: number | undefined = songDifficulty && +songDifficultyToNumberMap[songDifficulty];
+    const difficultyAsstring: number | undefined = songDifficulty && +songDifficultyToNumberMap[songDifficulty];
 
     return (
-        <StyledDifficultyBar title={songDifficulty}>
-            {_.times(difficultyAsNumber, (index) => (
+        <StyledDifficultyBar title={translations.SongDifficulty[SongDifficulty[songDifficulty]]}>
+            {_.times(difficultyAsNumber, index => (
                 <div key={index}></div>
             ))}
         </StyledDifficultyBar>

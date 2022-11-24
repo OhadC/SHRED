@@ -20,7 +20,7 @@ class BrowserApi {
     sendMessageToTab<T>(tabId: number, endpoint: ContentScriptEndpoint, data?: any): Promise<ContentScriptResponse<T>> {
         const request: ContentScriptRequest = { endpoint, data, requestId: this.nextRequestId++ };
 
-        return browser.tabs.sendMessage(tabId, request).catch((error) => logger.error("sendMessageToTab error", error));
+        return browser.tabs.sendMessage(tabId, request).catch(error => logger.error("sendMessageToTab error", error));
     }
 
     subscribeToActiveTabUrlChanges(callback: (tabId: number, changeInfo: Tabs.OnUpdatedChangeInfoType, tab: Tabs.Tab) => void): () => void {

@@ -30,7 +30,7 @@ export class EndpointService {
 
                     return response;
                 })
-                .catch((error) => logger.error("error", { error, request }));
+                .catch(error => logger.error("error", { error, request }));
         });
     }
 

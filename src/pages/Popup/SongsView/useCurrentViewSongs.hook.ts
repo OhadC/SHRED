@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { contentScriptApi } from "../api/content-scripts-api";
 import { getSongInfoFromSongsterr } from "../api/songsterr";
-import { CurrentTabContext } from "../CurrentTab.context";
+import { useCurrentTab } from "../shared-contexts/CurrentTab.context";
 import { SongInfo } from "../models";
 
 export function useCurrentViewSongs(): SongInfo[] {
-    const currentTab = useContext(CurrentTabContext);
+    const currentTab = useCurrentTab();
 
     const [currentViewSongs, setCurrentViewSongs] = useState<SongInfo[]>([]);
 
@@ -15,9 +15,9 @@ export function useCurrentViewSongs(): SongInfo[] {
         if (currentTabId !== undefined) {
             contentScriptApi
                 .getCurrentViewSongsFromTab(currentTabId)
-                .then((songs) =>
+                .then(songs =>
                     Promise.all(
-                        songs?.map((song) => getSongInfoFromSongsterr(song.title, song.artist).then((songInfo) => songInfo ?? song)) ?? []
+                        songs?.map(song => getSongInfoFromSongsterr(song.title, song.artist).then(songInfo => songInfo ?? song)) ?? []
                     )
                 )
                 .then(setCurrentViewSongs);

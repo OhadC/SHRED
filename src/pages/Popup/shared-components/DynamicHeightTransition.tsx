@@ -28,7 +28,7 @@ export const DynamicHeightTransition: React.FunctionComponent<{ className?: stri
 };
 
 const WrapperContainer = styled.div<{ containerSize: number }>`
-    height: ${(props) => props.containerSize}px;
+    height: ${props => props.containerSize}px;
     transition: height 0.3s ease-in-out;
     overflow: hidden;
 `;
