@@ -1,5 +1,5 @@
-import { SongsterrSongInfo } from "./songsterr.model";
-import { findIndexWithUndefined } from "../../../../../shared/utils";
+import { SongsterrSongInfo, SongsterrTrackInfo } from "./songsterr.model";
+import _ from "lodash";
 
 // mutate original object - add keys
 export function addClientProperties(innerSongInfo: SongsterrSongInfo) {
@@ -13,31 +13,36 @@ function getSongUrl(innerSongInfo: SongsterrSongInfo): string {
     return `https://www.songsterr.com/a/wsa/${songsterrTitle}-tab-s${innerSongInfo.songId}t${innerSongInfo.defaultTrackIndex}`;
 }
 
-const guitarInstrumentIds = new Set([
-    27, // Electric Guitar (clean)
-    30, // Distortion Guitar
-]);
-const bassGuitarInstrumentIds = new Set([
-    33, // Electric Bass (finger)
-    34, // Electric Bass (pick)
-]);
-
 function getDefaultTrackIndex(innerSongInfo: SongsterrSongInfo): number {
+    const getIndexForMaxViews = (tracks: SongsterrTrackInfo[]): number | undefined =>
+        tracks.reduce<number | undefined>(
+            // taken from original code. search for ".tracks.reduce"
+            (maxIndex, currentTrack, index) => (currentTrack.views > (innerSongInfo.tracks[maxIndex!]?.views ?? -1) ? index : maxIndex),
+            undefined
+        );
+
     return (
+        getIndexForMaxViews(innerSongInfo.tracks.filter(track => isGuitarInstrumen(track.instrumentId))) ??
+        getIndexForMaxViews(innerSongInfo.tracks.filter(track => isBassInstrumen(track.instrumentId))) ??
         innerSongInfo.defaultTrack ??
-        findIndexWithUndefined(innerSongInfo.tracks, track => guitarInstrumentIds.has(track.instrumentId)) ??
-        findIndexWithUndefined(innerSongInfo.tracks, track => bassGuitarInstrumentIds.has(track.instrumentId)) ??
         0
     );
 }
 
+function isGuitarInstrumen(instrumentId: number): boolean {
+    return instrumentId >= 24 && instrumentId <= 31;
+}
+
+function isBassInstrumen(instrumentId: number): boolean {
+    return instrumentId >= 32 && instrumentId <= 39;
+}
+
 function toSongsterrTitle(string: string): string {
-    // from original code
+    // from original code. search for ".toLowerCase().normalize"
     return string
         .toLowerCase()
-        .replace(/\//g, "-")
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-_]/g, "")
-        .replace(/-+/g, "-")
-        .replace(/^-*/g, "");
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\/|\s+/g, "-")
+        .replace(/[^a-z0-9-_]/g, "");
 }

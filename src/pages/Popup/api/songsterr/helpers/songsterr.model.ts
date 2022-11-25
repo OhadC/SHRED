@@ -17,6 +17,7 @@ export interface SongsterrTrackInfo {
     difficultyVersion?: number;
     tuning: number[];
     instrumentId: number;
+    views: number;
 }
 
 export enum SongsterrDifficulty {
