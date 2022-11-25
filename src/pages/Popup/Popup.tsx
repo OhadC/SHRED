@@ -18,7 +18,7 @@ export const PopupComponent: React.FunctionComponent = () => (
 );
 
 const PopupContainer = styled.div`
-    --popup-container-padding: 0.875em;
+    --popup-container-padding: calc(var(--inline-padding) / 2);
 
     max-height: calc(600px - 2 * var(--popup-container-padding)); // 600px is chrome limitation
     overflow-y: scroll;

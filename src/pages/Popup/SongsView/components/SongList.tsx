@@ -6,7 +6,7 @@ import { SongItem } from "./SongItem";
 
 export const SongList = ({ songList, title }: { songList: SongInfo[]; title?: string }) => (
     <Container>
-        {title && <SectionTitle>{title}</SectionTitle>}
+        {title && <SongListSectionTitle>{title}</SongListSectionTitle>}
 
         {songList.map((songInfo, index) => (
             <SongItem songInfo={songInfo} key={index} />
@@ -17,5 +17,9 @@ export const SongList = ({ songList, title }: { songList: SongInfo[]; title?: st
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.875em;
+    gap: 4px;
+`;
+
+const SongListSectionTitle = styled(SectionTitle)`
+    padding-inline: calc(var(--inline-padding) / 2);
 `;
