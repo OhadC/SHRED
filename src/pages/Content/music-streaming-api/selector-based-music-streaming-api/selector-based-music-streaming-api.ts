@@ -57,7 +57,7 @@ export class SelectorBasedMusicStreamingApi implements MusicStreamingApi {
                 return [];
             }
 
-            const artistElementParent = selectors.isArtistFromRow ? songRowDomElement : this.domApi;
+            const artistElementParent = selectors.isArtistFromRow ?? true ? songRowDomElement : this.domApi;
             const artistsDomElement = artistElementParent.querySelector<HTMLElement>(selectors.artistDomElement);
             const artist = artistsDomElement?.innerText;
 
