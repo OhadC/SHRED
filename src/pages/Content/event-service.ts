@@ -1,4 +1,4 @@
-import { browser } from "webextension-polyfill-ts";
+import browser from "webextension-polyfill";
 import { ContentScriptEventMessage, ContentScriptEvents } from "../../shared/shared.model";
 import { MusicStreamingApi } from "./music-streaming-api/music-streaming-api.model";
 import { getContentScriptLogger } from "./util/content-script-logger";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, createContext, useContext } from "react";
-import { Tabs } from "webextension-polyfill-ts";
+import { Tabs } from "webextension-polyfill";
 import { browserApi } from "../api/browser-api";
 
 type CurrentTabContextData = Tabs.Tab | undefined;

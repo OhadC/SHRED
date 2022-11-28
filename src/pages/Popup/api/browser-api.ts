@@ -1,4 +1,4 @@
-import { browser, Runtime, Tabs } from "webextension-polyfill-ts";
+import browser, { Runtime, Tabs } from "webextension-polyfill";
 import {
     ContentScriptEndpoint,
     ContentScriptEventMessage,
