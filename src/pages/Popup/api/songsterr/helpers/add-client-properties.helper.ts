@@ -1,5 +1,4 @@
 import { SongsterrSongInfo, SongsterrTrackInfo } from "./songsterr.model";
-import _ from "lodash";
 
 // mutate original object - add keys
 export function addClientProperties(innerSongInfo: SongsterrSongInfo) {
@@ -10,20 +9,24 @@ export function addClientProperties(innerSongInfo: SongsterrSongInfo) {
 function getSongUrl(innerSongInfo: SongsterrSongInfo): string {
     const songsterrTitle = toSongsterrTitle(`${innerSongInfo.artist}-${innerSongInfo.title}`);
 
-    return `https://www.songsterr.com/a/wsa/${songsterrTitle}-tab-s${innerSongInfo.songId}t${innerSongInfo.defaultTrackIndex}`;
+    return `https://www.songsterr.com/a/wsa/${songsterrTitle}-tab-s${innerSongInfo.songId}`;
 }
 
 function getDefaultTrackIndex(innerSongInfo: SongsterrSongInfo): number {
-    const getIndexForMaxViews = (tracks: SongsterrTrackInfo[]): number | undefined =>
+    const getIndexForMaxViews = (
+        tracks: SongsterrTrackInfo[],
+        filterPredicate: (track: SongsterrTrackInfo) => boolean
+    ): number | undefined =>
         tracks.reduce<number | undefined>(
             // taken from original code. search for ".tracks.reduce"
-            (maxIndex, currentTrack, index) => (currentTrack.views > (innerSongInfo.tracks[maxIndex!]?.views ?? -1) ? index : maxIndex),
+            (maxIndex, currentTrack, index) =>
+                filterPredicate(currentTrack) && currentTrack.views > (innerSongInfo.tracks[maxIndex!]?.views ?? -1) ? index : maxIndex,
             undefined
         );
 
     return (
-        getIndexForMaxViews(innerSongInfo.tracks.filter(track => isGuitarInstrumen(track.instrumentId))) ??
-        getIndexForMaxViews(innerSongInfo.tracks.filter(track => isBassInstrumen(track.instrumentId))) ??
+        getIndexForMaxViews(innerSongInfo.tracks, track => isGuitarInstrumen(track.instrumentId)) ??
+        getIndexForMaxViews(innerSongInfo.tracks, track => isBassInstrumen(track.instrumentId)) ??
         innerSongInfo.defaultTrack ??
         0
     );
