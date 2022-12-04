@@ -9,9 +9,7 @@ var { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const ASSET_PATH = process.env.ASSET_PATH || "/";
 
-var alias = {
-    "react-dom": "@hot-loader/react-dom",
-};
+var alias = {};
 
 // load the secrets
 var secretsPath = path.join(__dirname, "secrets." + env.NODE_ENV + ".js");
@@ -64,12 +62,6 @@ var options = {
                 test: new RegExp(".(" + fileExtensions.join("|") + ")$"),
                 type: "asset/resource",
                 exclude: /node_modules/,
-                // loader: "file-loader",
-                // options: {
-                //     name: "[path][name].[ext]",
-                //     context: "src",
-                //     esModule: false,
-                // },
             },
             {
                 test: /\.html$/,
@@ -168,7 +160,7 @@ var options = {
 };
 
 if (env.NODE_ENV === "development") {
-    options.devtool = "inline-source-map";
+    options.devtool = "inline-cheap-module-source-map";
 } else {
     options.optimization = {
         minimize: true,

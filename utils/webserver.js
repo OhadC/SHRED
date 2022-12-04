@@ -49,10 +49,6 @@ var server = new WebpackDevServer(
     compiler
 );
 
-if (process.env.NODE_ENV === "development" && module.hot) {
-    module.hot.accept();
-}
-
 (async () => {
     await server.start();
 })();

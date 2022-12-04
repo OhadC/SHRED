@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { SongInfo } from "../../models";
-import { SectionTitle } from "../../shared-components/SectionTitle";
+import { SectionTitle } from "../../shared/components/SectionTitle";
 import { SongItem } from "./SongItem";
 
 export const SongList = ({ songList, title }: { songList: SongInfo[]; title?: string }) => (

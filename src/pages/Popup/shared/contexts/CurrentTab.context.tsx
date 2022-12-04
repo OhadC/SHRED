@@ -1,6 +1,6 @@
-import React, { useEffect, useState, createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Tabs } from "webextension-polyfill";
-import { browserApi } from "../api/browser-api";
+import { browserApi } from "../../api/browser-api";
 
 type CurrentTabContextData = Tabs.Tab | undefined;
 
@@ -10,7 +10,7 @@ export function useCurrentTab(): CurrentTabContextData {
     return useContext(CurrentTabContext);
 }
 
-export const CurrentTabContextProvider: React.FunctionComponent<{}> = ({ children }) => {
+export const CurrentTabContextProvider: React.FunctionComponent<React.PropsWithChildren<{}>> = ({ children }) => {
     const [currentTab, setCurrentTab] = useState<CurrentTabContextData>();
 
     useEffect(() => {

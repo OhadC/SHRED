@@ -9,7 +9,7 @@ export function useLocale(): LocaleContextData {
     return useContext(LocaleContext);
 }
 
-export const LocaleContextProvider: React.FunctionComponent<{}> = ({ children }) => {
+export const LocaleContextProvider: React.FunctionComponent<React.PropsWithChildren<{}>> = ({ children }) => {
     const [locale, setLocale] = useState<string>("en-US");
 
     return <LocaleContext.Provider value={{ locale, setLocale }}>{children}</LocaleContext.Provider>;
