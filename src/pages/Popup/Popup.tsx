@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { CurrentTabContextProvider } from "./shared-contexts/CurrentTab.context";
-import { DynamicHeightTransition } from "./shared-components/DynamicHeightTransition";
+import { DynamicHeightTransition } from "./shared/components/DynamicHeightTransition";
+import { CurrentTabContextProvider } from "./shared/contexts/CurrentTab.context";
+import { LocaleContextProvider } from "./shared/contexts/Locale.context";
 import { SongsView } from "./SongsView/SongsView";
-import { LocaleContextProvider } from "./shared-contexts/Locale.context";
 
 export const PopupComponent: React.FunctionComponent = () => (
     <LocaleContextProvider>

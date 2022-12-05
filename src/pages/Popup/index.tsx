@@ -1,9 +1,13 @@
 import React from "react";
-import ReactDOM from "react-dom";
-
+import { createRoot } from "react-dom/client";
 import { PopupComponent } from "./Popup";
 import "./global-styles.scss";
 
-ReactDOM.render(<PopupComponent />, window.document.querySelector("#app-container"));
+const rootDiv = document.querySelector("#app-container")!;
+const root = createRoot(rootDiv);
 
-if (module.hot) module.hot.accept();
+root.render(
+    <React.StrictMode>
+        <PopupComponent />
+    </React.StrictMode>
+);

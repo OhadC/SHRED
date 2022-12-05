@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { tuningNumberToString } from "../../helpers/tuning-number-to-string.helper";
 import { SongInfo } from "../../models";
-import { EllipsisOneLineWithTooltip } from "../../shared-components/EllipsisDiv";
+import { EllipsisOneLineWithTooltip } from "../../shared/components/EllipsisDiv";
 import { DifficultyBar } from "./DifficultyBar";
 
 export const SongItem = ({ songInfo }: { songInfo: SongInfo }) => {
