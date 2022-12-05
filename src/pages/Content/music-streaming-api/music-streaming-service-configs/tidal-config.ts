@@ -5,15 +5,11 @@ import {
     SelectorBasedMusicStreamingServiceConfig,
 } from "../selector-based-music-streaming-api/selector-based-music-streaming-api.model";
 
-const sharedTableSelectors: Omit<MusicStreamingServiceConfigCurrentViewSongsSelectors, "songsTable"> = {
+const sharedTableSelectors: MusicStreamingServiceConfigCurrentViewSongsSelectors = {
     songRowDomElements: `[data-test="tracklist-row"]`,
     titleDomElement: `[data-test="table-row-title"] [data-test="table-cell-title"]`,
     artistDomElement: `[data-test="track-row-artist"]`,
-};
-
-const artistTopTracksTableSelectors: MusicStreamingServiceConfigCurrentViewSongsSelectors = {
-    ...sharedTableSelectors,
-    songsTable: `[data-track--source-type="artist"][data-type="media-table"] [role="rowgroup"]`,
+    songsTable: `[data-type="media-table"] [role="rowgroup"]`,
 };
 
 export const TIDAL_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStreamingServiceConfig> = {
@@ -31,25 +27,19 @@ export const TIDAL_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStreami
             views: [
                 {
                     urlMatch: "/playlist/",
-                    selectors: {
-                        ...sharedTableSelectors,
-                        songsTable: `[data-track--source-type="playlist"][data-type="media-table"] [role="rowgroup"]`,
-                    },
+                    selectors: { ...sharedTableSelectors },
                 },
                 {
                     urlMatch: "/album/",
-                    selectors: {
-                        ...sharedTableSelectors,
-                        songsTable: `[data-track--source-type="album"][data-type="media-table"] [role="rowgroup"]`,
-                    },
+                    selectors: { ...sharedTableSelectors },
                 },
                 {
                     urlMatch: "/artist/",
-                    selectors: { ...artistTopTracksTableSelectors },
+                    selectors: { ...sharedTableSelectors },
                 },
                 {
                     urlMatch: "/view/pages/single-module-page/",
-                    selectors: { ...artistTopTracksTableSelectors },
+                    selectors: { ...sharedTableSelectors },
                 },
             ],
         },
