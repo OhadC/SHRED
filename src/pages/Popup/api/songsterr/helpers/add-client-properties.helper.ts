@@ -2,34 +2,29 @@ import { SongsterrSongInfo, SongsterrTrackInfo } from "./songsterr.model";
 
 // mutate original object - add keys
 export function addClientProperties(innerSongInfo: SongsterrSongInfo) {
-    innerSongInfo.defaultTrackIndex = getDefaultTrackIndex(innerSongInfo);
-    innerSongInfo.url = getSongUrl(innerSongInfo);
+    innerSongInfo.defaultTrackIndex = getDefaultTrackIndex(innerSongInfo.tracks) ?? innerSongInfo.defaultTrack ?? 0;
+    innerSongInfo.url = getSongUrl(innerSongInfo.songId, innerSongInfo.artist, innerSongInfo.title);
 }
 
-function getSongUrl(innerSongInfo: SongsterrSongInfo): string {
-    const songsterrTitle = toSongsterrTitle(`${innerSongInfo.artist}-${innerSongInfo.title}`);
-
-    return `https://www.songsterr.com/a/wsa/${songsterrTitle}-tab-s${innerSongInfo.songId}`;
-}
-
-function getDefaultTrackIndex(innerSongInfo: SongsterrSongInfo): number {
-    const getIndexForMaxViews = (
-        tracks: SongsterrTrackInfo[],
-        filterPredicate: (track: SongsterrTrackInfo) => boolean
-    ): number | undefined =>
+function getDefaultTrackIndex(tracks: SongsterrTrackInfo[]): number | undefined {
+    const getIndexForMaxViews = (filterPredicate: (track: SongsterrTrackInfo) => boolean): number | undefined =>
         tracks.reduce<number | undefined>(
             // taken from original code. search for ".tracks.reduce"
             (maxIndex, currentTrack, index) =>
-                filterPredicate(currentTrack) && currentTrack.views > (innerSongInfo.tracks[maxIndex!]?.views ?? -1) ? index : maxIndex,
+                filterPredicate(currentTrack) && currentTrack.views > (tracks[maxIndex!]?.views ?? -1) ? index : maxIndex,
             undefined
         );
 
     return (
-        getIndexForMaxViews(innerSongInfo.tracks, track => isGuitarInstrumen(track.instrumentId)) ??
-        getIndexForMaxViews(innerSongInfo.tracks, track => isBassInstrumen(track.instrumentId)) ??
-        innerSongInfo.defaultTrack ??
-        0
+        getIndexForMaxViews(track => isGuitarInstrumen(track.instrumentId)) ??
+        getIndexForMaxViews(track => isBassInstrumen(track.instrumentId))
     );
+}
+
+function getSongUrl(songId: number, artist: string, title: string): string {
+    const songsterrTitle = toSongsterrTitle(`${artist}-${title}`);
+
+    return `https://www.songsterr.com/a/wsa/${songsterrTitle}-tab-s${songId}`;
 }
 
 function isGuitarInstrumen(instrumentId: number): boolean {

@@ -13,9 +13,9 @@ export const songDifficultySorted = [
 export const songDifficultyToNumberMap = Object.values(songDifficultySorted).reduce((acc, current, index) => {
     acc[current] = index + 1;
     return acc;
-}, {}) as Readonly<{ [key in keyof typeof SongDifficulty]: number }>;
+}, {}) as Readonly<Record<SongDifficulty, number>>;
 
 export const songDifficultyNumberToEnumMap = Object.values(songDifficultySorted).reduce((acc, current, index) => {
     acc[index + 1] = current;
     return acc;
-}, {}) as Readonly<{ [key: number]: SongDifficulty }>;
+}, {}) as Readonly<Record<number, SongDifficulty>>;

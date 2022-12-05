@@ -62,28 +62,3 @@ class BrowserApi {
 }
 
 export const browserApi = new BrowserApi();
-
-/* 
- * should not use that. popup is closed when switching between tabs.
- 
-export function subscribeToActiveTabChange(callback: (activeInfo: browser.tabs.TabActiveInfo) => void): () => void {
-    const onActivatedCallback = (activeInfo: browser.tabs.TabActiveInfo) => callback(activeInfo);
-
-    browser.tabs.onActivated.addListener(onActivatedCallback);
-    const unsubscribeFunction = () => browser.tabs.onActivated.removeListener(onActivatedCallback);
-
-    return unsubscribeFunction;
-}
-
-export function subscribeToAnyActiveTabChange(callback: (tabId: number) => void): () => void {
-    const unsubscribeToActiveTabUrlChange = subscribeToActiveTabUrlChange(callback);
-    const unsubscribeToActiveTabChange = subscribeToActiveTabChange((activeInfo) => callback(activeInfo.tabId));
-
-    const unsubscribeFunction = () => {
-        unsubscribeToActiveTabUrlChange();
-        unsubscribeToActiveTabChange();
-    };
-
-    return unsubscribeFunction;
-}
-*/

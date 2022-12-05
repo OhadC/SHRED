@@ -7,13 +7,11 @@ const MIN_ACCEPTEBLE_SIMILARITY = 0.5;
 export async function fetchSongsterrSongInfo(title: string, artist?: string): Promise<SongsterrSongInfo | undefined> {
     const songsterrSongInfos = await tryToFetchSong(title, artist);
 
-    if (songsterrSongInfos) {
-        const songsterrSongInfo = songsterrSongInfos.find(info => isSimilar(info, title, artist));
+    const songsterrSongInfo = songsterrSongInfos?.find(info => isSimilar(info.title, title) && (!artist || isSimilar(info.artist, artist)));
 
-        songsterrSongInfo && addClientProperties(songsterrSongInfo);
+    songsterrSongInfo && addClientProperties(songsterrSongInfo);
 
-        return songsterrSongInfo;
-    }
+    return songsterrSongInfo;
 }
 
 async function tryToFetchSong(title: string, artist?: string): Promise<SongsterrSongInfo[] | undefined> {
@@ -37,9 +35,6 @@ async function fetchPattern(pattern: string, numberOfResults = 5): Promise<Songs
     return songInfos;
 }
 
-function isSimilar(info: SongsterrSongInfo, title: string, artist?: string): boolean {
-    const isTitleSimilat = getStringsSimilarity(info.title, title) >= MIN_ACCEPTEBLE_SIMILARITY;
-    const isArtistSimilar = !artist || getStringsSimilarity(info.artist, artist) >= MIN_ACCEPTEBLE_SIMILARITY;
-
-    return isTitleSimilat && isArtistSimilar;
+function isSimilar(string1: string, string2: string): boolean {
+    return getStringsSimilarity(string1, string2) >= MIN_ACCEPTEBLE_SIMILARITY;
 }
