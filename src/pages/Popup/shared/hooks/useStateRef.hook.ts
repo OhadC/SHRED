@@ -1,15 +1,17 @@
-import { useCallback, useRef, useState } from "react";
+import { SetStateAction, useCallback, useRef, useState } from "react";
 
-// https://github.com/Aminadav/react-useStateRef/blob/master/index.js
+const isFunction = <S>(setStateAction: SetStateAction<S>): setStateAction is (prevState: S) => S => typeof setStateAction === "function";
+
+// https://github.com/Aminadav/react-useStateRef/blob/master/index.ts
 // https://www.smashingmagazine.com/2020/11/react-useref-hook/
-export function useStateRef<T>(initialState: T): [React.MutableRefObject<T>, (newState: T) => void] {
+export function useStateRef<S>(initialState: S): [S, (newState: S) => void, Readonly<React.MutableRefObject<S>>] {
+    const [state, setState] = useState(initialState); // changing stateRef.current will not trigger deep render. this will do the job
     const stateRef = useRef(initialState);
-    const [, forceUpdate] = useState(); // changing stateRef.current will not trigger deep render. this will do the
 
-    const setStateFunction = useCallback((newState: T) => {
-        stateRef.current = typeof newState === "function" ? newState(stateRef.current) : stateRef;
-        forceUpdate(undefined);
+    const setStateFunction = useCallback((newState: S) => {
+        stateRef.current = isFunction(newState) ? newState(stateRef.current) : newState;
+        setState(stateRef.current);
     }, []);
 
-    return [stateRef, setStateFunction];
+    return [state, setStateFunction, stateRef];
 }

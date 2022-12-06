@@ -1,8 +1,15 @@
 import { createUseTranslations } from "../util/createUseTranslations";
 
 const enUS = {
-    playingNow: "Playing Now",
-    currentView: "Current View",
+    songsView: {
+        playingNow: "Playing Now",
+        playingNowEmpty: "Not playing any song at the moment",
+        currentView: "Current View",
+        currentViewEmpty: "There are no songs in the current view",
+    },
+    songList: {
+        loading: "Loading...",
+    },
     SongDifficulty: {
         VaryEasy: "Vary easy",
         Easy: "Easy",

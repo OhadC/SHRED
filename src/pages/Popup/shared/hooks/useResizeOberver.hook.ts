@@ -1,32 +1,28 @@
-import { useEffect, useState } from "react";
-import { useNodeRef } from "./useNodeRef.hook";
+import { useEffect } from "react";
 import { useStateRef } from "./useStateRef.hook";
 
-export type UseResizeOberverCallbackProp = (resizeObserverEntry: ResizeObserverEntry) => void;
+export type UseResizeOberverCallback = (resizeObserverEntry: ResizeObserverEntry) => void;
 
 export function useResizeOberver<T extends HTMLElement>(
-    initialCallback: UseResizeOberverCallbackProp
-): [(element: T | null) => void, (newState: UseResizeOberverCallbackProp) => void] {
-    const [node, setNodeRef] = useNodeRef<T>();
+    initialCallback: UseResizeOberverCallback
+): { setNodeRef: (element: T | null) => void; setCallback: (newState: UseResizeOberverCallback) => void } {
+    const [, setNodeRef, nodeRef] = useStateRef<T | null>(null);
+    const [, setCallback, callbackRef] = useStateRef<UseResizeOberverCallback>(initialCallback);
 
-    const [callbackRef, setCallback] = useStateRef(initialCallback);
-    const [hasCallback, setHasCallback] = useState(!!callbackRef.current);
-    useEffect(() => {
-        setHasCallback(!!callbackRef.current);
-    }, [callbackRef.current]);
+    const hasCallback = !!callbackRef.current;
 
     useEffect(() => {
-        if (node.current && hasCallback) {
+        if (nodeRef.current && hasCallback) {
             const resizeObserver = new ResizeObserver(entries => {
-                callbackRef.current(entries[0]);
+                callbackRef.current!(entries[0]);
             });
 
-            resizeObserver.observe(node.current);
-            const unsubscribeFunction = () => resizeObserver.unobserve(node.current!);
+            resizeObserver.observe(nodeRef.current);
+            const unsubscribeFunction = () => resizeObserver.unobserve(nodeRef.current!);
 
             return unsubscribeFunction;
         }
-    }, [node.current, hasCallback]);
+    }, [nodeRef.current, hasCallback]);
 
-    return [setNodeRef, setCallback];
+    return { setNodeRef, setCallback };
 }

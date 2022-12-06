@@ -5,11 +5,11 @@ import { SongInfo } from "../../models";
 import { EllipsisOneLineWithTooltip } from "../../shared/components/EllipsisDiv";
 import { DifficultyBar } from "./DifficultyBar";
 
-export const SongItem = ({ songInfo }: { songInfo: SongInfo }) => {
+export const SongItem = ({ songInfo, className }: { songInfo: SongInfo; className?: string }) => {
     const tuningAsString = songInfo.tuning?.map(tuningNumberToString).reverse().join(" ");
 
     return (
-        <StyledSongItem href={songInfo.url} target="_blank" rel="noopener noreferrer" isLink={!!songInfo.url}>
+        <StyledSongItem href={songInfo.url} target="_blank" rel="noopener noreferrer" disabled={!songInfo.url} className={className}>
             <Title text={songInfo.title} />
             {songInfo.difficulty && (
                 <Difficulty>
@@ -22,15 +22,14 @@ export const SongItem = ({ songInfo }: { songInfo: SongInfo }) => {
     );
 };
 
-const StyledSongItem = styled.a<{ isLink: boolean }>`
+const StyledSongItem = styled.a<{ disabled: boolean }>`
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: auto;
     grid-template-areas: "title difficulty" "artist tuning";
     grid-gap: 0.5em;
-    padding: calc(var(--inline-padding) / 2);
     border-radius: calc(var(--inline-padding) / 2);
-    opacity: ${p => (p.isLink ? 1 : 0.5)};
+    opacity: ${p => (p.disabled ? 0.5 : 1)};
 
     &:hover {
         background: hsla(0, 0%, 100%, 12%);
@@ -39,14 +38,18 @@ const StyledSongItem = styled.a<{ isLink: boolean }>`
 
 const Title = styled(EllipsisOneLineWithTooltip)`
     grid-column: title;
-    text-align: start;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     font-weight: bold;
-    height: 1.4em;
 `;
 const Artist = styled(EllipsisOneLineWithTooltip)`
     grid-column: artist;
-    text-align: start;
-    height: 1.4em;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 `;
 const Difficulty = styled.div`
     grid-column: difficulty;
@@ -56,10 +59,13 @@ const Difficulty = styled.div`
     align-items: center;
 
     > * {
-        height: 0.6em;
+        height: 1em;
     }
 `;
 const Tuning = styled.div`
     grid-column: tuning;
-    text-align: end;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 `;

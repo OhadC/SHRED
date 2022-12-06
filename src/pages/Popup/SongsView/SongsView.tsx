@@ -1,19 +1,35 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { SongList } from "./components/SongList";
 import { useSongsViewTranslations } from "./SongsView.translations";
 import { useCurrentPlayingSong } from "./useCurrentPlayingSong.hook";
 import { useCurrentViewSongs } from "./useCurrentViewSongs.hook";
 
 export const SongsView: React.FunctionComponent = () => {
-    const currentPlayingSong = useCurrentPlayingSong();
-    const currentViewSongs = useCurrentViewSongs();
+    const { currentPlayingSong, isLoading: loadingCurrentPlayingSong } = useCurrentPlayingSong();
+    const { currentViewSongs, isLoading: loadingCurrentViewSongs } = useCurrentViewSongs();
     const translations = useSongsViewTranslations();
+
+    const currentPlayingSongAsList = useMemo(() => (currentPlayingSong ? [currentPlayingSong] : undefined), [currentPlayingSong]);
 
     return (
         <>
-            {currentPlayingSong && <SongList songList={[currentPlayingSong]} title={translations.playingNow} />}
+            {
+                <SongList
+                    songList={currentPlayingSongAsList}
+                    title={translations.songsView.playingNow}
+                    isLoading={loadingCurrentPlayingSong}
+                    emptyListText={translations.songsView.playingNowEmpty}
+                />
+            }
 
-            {currentViewSongs.length ? <SongList songList={currentViewSongs} title={translations.currentView} /> : undefined}
+            {
+                <SongList
+                    songList={currentViewSongs}
+                    title={translations.songsView.currentView}
+                    isLoading={loadingCurrentViewSongs}
+                    emptyListText={translations.songsView.currentViewEmpty}
+                />
+            }
         </>
     );
 };

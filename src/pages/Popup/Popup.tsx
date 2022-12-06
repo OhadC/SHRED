@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { DynamicHeightTransition } from "./shared/components/DynamicHeightTransition";
 import { CurrentTabContextProvider } from "./shared/contexts/CurrentTab.context";
 import { LocaleContextProvider } from "./shared/contexts/Locale.context";
 import { SongsView } from "./SongsView/SongsView";
@@ -9,9 +8,7 @@ export const PopupComponent: React.FunctionComponent = () => (
     <LocaleContextProvider>
         <CurrentTabContextProvider>
             <PopupContainer>
-                <DynamicHeightTransition>
-                    <SongsView />
-                </DynamicHeightTransition>
+                <SongsView />
             </PopupContainer>
         </CurrentTabContextProvider>
     </LocaleContextProvider>

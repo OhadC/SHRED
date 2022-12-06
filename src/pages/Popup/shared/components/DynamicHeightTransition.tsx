@@ -1,14 +1,13 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useResizeOberver, UseResizeOberverCallbackProp } from "../hooks/useResizeOberver.hook";
+import { useResizeOberver, UseResizeOberverCallback } from "../hooks/useResizeOberver.hook";
 
-export const DynamicHeightTransition: React.FunctionComponent<React.PropsWithChildren<{ className?: string }>> = ({
-    children,
-    className,
-}) => {
+type DynamicHeightTransitionProps = React.PropsWithChildren<{ className?: string; startAfterMs?: number }>;
+
+export const DynamicHeightTransition = ({ children, className, startAfterMs = 200 }: DynamicHeightTransitionProps) => {
     const [containerSize, setContainerSize] = useState<number>(0);
 
-    const wrapperResizeCallback: UseResizeOberverCallbackProp = useCallback((resizeObserverEntry: ResizeObserverEntry) => {
+    const wrapperResizeCallback: UseResizeOberverCallback = useCallback((resizeObserverEntry: ResizeObserverEntry) => {
         if (resizeObserverEntry) {
             const newContainerSize = resizeObserverEntry.borderBoxSize[0].blockSize;
 
@@ -16,17 +15,26 @@ export const DynamicHeightTransition: React.FunctionComponent<React.PropsWithChi
         }
     }, []);
 
-    const [setTarget, setCallback] = useResizeOberver(wrapperResizeCallback);
+    const { setNodeRef } = useResizeOberver(wrapperResizeCallback);
+
+    const [contentRendered, setContentRendered] = useState<boolean>(false);
+    useEffect(() => {
+        const timer = setTimeout(() => setContentRendered(true), startAfterMs ?? 0);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
-        <WrapperContainer containerSize={containerSize} className={className}>
-            <ContentContainer ref={setTarget}>{children}</ContentContainer>
+        <WrapperContainer containerSize={contentRendered ? containerSize : undefined}>
+            <ContentContainer ref={setNodeRef} className={className}>
+                {children}
+            </ContentContainer>
         </WrapperContainer>
     );
 };
 
-const WrapperContainer = styled.div<{ containerSize: number }>`
-    height: ${props => props.containerSize}px;
+const WrapperContainer = styled.div<{ containerSize: number | undefined }>`
+    height: ${props => (props.containerSize ? props.containerSize + "px" : "intital")};
     transition: height 0.3s ease-in-out;
     overflow: hidden;
 `;

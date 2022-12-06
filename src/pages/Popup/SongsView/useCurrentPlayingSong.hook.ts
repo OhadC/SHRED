@@ -5,12 +5,11 @@ import { getSongInfoFromSongsterr } from "../api/songsterr";
 import { useCurrentTab } from "../shared/contexts/CurrentTab.context";
 import { SongInfo } from "../models";
 
-type CurrentPlayingSongData = SongInfo | undefined;
-
-export function useCurrentPlayingSong(): CurrentPlayingSongData {
+export function useCurrentPlayingSong() {
     const currentTab = useCurrentTab();
 
-    const [currentPlayingSong, setCurrentPlayingSong] = useState<CurrentPlayingSongData>();
+    const [currentPlayingSong, setCurrentPlayingSong] = useState<SongInfo | undefined>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         if (currentTab?.id === undefined) {
@@ -18,11 +17,14 @@ export function useCurrentPlayingSong(): CurrentPlayingSongData {
         }
 
         return contentScriptApi.subscribeToCurrentPlayingSongFromTab(currentTab.id, async (song?: StreamingServiceSong) => {
+            setIsLoading(true);
+
             const songInfo: SongInfo | undefined = (song && (await getSongInfoFromSongsterr(song.title, song.artist))) ?? song;
 
             setCurrentPlayingSong(songInfo);
+            setIsLoading(false);
         });
-    }, [currentTab]);
+    }, [currentTab?.id]);
 
-    return currentPlayingSong;
+    return { currentPlayingSong, isLoading };
 }
