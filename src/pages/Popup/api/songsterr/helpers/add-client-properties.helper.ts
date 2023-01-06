@@ -1,9 +1,14 @@
 import { SongsterrSongInfo, SongsterrTrackInfo } from "./songsterr.model";
 
-// mutate original object - add keys
-export function addClientProperties(innerSongInfo: SongsterrSongInfo) {
-    innerSongInfo.defaultTrackIndex = getDefaultTrackIndex(innerSongInfo.tracks) ?? innerSongInfo.defaultTrack ?? 0;
-    innerSongInfo.url = getSongUrl(innerSongInfo.songId, innerSongInfo.artist, innerSongInfo.title);
+export function addClientProperties(songInfo: SongsterrSongInfo): SongsterrSongInfo {
+    const defaultTrackIndex = getDefaultTrackIndex(songInfo.tracks);
+    const url = getSongUrl(songInfo.songId, songInfo.artist, songInfo.title);
+
+    return {
+        ...songInfo,
+        defaultTrackIndex: defaultTrackIndex ?? songInfo.defaultTrack ?? 0,
+        url,
+    };
 }
 
 function getDefaultTrackIndex(tracks: SongsterrTrackInfo[]): number | undefined {

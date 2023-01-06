@@ -9,10 +9,10 @@ export const DifficultyBar = ({ songDifficulty }: { songDifficulty: SongDifficul
     const translations = useSongsViewTranslations();
 
     const difficultyAsNumber: number | undefined = songDifficulty && +songDifficultyToNumberMap[songDifficulty];
-    const difficultyAsstring: string = songDifficulty && translations.SongDifficulty[SongDifficulty[songDifficulty]];
+    const difficultyAsString: string = songDifficulty && translations.SongDifficulty[songDifficulty.toString()];
 
     return (
-        <StyledDifficultyBar title={difficultyAsstring}>
+        <StyledDifficultyBar title={difficultyAsString}>
             {_.times(difficultyAsNumber, index => (
                 <div key={index}></div>
             ))}

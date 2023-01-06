@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
+import { useTimeout } from "react-use";
 import styled from "styled-components";
 import { useResizeOberver, UseResizeOberverCallback } from "../hooks/useResizeOberver.hook";
 
@@ -17,15 +18,10 @@ export const DynamicHeightTransition = ({ children, className, startAfterMs = 20
 
     const { setNodeRef } = useResizeOberver(wrapperResizeCallback);
 
-    const [contentRendered, setContentRendered] = useState<boolean>(false);
-    useEffect(() => {
-        const timer = setTimeout(() => setContentRendered(true), startAfterMs ?? 0);
-
-        return () => clearTimeout(timer);
-    }, []);
+    const [isReady] = useTimeout(startAfterMs ?? 0);
 
     return (
-        <WrapperContainer containerSize={contentRendered ? containerSize : undefined}>
+        <WrapperContainer containerSize={isReady() ? containerSize : undefined}>
             <ContentContainer ref={setNodeRef} className={className}>
                 {children}
             </ContentContainer>
@@ -39,4 +35,12 @@ const WrapperContainer = styled.div<{ containerSize: number | undefined }>`
     overflow: hidden;
 `;
 
-const ContentContainer = styled.div``;
+const ContentContainer = styled.div`
+    &::before,
+    &::after {
+        /* fix for case where first/last element inside ContentContainer has margin-box */
+        content: "";
+        display: block;
+        overflow: hidden;
+    }
+`;

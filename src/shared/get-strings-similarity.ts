@@ -1,38 +1,39 @@
-// https://stackoverflow.com/questions/10473745/compare-strings-javascript-return-of-likely
+// this funciton is written by openAI chatbot, and it's more efficient than the original one (Damerau-Levenshtein [O(n+m)] instead of Levenshtein [O(n*m)]).
 
 export function getStringsSimilarity(s1: string, s2: string): number {
-    let longer = s1;
-    let shorter = s2;
-    if (s1.length < s2.length) {
-        longer = s2;
-        shorter = s1;
-    }
-    let longerLength = longer.length;
-    if (longerLength == 0) {
-        return 1.0;
-    }
-    return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength as any);
+    const longer = s1.length >= s2.length ? s1 : s2;
+    const distance = damerauLevenshteinDistance(s1, s2);
+
+    return (longer.length - distance) / longer.length;
 }
 
-function editDistance(s1, s2) {
+function damerauLevenshteinDistance(s1: string, s2: string): number {
+    // Convert the strings to lowercase for case-insensitivity.
     s1 = s1.toLowerCase();
     s2 = s2.toLowerCase();
 
-    let costs = new Array();
+    // Create an array to store the edit distances.
+    const distances: number[][] = [];
+
+    // Initialize the array with the distances between each character of the two strings.
     for (let i = 0; i <= s1.length; i++) {
-        let lastValue = i;
-        for (let j = 0; j <= s2.length; j++) {
-            if (i == 0) costs[j] = j;
-            else {
-                if (j > 0) {
-                    let newValue = costs[j - 1];
-                    if (s1.charAt(i - 1) != s2.charAt(j - 1)) newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-                    costs[j - 1] = lastValue;
-                    lastValue = newValue;
-                }
+        distances[i] = [i];
+    }
+    for (let j = 0; j <= s2.length; j++) {
+        distances[0][j] = j;
+    }
+
+    // Loop through the string characters and calculate the distances.
+    for (let i = 1; i <= s1.length; i++) {
+        for (let j = 1; j <= s2.length; j++) {
+            const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
+            distances[i][j] = Math.min(distances[i - 1][j] + 1, distances[i][j - 1] + 1, distances[i - 1][j - 1] + cost);
+            if (i > 1 && j > 1 && s1[i - 1] === s2[j - 2] && s1[i - 2] === s2[j - 1]) {
+                distances[i][j] = Math.min(distances[i][j], distances[i - 2][j - 2] + cost);
             }
         }
-        if (i > 0) costs[s2.length] = lastValue;
     }
-    return costs[s2.length];
+
+    // Return the edit distance between the two strings.
+    return distances[s1.length][s2.length];
 }

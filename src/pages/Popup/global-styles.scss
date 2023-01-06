@@ -46,6 +46,21 @@ html {
     box-sizing: inherit;
 }
 
+.ellipsis-one-line,
+.standalone-ellipsis-one-line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standalone-ellipsis-one-line {
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    white-space: unset;
+    word-break: break-all;
+}
+
 ::-webkit-scrollbar {
     width: auto;
     max-width: var(--scrollbar-width);

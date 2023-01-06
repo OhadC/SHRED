@@ -5,21 +5,17 @@ import { SongsterrSongInfo } from "./songsterr.model";
 const MIN_ACCEPTEBLE_SIMILARITY = 0.5;
 
 export async function fetchSongsterrSongInfo(title: string, artist?: string): Promise<SongsterrSongInfo | undefined> {
-    const songsterrSongInfos = await tryToFetchSong(title, artist);
+    const songsterrSongInfos = await fetchSongInfo(title, artist);
 
     const songsterrSongInfo = songsterrSongInfos?.find(info => isSimilar(info.title, title) && (!artist || isSimilar(info.artist, artist)));
 
-    songsterrSongInfo && addClientProperties(songsterrSongInfo);
-
-    return songsterrSongInfo;
+    return songsterrSongInfo && addClientProperties(songsterrSongInfo);
 }
 
-async function tryToFetchSong(title: string, artist?: string): Promise<SongsterrSongInfo[] | undefined> {
+async function fetchSongInfo(title: string, artist?: string): Promise<SongsterrSongInfo[] | undefined> {
     let result: SongsterrSongInfo[] | undefined;
     if (artist) {
-        const pattern = `${artist}%20${title}`;
-
-        result = await fetchPattern(pattern);
+        result = await fetchPattern(`${artist} ${title}`);
     }
 
     if (!result) {
@@ -30,9 +26,9 @@ async function tryToFetchSong(title: string, artist?: string): Promise<Songsterr
 }
 
 async function fetchPattern(pattern: string, numberOfResults = 5): Promise<SongsterrSongInfo[]> {
-    const songInfos = await fetch(`https://www.songsterr.com/api/songs?pattern=${pattern}&size=${numberOfResults}`).then(res => res.json());
+    const encodedPattern = encodeURIComponent(pattern);
 
-    return songInfos;
+    return fetch(`https://www.songsterr.com/api/songs?pattern=${encodedPattern}&size=${numberOfResults}`).then(res => res.json());
 }
 
 function isSimilar(string1: string, string2: string): boolean {

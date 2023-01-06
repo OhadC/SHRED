@@ -12,21 +12,23 @@ export const SongList = ({ title, songList, isLoading, emptyListText }: SongList
     const translations = useSongsViewTranslations();
 
     return (
-        <Container>
+        <DynamicHeightTransition>
             {<SongListSectionTitle>{title}</SongListSectionTitle>}
 
-            {isLoading ? (
-                <TextItemContainer>{translations.songList.loading}</TextItemContainer>
-            ) : songList?.length ? (
-                songList.map((songInfo, index) => <SongListItem songInfo={songInfo} key={index} />)
-            ) : (
-                <TextItemContainer>{emptyListText}</TextItemContainer>
-            )}
-        </Container>
+            <Container>
+                {isLoading ? (
+                    <TextItemContainer>{translations.songList.loading}</TextItemContainer>
+                ) : songList?.length ? (
+                    songList.map((songInfo, index) => <SongListItem songInfo={songInfo} key={index} />)
+                ) : (
+                    <TextItemContainer>{emptyListText}</TextItemContainer>
+                )}
+            </Container>
+        </DynamicHeightTransition>
     );
 };
 
-const Container = styled(DynamicHeightTransition)`
+const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 4px;

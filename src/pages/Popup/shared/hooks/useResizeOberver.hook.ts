@@ -12,16 +12,17 @@ export function useResizeOberver<T extends HTMLElement>(
     const hasCallback = !!callbackRef.current;
 
     useEffect(() => {
-        if (nodeRef.current && hasCallback) {
-            const resizeObserver = new ResizeObserver(entries => {
-                callbackRef.current!(entries[0]);
-            });
-
-            resizeObserver.observe(nodeRef.current);
-            const unsubscribeFunction = () => resizeObserver.unobserve(nodeRef.current!);
-
-            return unsubscribeFunction;
+        if (!nodeRef.current || !hasCallback) {
+            return;
         }
+
+        const resizeObserver = new ResizeObserver(entries => {
+            callbackRef.current!(entries[0]);
+        });
+
+        resizeObserver.observe(nodeRef.current);
+
+        return () => resizeObserver.unobserve(nodeRef.current!);
     }, [nodeRef.current, hasCallback]);
 
     return { setNodeRef, setCallback };

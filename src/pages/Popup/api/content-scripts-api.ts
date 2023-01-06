@@ -24,27 +24,13 @@ class ContentScriptApi {
         tabId: number,
         callback: (currentPlayingSong: StreamingServiceSong | undefined) => void
     ): () => void {
-        let isUnsubscribed = false;
-
-        const getCurrentPlayingSong = () =>
-            this.getCurrentPlayingSongFromTab(tabId).then(currentPlayingSong => {
-                if (!isUnsubscribed) {
-                    callback(currentPlayingSong);
-                }
-            });
+        const getCurrentPlayingSong = () => this.getCurrentPlayingSongFromTab(tabId).then(callback);
 
         getCurrentPlayingSong();
-        const unsubscriveToCurrentPlayingSongChanges = browserApi.subscribeToEvent(
-            ContentScriptEvents.CurrentPlayingSongChanged,
-            getCurrentPlayingSong
-        );
 
-        const unsubscribeFunction = () => {
-            isUnsubscribed = true;
-            unsubscriveToCurrentPlayingSongChanges();
-        };
+        const unsubscribe = browserApi.subscribeToEvent(ContentScriptEvents.CurrentPlayingSongChanged, getCurrentPlayingSong);
 
-        return unsubscribeFunction;
+        return unsubscribe;
     }
 }
 

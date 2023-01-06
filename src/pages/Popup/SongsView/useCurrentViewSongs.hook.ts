@@ -1,32 +1,26 @@
-import { useEffect, useState } from "react";
+import { useAsync } from "react-use";
+import { StreamingServiceSong } from "../../../shared/shared.model";
 import { contentScriptApi } from "../api/content-scripts-api";
 import { getSongInfoFromSongsterr } from "../api/songsterr";
-import { useCurrentTab } from "../shared/contexts/CurrentTab.context";
 import { SongInfo } from "../models";
+import { useCurrentTab } from "../shared/contexts/CurrentTab.context";
 
 export function useCurrentViewSongs() {
     const currentTab = useCurrentTab();
 
-    const [currentViewSongs, setCurrentViewSongs] = useState<SongInfo[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    useEffect(() => {
+    const { loading, error, value } = useAsync(async () => {
         if (currentTab?.id === undefined) {
-            return;
+            return [];
         }
 
-        setIsLoading(true);
+        const songs: StreamingServiceSong[] | undefined = await contentScriptApi.getCurrentViewSongsFromTab(currentTab.id);
 
-        contentScriptApi
-            .getCurrentViewSongsFromTab(currentTab.id)
-            .then(songs =>
-                Promise.all(songs?.map(song => getSongInfoFromSongsterr(song.title, song.artist).then(songInfo => songInfo ?? song)) ?? [])
-            )
-            .then(response => {
-                setCurrentViewSongs(response);
-                setIsLoading(false);
-            });
+        const songInfoPromises: Promise<SongInfo>[] | undefined = songs?.map(song =>
+            getSongInfoFromSongsterr(song.title, song.artist).then(songInfo => songInfo ?? song)
+        );
+
+        return Promise.all(songInfoPromises ?? []);
     }, [currentTab]);
 
-    return { currentViewSongs, isLoading };
+    return { currentViewSongs: value, loading, error };
 }

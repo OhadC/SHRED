@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import styled from "styled-components";
 import { tuningNumberToString } from "../../helpers/tuning-number-to-string.helper";
 import { SongInfo } from "../../models";
-import { EllipsisOneLineWithTooltip } from "../../shared/components/EllipsisDiv";
+import { EllipsisOneLine } from "../../shared/components/EllipsisDiv";
 import { DifficultyBar } from "./DifficultyBar";
 
 export const SongItem = ({ songInfo, className }: { songInfo: SongInfo; className?: string }) => {
@@ -10,13 +10,17 @@ export const SongItem = ({ songInfo, className }: { songInfo: SongInfo; classNam
 
     return (
         <StyledSongItem href={songInfo.url} target="_blank" rel="noopener noreferrer" disabled={!songInfo.url} className={className}>
-            <Title text={songInfo.title} />
+            <Title>
+                <EllipsisOneLine text={songInfo.title}></EllipsisOneLine>
+            </Title>
             {songInfo.difficulty && (
                 <Difficulty>
                     <DifficultyBar songDifficulty={songInfo.difficulty} />
                 </Difficulty>
             )}
-            <Artist text={songInfo.artist} />
+            <Artist>
+                <EllipsisOneLine text={songInfo.artist}></EllipsisOneLine>
+            </Artist>
             <Tuning>{tuningAsString}</Tuning>
         </StyledSongItem>
     );
@@ -36,7 +40,7 @@ const StyledSongItem = styled.a<{ disabled: boolean }>`
     }
 `;
 
-const Title = styled(EllipsisOneLineWithTooltip)`
+const Title = styled.div`
     grid-column: title;
 
     display: flex;
@@ -44,7 +48,7 @@ const Title = styled(EllipsisOneLineWithTooltip)`
     align-items: center;
     font-weight: bold;
 `;
-const Artist = styled(EllipsisOneLineWithTooltip)`
+const Artist = styled.div`
     grid-column: artist;
 
     display: flex;

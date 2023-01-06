@@ -1,17 +1,7 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useMemo } from "react";
 
-export const EllipsisOneLine = styled.div`
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-`;
-
-export const EllipsisOneLineWithTooltip: React.FunctionComponent<{ text: string | undefined; className?: string }> = ({
-    text,
-    className,
-}) => (
-    <EllipsisOneLine title={text} className={className}>
+export const EllipsisOneLine: React.FunctionComponent<{ text: string | undefined; className?: string }> = ({ text, className }) => (
+    <span title={text} className={useMemo(() => `${className ?? ""} standalone-ellipsis-one-line`, [className])}>
         {text}
-    </EllipsisOneLine>
+    </span>
 );
