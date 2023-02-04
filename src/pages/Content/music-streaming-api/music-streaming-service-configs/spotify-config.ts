@@ -8,7 +8,7 @@ import {
 const sharedTableSelectors: MusicStreamingServiceConfigCurrentViewSongsSelectors = {
     songsTable: `[role="grid"]`,
     songRowDomElements: `[data-testid="tracklist-row"]`,
-    titleDomElement: `a[href^="/track/"]`,
+    titleDomElement: `a[data-testid="internal-track-link"]`,
     artistDomElement: `a[href^="/artist/"]`,
 };
 
@@ -27,21 +27,24 @@ export const SPOTIFY_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStrea
             views: [
                 {
                     urlMatch: "/playlist/",
-                    selectors: { ...sharedTableSelectors },
+                    selectors: {
+                        ...sharedTableSelectors,
+                        songsTable: `[data-testid="playlist-tracklist"]`,
+                    },
                 },
                 {
                     urlMatch: "/album/",
                     selectors: {
                         ...sharedTableSelectors,
-                        titleDomElement: `[role="gridcell"]:nth-child(2) > div > div`,
+                        songsTable: `[data-testid="track-list"]`,
                     },
                 },
                 {
                     urlMatch: "/artist/",
                     selectors: {
                         ...sharedTableSelectors,
-                        titleDomElement: `[role="gridcell"]:nth-child(2) > div > div`,
-                        artistDomElement: `h1`,
+                        songsTable: `[data-testid="track-list"]`,
+                        artistDomElement: `[data-testid="entityTitle"]`,
                         isArtistFromRow: false,
                     },
                 },
