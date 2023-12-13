@@ -1,5 +1,5 @@
 import { container } from "tsyringe";
-import { getApiLogger } from "~api/api-logger";
+import { getApiLogger } from "../api-logger";
 import { DomApi } from "../helpers/dom-api";
 import {
     MusicStreamingApiToken,
