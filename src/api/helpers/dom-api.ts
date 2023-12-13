@@ -1,3 +1,6 @@
+import { singleton } from "tsyringe";
+
+@singleton()
 export class DomApi {
     getCurrentUrl(): string {
         return document.URL;

@@ -1,17 +1,19 @@
 import _ from "lodash";
+import { inject, singleton } from "tsyringe";
 import { waitForElementToDisplay } from "~/shared/dom-helpers";
 import { type StreamingServiceSong } from "~shared/shared-api.model";
 import { getApiLogger } from "../../api-logger";
 import { DomApi } from "../../helpers/dom-api";
-import { type MusicStreamingApi } from "../music-streaming-api.model";
+import { MusicStreamingClassBasedConfigToken, type MusicStreamingApi } from "../music-streaming-api.model";
 import { type SelectorBasedMusicStreamingServiceConfig } from "./selector-based-music-streaming-api.model";
 
 const logger = getApiLogger("SelectorBasedMusicStreamingApi");
 
+@singleton()
 export class SelectorBasedMusicStreamingApi implements MusicStreamingApi {
     constructor(
-        private domApi: DomApi,
-        private config: SelectorBasedMusicStreamingServiceConfig,
+        @inject(DomApi) private domApi: DomApi,
+        @inject(MusicStreamingClassBasedConfigToken) private config: SelectorBasedMusicStreamingServiceConfig,
     ) {}
 
     public async getCurrentPlayingSong(): Promise<StreamingServiceSong | undefined> {

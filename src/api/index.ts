@@ -1,14 +1,19 @@
+import "@abraham/reflection";
+import { container, inject, singleton } from "tsyringe";
 import { EndpointService } from "./endpoint-service";
 import { EventService } from "./event-service";
-import { DomApi } from "./helpers/dom-api";
-import { MusicStreamingApiFactory } from "./music-streaming-api/music-streaming-api-factory";
+import "./music-streaming-api/music-streaming-api-factory";
 
-const musicStreamingApi = new MusicStreamingApiFactory(new DomApi()).getMusicStreamingApi();
+@singleton()
+class Api {
+    constructor(
+        @inject(EndpointService) private endpointService: EndpointService,
+        @inject(EventService) private eventService: EventService,
+    ) {
+        this.endpointService.init();
 
-if (musicStreamingApi) {
-    const endpointsService = new EndpointService(musicStreamingApi);
-    endpointsService.init();
-
-    const eventService = new EventService(musicStreamingApi);
-    eventService.init();
+        this.eventService.init();
+    }
 }
+
+export const api = container.resolve(Api);

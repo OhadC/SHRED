@@ -1,3 +1,4 @@
+import { inject, singleton } from "tsyringe";
 import browser, { type Runtime } from "webextension-polyfill";
 import {
     ApiEndpoint,
@@ -7,12 +8,14 @@ import {
     type GetCurrentViewSongsResponse,
 } from "~shared/shared-api.model";
 import { getApiLogger } from "./api-logger";
-import type { MusicStreamingApi } from "./music-streaming-api/music-streaming-api.model";
+import { MusicStreamingApiToken, type MusicStreamingApi } from "./music-streaming-api/music-streaming-api.model";
 
 const logger = getApiLogger("EndpointService");
 
+export const EndpointService_INJECT_TOKEN = Symbol("EndpointService_INJECT_TOKEN");
+@singleton()
 export class EndpointService {
-    constructor(private musicStreamingApi: MusicStreamingApi) {}
+    constructor(@inject(MusicStreamingApiToken) private musicStreamingApi: MusicStreamingApi) {}
 
     public init() {
         this.subscribeToBrowserMessages();

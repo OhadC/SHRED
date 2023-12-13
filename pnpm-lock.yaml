@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@abraham/reflection':
+    specifier: ^0.12.0
+    version: 0.12.0
+  '@preact/signals-react':
+    specifier: ^1.3.8
+    version: 1.3.8(react@18.2.0)
   js-logger:
     specifier: ^1.6.1
     version: 1.6.1
@@ -26,6 +32,9 @@ dependencies:
   styled-components:
     specifier: ^6.1.1
     version: 6.1.1(react-dom@18.2.0)(react@18.2.0)
+  tsyringe:
+    specifier: ^4.8.0
+    version: 4.8.0
   webextension-polyfill:
     specifier: ^0.10.0
     version: 0.10.0
@@ -33,7 +42,7 @@ dependencies:
 devDependencies:
   '@ianvs/prettier-plugin-sort-imports':
     specifier: 4.1.1
-    version: 4.1.1(prettier@3.0.3)
+    version: 4.1.1(prettier@3.1.1)
   '@types/chrome':
     specifier: 0.0.251
     version: 0.0.251
@@ -53,13 +62,17 @@ devDependencies:
     specifier: ^0.10.7
     version: 0.10.7
   prettier:
-    specifier: 3.0.3
-    version: 3.0.3
+    specifier: 3.1.1
+    version: 3.1.1
   typescript:
     specifier: 5.2.2
     version: 5.2.2
 
 packages:
+
+  /@abraham/reflection@0.12.0:
+    resolution: {integrity: sha512-OoLlgBE5u18mc61pJNamEh2OtFpHjtvDi1pV4ojnnH77juCvQw/Z3YlHF8TJiorU7/V6UuGApFzsi+bieug7fg==}
+    dev: false
 
   /@ampproject/remapping@2.2.1:
     resolution: {integrity: sha512-lFMjJTrFL3j7L9yBxwYfCq2k6qqwHyzuUl/XBnif78PWTJYyL/dfowQHWE3sp6U6ZzqWiiIZnpTMO96zhkjwtg==}
@@ -464,7 +477,7 @@ packages:
       cross-spawn: 7.0.3
     dev: false
 
-  /@ianvs/prettier-plugin-sort-imports@4.1.1(prettier@3.0.3):
+  /@ianvs/prettier-plugin-sort-imports@4.1.1(prettier@3.1.1):
     resolution: {integrity: sha512-kJhXq63ngpTQ2dxgf5GasbPJWsJA3LgoOdd7WGhpUSzLgLgI4IsIzYkbJf9kmpOHe7Vdm/o3PcRA3jmizXUuAQ==}
     peerDependencies:
       '@vue/compiler-sfc': '>=3.0.0'
@@ -478,7 +491,7 @@ packages:
       '@babel/parser': 7.23.5
       '@babel/traverse': 7.23.5
       '@babel/types': 7.23.5
-      prettier: 3.0.3
+      prettier: 3.1.1
       semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
@@ -2237,6 +2250,20 @@ packages:
       '@pnpm/config.env-replace': 1.1.0
       '@pnpm/network.ca-file': 1.0.2
       config-chain: 1.1.13
+    dev: false
+
+  /@preact/signals-core@1.5.1:
+    resolution: {integrity: sha512-dE6f+WCX5ZUDwXzUIWNMhhglmuLpqJhuy3X3xHrhZYI0Hm2LyQwOu0l9mdPiWrVNsE+Q7txOnJPgtIqHCYoBVA==}
+    dev: false
+
+  /@preact/signals-react@1.3.8(react@18.2.0):
+    resolution: {integrity: sha512-i7mVZ/ZiD9WqNH79r+klpQsp8X+/dOd/5AtvDI0HNpgWuHyzyF9WXDViKl+1vXgB767n9VnH1W2azg+w1oyFMQ==}
+    peerDependencies:
+      react: ^16.14.0 || 17.x || 18.x
+    dependencies:
+      '@preact/signals-core': 1.5.1
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
   /@sindresorhus/is@5.6.0:
@@ -4941,8 +4968,8 @@ packages:
       tunnel-agent: 0.6.0
     dev: false
 
-  /prettier@3.0.3:
-    resolution: {integrity: sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==}
+  /prettier@3.1.1:
+    resolution: {integrity: sha512-22UbSzg8luF4UuZtzgiUOfcGM8s4tjBv6dJRT7j275NXsy2jb4aJa4NNveul5x4eqlF1wuhuR2RElK71RvmVaw==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -5595,6 +5622,10 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: false
 
+  /tslib@1.14.1:
+    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+    dev: false
+
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
     dev: false
@@ -5633,6 +5664,13 @@ packages:
     transitivePeerDependencies:
       - supports-color
       - ts-node
+    dev: false
+
+  /tsyringe@4.8.0:
+    resolution: {integrity: sha512-YB1FG+axdxADa3ncEtRnQCFq/M0lALGLxSZeVNbTU8NqhOVc51nnv2CISTcvc1kyv6EGPtXVr0v6lWeDxiijOA==}
+    engines: {node: '>= 6.0.0'}
+    dependencies:
+      tslib: 1.14.1
     dev: false
 
   /tunnel-agent@0.6.0:
@@ -5702,6 +5740,14 @@ packages:
       browserslist: 4.22.2
       escalade: 3.1.1
       picocolors: 1.0.0
+
+  /use-sync-external-store@1.2.0(react@18.2.0):
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
