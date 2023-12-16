@@ -26,6 +26,9 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
+  react-facade:
+    specifier: ^0.5.0
+    version: 0.5.0(react@18.2.0)
   react-use:
     specifier: ^17.4.2
     version: 17.4.2(react-dom@18.2.0)(react@18.2.0)
@@ -3970,6 +3973,12 @@ packages:
       wrap-ansi: 6.2.0
     dev: false
 
+  /invariant@2.2.4:
+    resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
+    dependencies:
+      loose-envify: 1.4.0
+    dev: false
+
   /is-arrayish@0.2.1:
     resolution: {integrity: sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==}
     dev: false
@@ -5036,6 +5045,15 @@ packages:
 
   /react-error-overlay@6.0.9:
     resolution: {integrity: sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==}
+    dev: false
+
+  /react-facade@0.5.0(react@18.2.0):
+    resolution: {integrity: sha512-3hqIr8s5UPTuKH5TLJ3mTdcv2mvn/7ZHcJ/0Tfx/QlMwbRVVh6gQhS+7BZKFEy05gVbGN79yoyczu1DKNG+c8g==}
+    peerDependencies:
+      react: ^18.2.0
+    dependencies:
+      invariant: 2.2.4
+      react: 18.2.0
     dev: false
 
   /react-refresh@0.14.0:

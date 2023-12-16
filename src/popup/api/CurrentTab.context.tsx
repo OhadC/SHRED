@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { container } from "tsyringe";
 import { type Tabs } from "webextension-polyfill";
-import { browserApi } from "../../api/browser-api";
+import { BrowserProxy } from "./browser-proxy";
 
 type CurrentTabContextData = Tabs.Tab | undefined;
 
@@ -14,9 +15,11 @@ export const CurrentTabContextProvider: React.FunctionComponent<React.PropsWithC
     const [currentTab, setCurrentTab] = useState<CurrentTabContextData>();
 
     useEffect(() => {
-        browserApi.getActiveTab().then(tab => setCurrentTab(tab));
+        const browserProxy = container.resolve(BrowserProxy);
 
-        return browserApi.subscribeToActiveTabUrlChanges((tabId, changeInfo, tab) => setCurrentTab(tab));
+        browserProxy.getActiveTab().then(tab => setCurrentTab(tab));
+
+        return browserProxy.subscribeToActiveTabUrlChanges((tabId, changeInfo, tab) => setCurrentTab(tab));
     }, []);
 
     return <CurrentTabContext.Provider value={currentTab}>{children}</CurrentTabContext.Provider>;

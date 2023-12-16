@@ -1,11 +1,11 @@
-import { SongList } from "./components/SongList";
 import { useSongsViewTranslations } from "./SongsView.translations";
+import { SongList } from "./components/SongList";
 import { useCurrentPlayingSong } from "./useCurrentPlayingSong.hook";
 import { useCurrentViewSongs } from "./useCurrentViewSongs.hook";
 
 export const SongsView: React.FunctionComponent = () => {
-    const { currentPlayingSong, loading: loadingCurrentPlayingSong } = useCurrentPlayingSong();
-    const { currentViewSongs, loading: loadingCurrentViewSongs } = useCurrentViewSongs();
+    const { value: currentPlayingSong, loading: loadingCurrentPlayingSong } = useCurrentPlayingSong();
+    const { value: currentViewSongs, loading: loadingCurrentViewSongs } = useCurrentViewSongs();
     const translations = useSongsViewTranslations();
 
     const currentPlayingSongAsList = currentPlayingSong ? [currentPlayingSong] : undefined;

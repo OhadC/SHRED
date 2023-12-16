@@ -1,8 +1,8 @@
 import _ from "lodash";
 import styled from "styled-components";
-import { songDifficultySorted, songDifficultyToNumberMap } from "../../helpers/song-difficulty-number";
 import { SongDifficulty } from "../../models";
 import { useSongsViewTranslations } from "../SongsView.translations";
+import { songDifficultySorted, songDifficultyToNumberMap } from "../helpers/song-difficulty-number";
 
 export const DifficultyBar = ({ songDifficulty }: { songDifficulty: SongDifficulty }) => {
     const translations = useSongsViewTranslations();

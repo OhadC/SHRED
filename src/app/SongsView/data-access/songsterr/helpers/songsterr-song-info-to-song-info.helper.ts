@@ -1,5 +1,5 @@
-import { SongDifficulty, SongInfo, TabsWebsite } from "../../../models";
-import { SongsterrDifficulty, SongsterrSongInfo, SongsterrTrackInfo } from "./songsterr.model";
+import { SongDifficulty, TabsWebsite, type SongInfo } from "~app/models";
+import { SongsterrDifficulty, type SongsterrSongInfo, type SongsterrTrackInfo } from "./songsterr.model";
 
 export function songsterrSongInfoToSongInfo(innerSongInfo: SongsterrSongInfo): SongInfo {
     const defaultTrack = innerSongInfo.tracks[innerSongInfo.defaultTrackIndex!];

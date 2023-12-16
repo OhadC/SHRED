@@ -1,5 +1,5 @@
-import { SongInfo } from "../../models";
-import { getAppLogger } from "../../shared/app-logger";
+import type { SongInfo } from "~app/models";
+import { getAppLogger } from "~app/shared/app-logger";
 import { fetchSongsterrSongInfo } from "./helpers/fetch-songsterr-song-info.helper";
 import { songsterrSongInfoToSongInfo } from "./helpers/songsterr-song-info-to-song-info.helper";
 

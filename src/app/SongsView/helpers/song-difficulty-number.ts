@@ -1,4 +1,4 @@
-import { SongDifficulty } from "../models";
+import { SongDifficulty } from "../../models";
 
 export const songDifficultySorted = [
     SongDifficulty.VaryEasy,

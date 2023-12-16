@@ -1,10 +1,13 @@
+import { singleton } from "tsyringe";
 import Browser, { type Runtime, type Tabs } from "webextension-polyfill";
+import { getPopupLogger } from "~popup/popup-logger";
 import type { ApiEndpoint, ApiEventMessage, ApiEvents, ApiRequest, ApiResponse } from "~shared/shared-api.model";
-import { getAppLogger } from "../shared/app-logger";
+import type { Unsubscribe } from "~shared/util.model";
 
-const logger = getAppLogger("BrowserApi");
+const logger = getPopupLogger("BrowserApi");
 
-class BrowserApi {
+@singleton()
+export class BrowserProxy {
     private nextRequestId = 1;
 
     getActiveTab(): Promise<Tabs.Tab> {
@@ -17,7 +20,9 @@ class BrowserApi {
         return Browser.tabs.sendMessage(tabId, request).catch(error => logger.error("sendMessageToTab error", error));
     }
 
-    subscribeToActiveTabUrlChanges(callback: (tabId: number, changeInfo: Tabs.OnUpdatedChangeInfoType, tab: Tabs.Tab) => void): () => void {
+    subscribeToActiveTabUrlChanges(
+        callback: (tabId: number, changeInfo: Tabs.OnUpdatedChangeInfoType, tab: Tabs.Tab) => void,
+    ): Unsubscribe {
         let waitingForPageToComplete = false;
 
         const onUpdateCallback = (tabId: number, changeInfo: Tabs.OnUpdatedChangeInfoType, tab: Tabs.Tab) => {
@@ -38,7 +43,7 @@ class BrowserApi {
         return unsubscribeFunction;
     }
 
-    subscribeToEvent<T>(event: ApiEvents, callback: (eventMessage: ApiEventMessage<T>, tabId: number, tab: Tabs.Tab) => void): () => void {
+    subscribeToEvent<T>(event: ApiEvents, callback: (eventMessage: ApiEventMessage<T>, tabId: number, tab: Tabs.Tab) => void): Unsubscribe {
         const onMessageCallback = (message: ApiEventMessage<T>, sender: Runtime.MessageSender) => {
             if (message?.event === event && sender.tab?.active) {
                 callback(message, sender.tab.id!, sender.tab);
@@ -51,5 +56,3 @@ class BrowserApi {
         return unsubscribeFunction;
     }
 }
-
-export const browserApi = new BrowserApi();

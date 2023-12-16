@@ -1,4 +1,4 @@
-import { SongsterrSongInfo, SongsterrTrackInfo } from "./songsterr.model";
+import type { SongsterrSongInfo, SongsterrTrackInfo } from "./songsterr.model";
 
 export function addClientProperties(songInfo: SongsterrSongInfo): SongsterrSongInfo {
     const defaultTrackIndex = getDefaultTrackIndex(songInfo.tracks);

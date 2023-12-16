@@ -1,3 +1,4 @@
+import { inject, singleton } from "tsyringe";
 import {
     ApiEndpoint,
     ApiEvents,
@@ -5,17 +6,20 @@ import {
     type GetCurrentViewSongsResponse,
     type StreamingServiceSong,
 } from "~shared/shared-api.model";
-import { browserApi } from "./browser-api";
+import { BrowserProxy } from "./browser-proxy";
 
-class ContentScriptApi {
-    getCurrentPlayingSongFromTab(tabId: number): Promise<StreamingServiceSong | undefined> {
-        return browserApi
+@singleton()
+export class ApiProxy {
+    constructor(@inject(BrowserProxy) private browserProxy: BrowserProxy) {}
+
+    public getCurrentPlayingSongFromTab(tabId: number): Promise<StreamingServiceSong | undefined> {
+        return this.browserProxy
             .sendMessageToTab<GetCurrentPlayingSongResponse>(tabId, ApiEndpoint.GetCurrentPlayingSong)
             .then(response => response?.data);
     }
 
-    getCurrentViewSongsFromTab(tabId: number): Promise<StreamingServiceSong[] | undefined> {
-        return browserApi
+    public getCurrentViewSongsFromTab(tabId: number): Promise<StreamingServiceSong[] | undefined> {
+        return this.browserProxy
             .sendMessageToTab<GetCurrentViewSongsResponse>(tabId, ApiEndpoint.GetCurrentViewSongs)
             .then(response => response?.data);
     }
@@ -28,10 +32,8 @@ class ContentScriptApi {
 
         getCurrentPlayingSong();
 
-        const unsubscribe = browserApi.subscribeToEvent(ApiEvents.CurrentPlayingSongChanged, getCurrentPlayingSong);
+        const unsubscribe = this.browserProxy.subscribeToEvent(ApiEvents.CurrentPlayingSongChanged, getCurrentPlayingSong);
 
         return unsubscribe;
     }
 }
-
-export const contentScriptApi = new ContentScriptApi();

@@ -1,26 +1,22 @@
 import { useAsync } from "react-use";
-import { type StreamingServiceSong } from "~shared/shared-api.model";
-import { contentScriptApi } from "../api/content-scripts-api";
-import { getSongInfoFromSongsterr } from "../api/songsterr";
+import { apiHooks } from "~popup/api/api.hooks";
 import { type SongInfo } from "../models";
-import { useCurrentTab } from "../shared/contexts/CurrentTab.context";
+import { getSongInfoFromSongsterr } from "./data-access/songsterr";
 
 export function useCurrentViewSongs() {
-    const currentTab = useCurrentTab();
+    const currentViewStreamingServiceSong = apiHooks.useCurrentViewStreamingServiceSong();
 
-    const { loading, error, value } = useAsync(async () => {
-        if (currentTab?.id === undefined) {
-            return [];
-        }
-
-        const songs: StreamingServiceSong[] | undefined = await contentScriptApi.getCurrentViewSongsFromTab(currentTab.id);
-
-        const songInfoPromises: Promise<SongInfo>[] | undefined = songs?.map(song =>
+    const currentViewSongs = useAsync(async () => {
+        const songInfoPromises: Promise<SongInfo>[] | undefined = currentViewStreamingServiceSong.value?.map(song =>
             getSongInfoFromSongsterr(song.title, song.artist).then(songInfo => songInfo ?? song),
         );
 
         return Promise.all(songInfoPromises ?? []);
-    }, [currentTab]);
+    }, [currentViewStreamingServiceSong.value]);
 
-    return { currentViewSongs: value, loading, error };
+    return {
+        value: currentViewSongs.value,
+        loading: currentViewStreamingServiceSong.loading || currentViewSongs.loading,
+        error: currentViewStreamingServiceSong.error || currentViewSongs.error,
+    };
 }
