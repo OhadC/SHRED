@@ -1,6 +1,6 @@
 import { useAsync } from "react-use";
-import { apiHooks } from "~popup/api/api.hooks";
 import { type SongInfo } from "../models";
+import { apiHooks } from "../shared/hooks/api-hooks";
 import { getSongInfoFromSongsterr } from "./data-access/songsterr";
 
 export function useCurrentViewSongs() {

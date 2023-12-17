@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { inject, singleton } from "tsyringe";
-import { waitForElementToDisplay } from "~/shared/dom-helpers";
 import { type StreamingServiceSong } from "~shared/shared-api.model";
+import { waitForFunctionToResolve } from "~shared/wait-for-function-to-resolve";
 import { getApiLogger } from "../../api-logger";
 import { DomApi } from "../../helpers/dom-api";
 import { MusicStreamingClassBasedConfigToken, type MusicStreamingApi } from "../music-streaming-api.model";
@@ -22,9 +22,7 @@ export class SelectorBasedMusicStreamingApi implements MusicStreamingApi {
             return;
         }
 
-        await waitForElementToDisplay(selectors.containerDomElement);
-
-        const containerDomElement = this.domApi.querySelector(selectors.containerDomElement);
+        const containerDomElement = await waitForElementToDisplay(selectors.containerDomElement);
         const titleDomElement = containerDomElement?.querySelector<HTMLElement>(selectors.titleDomElement);
         const title = this.leanTitle(titleDomElement?.innerText);
         if (!title) {
@@ -97,9 +95,7 @@ export class SelectorBasedMusicStreamingApi implements MusicStreamingApi {
             return;
         }
 
-        await waitForElementToDisplay(selectors.containerDomElement);
-
-        const containerDomElement = this.domApi.querySelector(selectors.containerDomElement);
+        const containerDomElement = await waitForElementToDisplay(selectors.containerDomElement);
 
         return containerDomElement ?? undefined;
     }
@@ -123,3 +119,8 @@ const removeMatch = _.curry((regexp: string | RegExp, text: string): string => {
 
     return stringContainRemaster?.length ? text!.replace(stringContainRemaster[0], "") : text;
 });
+
+const waitForElementToDisplay = (selector: string) =>
+    waitForFunctionToResolve(() => document.querySelector(selector)).catch(error => {
+        throw Error(`Could not resolve selector: ${selector}`);
+    });
