@@ -1,8 +1,9 @@
-import { createContext, useContext, useState } from "react";
+import { Signal, useSignal } from "@preact/signals-react";
+import { createContext, useContext } from "react";
 
 export const DEFAULT_LOCALE = "en-US";
 
-type LocaleContextData = { locale: string; setLocale: React.Dispatch<React.SetStateAction<string>> };
+type LocaleContextData = Signal<string>;
 
 const LocaleContext = createContext<LocaleContextData>(undefined!);
 
@@ -11,7 +12,7 @@ export function useLocale(): LocaleContextData {
 }
 
 export const LocaleContextProvider: React.FunctionComponent<React.PropsWithChildren<{}>> = ({ children }) => {
-    const [locale, setLocale] = useState<string>(DEFAULT_LOCALE);
+    const locale = useSignal<string>(DEFAULT_LOCALE);
 
-    return <LocaleContext.Provider value={{ locale, setLocale }}>{children}</LocaleContext.Provider>;
+    return <LocaleContext.Provider value={locale}>{children}</LocaleContext.Provider>;
 };

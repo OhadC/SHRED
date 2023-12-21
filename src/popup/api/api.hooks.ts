@@ -1,39 +1,46 @@
-import { useEffect, useState } from "react";
-import { useAsync } from "react-use";
-import type { AsyncState } from "react-use/lib/useAsyncFn";
+import { Signal, useComputed, useSignal, useSignalEffect } from "@preact/signals-react";
 import { container } from "tsyringe";
+import type { ApiHooks } from "~app/shared/hooks/api-hooks";
+import { useAsyncSignalComputed, type UseAsyncSignalState } from "~app/shared/hooks/use-async-signal.hook";
 import type { StreamingServiceSong } from "~shared/shared-api.model";
 import { useCurrentTab } from "./CurrentTab.context";
 import { ApiProxy } from "./api-proxy";
 
-export const apiHooks = {
+export const apiHooks: ApiHooks = {
     useCurrentPlayingStreamingServiceSong,
     useCurrentViewStreamingServiceSong,
 };
 
-function useCurrentPlayingStreamingServiceSong(): StreamingServiceSong {
+function useCurrentPlayingStreamingServiceSong(): Signal<StreamingServiceSong> {
     const currentTab = useCurrentTab();
 
-    const [currentPlayingStreamingServiceSong, setCurrentPlayingStreamingServiceSong] = useState<StreamingServiceSong | undefined>();
-    useEffect(() => {
-        if (currentTab?.id === undefined) {
+    const currentTabId = useComputed<number>(() => currentTab.value?.id);
+
+    const currentPlayingStreamingServiceSong = useSignal<StreamingServiceSong | undefined>(undefined);
+    useSignalEffect(() => {
+        if (currentTabId.value === undefined) {
             return;
         }
 
-        return container.resolve(ApiProxy).subscribeToCurrentPlayingSongFromTab(currentTab.id, setCurrentPlayingStreamingServiceSong);
-    }, [currentTab?.id]);
+        return container
+            .resolve(ApiProxy)
+            .subscribeToCurrentPlayingSongFromTab(
+                currentTabId.value,
+                currentPlayingSong => (currentPlayingStreamingServiceSong.value = currentPlayingSong),
+            );
+    });
 
     return currentPlayingStreamingServiceSong;
 }
 
-function useCurrentViewStreamingServiceSong(): AsyncState<StreamingServiceSong[]> {
+function useCurrentViewStreamingServiceSong(): UseAsyncSignalState<StreamingServiceSong[]> {
     const currentTab = useCurrentTab();
 
-    return useAsync(async () => {
-        if (currentTab?.id === undefined) {
+    return useAsyncSignalComputed(async () => {
+        if (currentTab.value?.id === undefined) {
             return [];
         }
 
-        return container.resolve(ApiProxy).getCurrentViewSongsFromTab(currentTab.id);
-    }, [currentTab]);
+        return container.resolve(ApiProxy).getCurrentViewSongsFromTab(currentTab.value.id);
+    });
 }

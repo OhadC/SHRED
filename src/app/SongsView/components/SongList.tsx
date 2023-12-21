@@ -1,3 +1,4 @@
+import { type ReadonlySignal } from "@preact/signals-react";
 import styled, { css } from "styled-components";
 import { type SongInfo } from "../../models";
 import { DynamicHeightTransition } from "../../shared/components/DynamicHeightTransition";
@@ -5,20 +6,22 @@ import { SectionTitle } from "../../shared/components/SectionTitle";
 import { useSongsViewTranslations } from "../SongsView.translations";
 import { SongItem } from "./SongItem";
 
-type SongListProps = { title: string; songList?: SongInfo[]; isLoading: boolean; emptyListText: string };
+type SongListProps = { title: string; songList?: ReadonlySignal<SongInfo[]>; isLoading: ReadonlySignal<boolean>; emptyListText: string };
 
 export const SongList = ({ title, songList, isLoading, emptyListText }: SongListProps) => {
     const translations = useSongsViewTranslations();
+
+    console.log("SongList");
 
     return (
         <DynamicHeightTransition>
             {<SongListSectionTitle>{title}</SongListSectionTitle>}
 
             <Container>
-                {isLoading ? (
-                    <TextItemContainer>{translations.songList.loading}</TextItemContainer>
-                ) : songList?.length ? (
-                    songList.map(songInfo => <SongListItem songInfo={songInfo} key={`${songInfo.artist}__${songInfo.title}`} />)
+                {isLoading.value ? (
+                    <TextItemContainer>{translations.value.songList.loading}</TextItemContainer>
+                ) : songList.value?.length ? (
+                    songList.value.map(songInfo => <SongListItem songInfo={songInfo} key={`${songInfo.artist}__${songInfo.title}`} />)
                 ) : (
                     <TextItemContainer>{emptyListText}</TextItemContainer>
                 )}

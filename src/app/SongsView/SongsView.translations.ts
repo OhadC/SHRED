@@ -21,6 +21,7 @@ const enUS = {
     },
 };
 
-export const useSongsViewTranslations = createUseTranslations({
-    "en-US": enUS,
-});
+export const useSongsViewTranslations = () =>
+    createUseTranslations({
+        "en-US": enUS,
+    });

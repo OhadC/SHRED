@@ -1,29 +1,29 @@
-import { useEffect } from "react";
-import { useStateRef } from "./useStateRef.hook";
+import { Signal } from "@preact/signals-react";
+import { useEffect, useRef } from "react";
 
 export type UseResizeOberverCallback = (resizeObserverEntry: ResizeObserverEntry) => void;
 
-export function useResizeOberver<T extends HTMLElement>(
-    initialCallback: UseResizeOberverCallback,
-): { setNodeRef: (element: T | null) => void; setCallback: (newState: UseResizeOberverCallback) => void } {
-    const [, setNodeRef, nodeRef] = useStateRef<T | null>(null);
-    const [, setCallback, callbackRef] = useStateRef<UseResizeOberverCallback>(initialCallback);
+export function useResizeOberver(): {
+    nodeRef: typeof nodeRef;
+    resizeObserverEntry: Signal<ResizeObserverEntry | undefined>;
+} {
+    const nodeRef = useRef(null);
 
-    const hasCallback = !!callbackRef.current;
+    const resizeObserverEntry = new Signal<ResizeObserverEntry | undefined>(undefined);
 
     useEffect(() => {
-        if (!nodeRef.current || !hasCallback) {
+        if (!nodeRef.current) {
             return;
         }
 
         const resizeObserver = new ResizeObserver(entries => {
-            callbackRef.current!(entries[0]);
+            resizeObserverEntry.value = entries[0];
         });
 
         resizeObserver.observe(nodeRef.current);
 
         return () => resizeObserver.unobserve(nodeRef.current!);
-    }, [nodeRef.current, hasCallback]);
+    }, [nodeRef.current]);
 
-    return { setNodeRef, setCallback };
+    return { nodeRef, resizeObserverEntry: resizeObserverEntry };
 }

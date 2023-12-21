@@ -1,22 +1,23 @@
-import { useAsync } from "react-use";
+import { useComputed } from "@preact/signals-react";
+import { useAsyncSignalComputed, type UseAsyncSignalState } from "~app/shared/hooks/use-async-signal.hook";
 import { type SongInfo } from "../models";
 import { apiHooks } from "../shared/hooks/api-hooks";
 import { getSongInfoFromSongsterr } from "./data-access/songsterr";
 
-export function useCurrentViewSongs() {
+export function useCurrentViewSongs(): UseAsyncSignalState<SongInfo[]> {
     const currentViewStreamingServiceSong = apiHooks.useCurrentViewStreamingServiceSong();
 
-    const currentViewSongs = useAsync(async () => {
-        const songInfoPromises: Promise<SongInfo>[] | undefined = currentViewStreamingServiceSong.value?.map(song =>
+    const currentViewSongs = useAsyncSignalComputed(async () => {
+        const songInfoPromises: Promise<SongInfo>[] | undefined = currentViewStreamingServiceSong.data.value?.map(song =>
             getSongInfoFromSongsterr(song.title, song.artist).then(songInfo => songInfo ?? song),
         );
 
         return Promise.all(songInfoPromises ?? []);
-    }, [currentViewStreamingServiceSong.value]);
+    });
 
     return {
-        value: currentViewSongs.value,
-        loading: currentViewStreamingServiceSong.loading || currentViewSongs.loading,
-        error: currentViewStreamingServiceSong.error || currentViewSongs.error,
+        data: currentViewSongs.data,
+        loading: useComputed(() => currentViewStreamingServiceSong.loading.value || currentViewSongs.loading.value),
+        error: useComputed(() => currentViewStreamingServiceSong.error.value || currentViewSongs.error.value),
     };
 }

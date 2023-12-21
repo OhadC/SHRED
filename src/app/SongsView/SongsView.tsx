@@ -1,29 +1,32 @@
+import { useComputed } from "@preact/signals-react";
+import type { SongInfo } from "../models";
 import { useSongsViewTranslations } from "./SongsView.translations";
 import { SongList } from "./components/SongList";
 import { useCurrentPlayingSong } from "./useCurrentPlayingSong.hook";
 import { useCurrentViewSongs } from "./useCurrentViewSongs.hook";
 
 export const SongsView: React.FunctionComponent = () => {
-    const { value: currentPlayingSong, loading: loadingCurrentPlayingSong } = useCurrentPlayingSong();
-    const { value: currentViewSongs, loading: loadingCurrentViewSongs } = useCurrentViewSongs();
+    const { data: currentPlayingSong, loading: loadingCurrentPlayingSong } = useCurrentPlayingSong();
+    const { data: currentViewSongs, loading: loadingCurrentViewSongs } = useCurrentViewSongs();
+
     const translations = useSongsViewTranslations();
 
-    const currentPlayingSongAsList = currentPlayingSong ? [currentPlayingSong] : undefined;
+    console.log("SongsView");
 
     return (
         <>
             <SongList
-                songList={currentPlayingSongAsList}
-                title={translations.songsView.playingNow}
+                songList={useComputed<SongInfo[]>(() => (currentPlayingSong.value ? [currentPlayingSong.value] : undefined))}
+                title={translations.value.songsView.playingNow}
                 isLoading={loadingCurrentPlayingSong}
-                emptyListText={translations.songsView.playingNowEmpty}
+                emptyListText={translations.value.songsView.playingNowEmpty}
             />
 
             <SongList
                 songList={currentViewSongs}
-                title={translations.songsView.currentView}
+                title={translations.value.songsView.currentView}
                 isLoading={loadingCurrentViewSongs}
-                emptyListText={translations.songsView.currentViewEmpty}
+                emptyListText={translations.value.songsView.currentViewEmpty}
             />
         </>
     );

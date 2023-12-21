@@ -8,7 +8,7 @@ export const DifficultyBar = ({ songDifficulty }: { songDifficulty: SongDifficul
     const translations = useSongsViewTranslations();
 
     const difficultyAsNumber: number | undefined = songDifficulty && +songDifficultyToNumberMap[songDifficulty];
-    const difficultyAsString: string = songDifficulty && translations.SongDifficulty[songDifficulty.toString()];
+    const difficultyAsString: string = songDifficulty && translations.value.SongDifficulty[songDifficulty.toString()];
 
     return (
         <StyledDifficultyBar title={difficultyAsString}>
