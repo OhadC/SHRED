@@ -5,7 +5,7 @@ import { useResizeOberver } from "../hooks/useResizeOberver.hook";
 
 type DynamicHeightTransitionProps = React.PropsWithChildren<{ className?: string; startAfterMs?: number }>;
 
-export const DynamicHeightTransition = ({ children, className, startAfterMs = 200 }: DynamicHeightTransitionProps) => {
+export function DynamicHeightTransition({ children, className, startAfterMs = 200 }: DynamicHeightTransitionProps) {
     const { nodeRef, resizeObserverEntry } = useResizeOberver();
 
     const containerSize = useComputed(() => resizeObserverEntry.value?.borderBoxSize[0].blockSize);
@@ -19,7 +19,7 @@ export const DynamicHeightTransition = ({ children, className, startAfterMs = 20
             </ContentContainer>
         </WrapperContainer>
     );
-};
+}
 
 const WrapperContainer = styled.div<{ $containerSize: number | undefined }>`
     height: ${props => (props.$containerSize ? props.$containerSize + "px" : "intital")};

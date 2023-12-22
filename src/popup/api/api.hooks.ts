@@ -3,8 +3,11 @@ import { container } from "tsyringe";
 import type { ApiHooks } from "~app/shared/hooks/api-hooks";
 import { useAsyncSignalComputed, type UseAsyncSignalState } from "~app/shared/hooks/use-async-signal.hook";
 import type { StreamingServiceSong } from "~shared/shared-api.model";
+import { getPopupLogger } from "../popup-logger";
 import { useCurrentTab } from "./CurrentTab.context";
 import { ApiProxy } from "./api-proxy";
+
+const logger = getPopupLogger("ApiHooks");
 
 export const apiHooks: ApiHooks = {
     useCurrentPlayingStreamingServiceSong,
@@ -38,8 +41,10 @@ function useCurrentViewStreamingServiceSong(): UseAsyncSignalState<StreamingServ
 
     return useAsyncSignalComputed(async () => {
         if (currentTab.value?.id === undefined) {
-            return [];
+            return;
         }
+
+        logger.log("useCurrentViewStreamingServiceSong requsing ApiProxy.getCurrentViewSongsFromTab");
 
         return container.resolve(ApiProxy).getCurrentViewSongsFromTab(currentTab.value.id);
     });

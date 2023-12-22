@@ -8,10 +8,8 @@ import { SongItem } from "./SongItem";
 
 type SongListProps = { title: string; songList?: ReadonlySignal<SongInfo[]>; isLoading: ReadonlySignal<boolean>; emptyListText: string };
 
-export const SongList = ({ title, songList, isLoading, emptyListText }: SongListProps) => {
+export function SongList({ title, songList, isLoading, emptyListText }: SongListProps) {
     const translations = useSongsViewTranslations();
-
-    console.log("SongList");
 
     return (
         <DynamicHeightTransition>
@@ -28,7 +26,7 @@ export const SongList = ({ title, songList, isLoading, emptyListText }: SongList
             </Container>
         </DynamicHeightTransition>
     );
-};
+}
 
 const Container = styled.div`
     display: flex;

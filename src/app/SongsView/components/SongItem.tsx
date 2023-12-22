@@ -5,7 +5,7 @@ import { EllipsisOneLine } from "../../shared/components/EllipsisDiv";
 import { tuningNumberToString } from "../helpers/tuning-number-to-string.helper";
 import { DifficultyBar } from "./DifficultyBar";
 
-export const SongItem = ({ songInfo, className }: { songInfo: SongInfo; className?: string }) => {
+export function SongItem({ songInfo, className }: { songInfo: SongInfo; className?: string }) {
     const tuningAsString = useMemo(() => songInfo.tuning?.map(tuningNumberToString).reverse().join(" "), [songInfo.tuning]);
 
     return (
@@ -24,7 +24,7 @@ export const SongItem = ({ songInfo, className }: { songInfo: SongInfo; classNam
             <Tuning>{tuningAsString}</Tuning>
         </StyledSongItem>
     );
-};
+}
 
 const StyledSongItem = styled.a<{ $disabled: boolean }>`
     display: grid;

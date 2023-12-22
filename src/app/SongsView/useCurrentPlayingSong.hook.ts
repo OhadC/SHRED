@@ -9,7 +9,7 @@ export function useCurrentPlayingSong(): UseAsyncSignalState<SongInfo> {
 
     const songInfo = useAsyncSignalComputed(
         async () =>
-            currentPlayingStreamingServiceSong &&
+            currentPlayingStreamingServiceSong.value &&
             getSongInfoFromSongsterr(currentPlayingStreamingServiceSong.value.title, currentPlayingStreamingServiceSong.value.artist),
     );
 

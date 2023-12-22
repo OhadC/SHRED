@@ -17,6 +17,8 @@ export class BrowserProxy {
     sendMessageToTab<T>(tabId: number, endpoint: ApiEndpoint, data?: any): Promise<ApiResponse<T>> {
         const request: ApiRequest = { endpoint, data, requestId: this.nextRequestId++ };
 
+        logger.log("sendMessageToTab", { tabId, endpoint, data });
+
         return Browser.tabs.sendMessage(tabId, request).catch(error => logger.error("sendMessageToTab error", error));
     }
 

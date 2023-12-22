@@ -5,13 +5,11 @@ import { SongList } from "./components/SongList";
 import { useCurrentPlayingSong } from "./useCurrentPlayingSong.hook";
 import { useCurrentViewSongs } from "./useCurrentViewSongs.hook";
 
-export const SongsView: React.FunctionComponent = () => {
+export function SongsView() {
     const { data: currentPlayingSong, loading: loadingCurrentPlayingSong } = useCurrentPlayingSong();
     const { data: currentViewSongs, loading: loadingCurrentViewSongs } = useCurrentViewSongs();
 
     const translations = useSongsViewTranslations();
-
-    console.log("SongsView");
 
     return (
         <>
@@ -30,4 +28,4 @@ export const SongsView: React.FunctionComponent = () => {
             />
         </>
     );
-};
+}

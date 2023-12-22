@@ -4,7 +4,7 @@ import { SongDifficulty } from "../../models";
 import { useSongsViewTranslations } from "../SongsView.translations";
 import { songDifficultySorted, songDifficultyToNumberMap } from "../helpers/song-difficulty-number";
 
-export const DifficultyBar = ({ songDifficulty }: { songDifficulty: SongDifficulty }) => {
+export function DifficultyBar({ songDifficulty }: { songDifficulty: SongDifficulty }) {
     const translations = useSongsViewTranslations();
 
     const difficultyAsNumber: number | undefined = songDifficulty && +songDifficultyToNumberMap[songDifficulty];
@@ -17,7 +17,7 @@ export const DifficultyBar = ({ songDifficulty }: { songDifficulty: SongDifficul
             ))}
         </StyledDifficultyBar>
     );
-};
+}
 
 const StyledDifficultyBar = styled.div`
     display: grid;

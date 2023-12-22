@@ -1,4 +1,5 @@
 import { batch, useComputed, useSignal, useSignalEffect, type ReadonlySignal } from "@preact/signals-react";
+import { useRef } from "react";
 
 export type UseAsyncSignalState<T> = {
     data: ReadonlySignal<T | undefined>;
@@ -7,41 +8,45 @@ export type UseAsyncSignalState<T> = {
 };
 
 export function useAsyncSignalComputed<T>(callback: () => Promise<T>): UseAsyncSignalState<T> {
-    return useAsyncSignal(useComputed(callback));
+    const computedCallback = useComputed(callback);
+
+    return useAsyncSignal(computedCallback);
 }
 
 export function useAsyncSignal<T>(source: ReadonlySignal<Promise<T>>): UseAsyncSignalState<T> {
-    const interation = useSignal<number>(0);
+    const interation = useRef<number>(0);
 
     const data = useSignal<T | undefined>(undefined);
     const loading = useSignal<boolean>(true);
     const error = useSignal<Error | undefined>(undefined);
 
     useSignalEffect(() => {
-        let currentInteration = interation.peek();
-        interation.value = ++currentInteration;
+        const currentInteration = ++interation.current;
 
         loading.value = true;
 
         source.value.then(
-            value =>
-                batch(() => {
-                    if (currentInteration !== interation.peek()) {
-                        return;
-                    }
-
-                    data.value = value;
-                    loading.value = false;
-                    error.value = undefined;
-                }),
-            reject => () => {
-                if (currentInteration !== interation.peek()) {
+            value => {
+                if (currentInteration !== interation.current) {
                     return;
                 }
 
-                data.value = undefined;
-                loading.value = false;
-                error.value = reject;
+                batch(() => {
+                    data.value = value;
+                    loading.value = false;
+                    error.value = undefined;
+                });
+            },
+            reject => {
+                if (currentInteration !== interation.current) {
+                    return;
+                }
+
+                batch(() => {
+                    data.value = undefined;
+                    loading.value = false;
+                    error.value = reject;
+                });
             },
         );
     });

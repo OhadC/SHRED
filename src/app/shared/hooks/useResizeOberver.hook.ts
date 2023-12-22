@@ -1,4 +1,4 @@
-import { Signal } from "@preact/signals-react";
+import { Signal, useSignal } from "@preact/signals-react";
 import { useEffect, useRef } from "react";
 
 export type UseResizeOberverCallback = (resizeObserverEntry: ResizeObserverEntry) => void;
@@ -7,12 +7,13 @@ export function useResizeOberver(): {
     nodeRef: typeof nodeRef;
     resizeObserverEntry: Signal<ResizeObserverEntry | undefined>;
 } {
-    const nodeRef = useRef(null);
+    const nodeRef = useRef<HTMLDivElement>(null);
 
-    const resizeObserverEntry = new Signal<ResizeObserverEntry | undefined>(undefined);
+    const resizeObserverEntry = useSignal<ResizeObserverEntry | undefined>(undefined);
 
     useEffect(() => {
-        if (!nodeRef.current) {
+        const node = nodeRef.current;
+        if (!node) {
             return;
         }
 
@@ -20,10 +21,10 @@ export function useResizeOberver(): {
             resizeObserverEntry.value = entries[0];
         });
 
-        resizeObserver.observe(nodeRef.current);
+        resizeObserver.observe(node);
 
-        return () => resizeObserver.unobserve(nodeRef.current!);
+        return () => resizeObserver.unobserve(node);
     }, [nodeRef.current]);
 
-    return { nodeRef, resizeObserverEntry: resizeObserverEntry };
+    return { nodeRef, resizeObserverEntry };
 }
