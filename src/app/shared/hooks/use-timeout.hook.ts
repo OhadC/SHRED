@@ -9,9 +9,11 @@ export function useTimeout(ms?: number): UseTimeoutReturn {
     const isReady = useSignal<boolean>(false);
 
     useEffect(() => {
-        const timer = setTimeout(() => (isReady.value = true), ms);
+        const timer = setTimeout(() => {
+            isReady.value = true;
+        }, ms || 0);
 
-        return clearTimeout(timer);
+        return () => clearTimeout(timer);
     }, []);
 
     return { isReady };
