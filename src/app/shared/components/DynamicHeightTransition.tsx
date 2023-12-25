@@ -1,6 +1,6 @@
 import { useComputed } from "@preact/signals-react";
-import { useTimeout } from "react-use";
 import styled from "styled-components";
+import { useTimeout } from "../hooks/use-timeout.hook";
 import { useResizeOberver } from "../hooks/useResizeOberver.hook";
 
 type DynamicHeightTransitionProps = React.PropsWithChildren<{ className?: string; startAfterMs?: number }>;
@@ -10,10 +10,10 @@ export function DynamicHeightTransition({ children, className, startAfterMs = 20
 
     const containerSize = useComputed(() => resizeObserverEntry.value?.borderBoxSize[0].blockSize);
 
-    const [isReady] = useTimeout(startAfterMs ?? 0);
+    const { isReady } = useTimeout(startAfterMs ?? 0);
 
     return (
-        <WrapperContainer $containerSize={isReady() ? containerSize.value : undefined}>
+        <WrapperContainer $containerSize={isReady.value ? containerSize.value : undefined}>
             <ContentContainer ref={nodeRef} className={className}>
                 {children}
             </ContentContainer>
