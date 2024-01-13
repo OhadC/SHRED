@@ -3,6 +3,12 @@ export interface StreamingServiceSong {
     title: string;
 }
 
+export type ApiService = {
+    getCurrentPlayingSong(): Promise<StreamingServiceSong | undefined>;
+    getCurrentViewSongs(): Promise<StreamingServiceSong[] | undefined>;
+};
+export const apiServiceRpcToken = "__ApiServiceRpcToken__";
+
 export enum ApiEndpoint {
     GetCurrentPlayingSong = "GetCurrentPlayingSong",
     GetCurrentViewSongs = "GetCurrentViewSongs",
