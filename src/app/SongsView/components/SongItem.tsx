@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import styled from "styled-components";
 import { type SongInfo } from "../../models";
-import { EllipsisOneLine } from "../../shared/components/EllipsisDiv";
+import { EllipsisOneLine } from "../../shared/components/EllipsisOneLine";
 import { tuningNumberToString } from "../helpers/tuning-number-to-string.helper";
 import { DifficultyBar } from "./DifficultyBar";
 

@@ -1,4 +1,4 @@
-import { createUseTranslations } from "../shared/createUseTranslations";
+import { useTranslationMap } from "../shared/useTranslationMap";
 
 const enUS = {
     songsView: {
@@ -22,6 +22,6 @@ const enUS = {
 };
 
 export const useSongsViewTranslations = () =>
-    createUseTranslations({
+    useTranslationMap({
         "en-US": enUS,
     });

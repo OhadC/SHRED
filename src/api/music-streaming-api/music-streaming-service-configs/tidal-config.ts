@@ -5,12 +5,12 @@ import {
     type SelectorBasedMusicStreamingServiceConfig,
 } from "../selector-based-music-streaming-api/selector-based-music-streaming-api.model";
 
-const sharedTableSelectors: MusicStreamingServiceConfigCurrentViewSongsSelectors = {
+const sharedTableSelectors = {
     songRowDomElements: `[data-test="tracklist-row"]`,
     titleDomElement: `[data-test="table-row-title"] [data-test="table-cell-title"]`,
     artistDomElement: `[data-test="track-row-artist"]`,
     songsTable: `[data-type="media-table"] [role="rowgroup"]`,
-};
+} satisfies Partial<MusicStreamingServiceConfigCurrentViewSongsSelectors>;
 
 export const TIDAL_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStreamingServiceConfig> = {
     urlMatch: "listen.tidal.com/",

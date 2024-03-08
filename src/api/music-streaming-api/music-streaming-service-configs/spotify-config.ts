@@ -5,12 +5,12 @@ import {
     type SelectorBasedMusicStreamingServiceConfig,
 } from "../selector-based-music-streaming-api/selector-based-music-streaming-api.model";
 
-const sharedTableSelectors: MusicStreamingServiceConfigCurrentViewSongsSelectors = {
-    songsTable: `[role="grid"]`,
+const sharedTableSelectors = {
+    songsTable: `[data-testid="track-list"]`,
     songRowDomElements: `[data-testid="tracklist-row"]`,
     titleDomElement: `a[data-testid="internal-track-link"]`,
     artistDomElement: `a[href^="/artist/"]`,
-};
+} satisfies Partial<MusicStreamingServiceConfigCurrentViewSongsSelectors>;
 
 export const SPOTIFY_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStreamingServiceConfig> = {
     urlMatch: "open.spotify.com/",
@@ -34,16 +34,16 @@ export const SPOTIFY_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStrea
                 },
                 {
                     urlMatch: "/album/",
-                    selectors: {
-                        ...sharedTableSelectors,
-                        songsTable: `[data-testid="track-list"]`,
-                    },
+                    selectors: { ...sharedTableSelectors },
+                },
+                {
+                    urlMatch: "/collection/", // Liked Songs playlist
+                    selectors: { ...sharedTableSelectors },
                 },
                 {
                     urlMatch: "/artist/",
                     selectors: {
                         ...sharedTableSelectors,
-                        songsTable: `[data-testid="track-list"]`,
                         artistDomElement: `[data-testid="entityTitle"]`,
                         isArtistFromRow: false,
                     },
