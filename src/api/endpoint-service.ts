@@ -1,21 +1,20 @@
 import { inject, singleton } from "tsyringe";
 import browser, { type Runtime } from "webextension-polyfill";
+import { getApiLogger } from "./api-logger";
 import {
     ApiEndpoint,
     type ApiRequest,
     type ApiResponse,
     type GetCurrentPlayingSongResponse,
     type GetCurrentViewSongsResponse,
-} from "~shared/shared-api.model";
-import { getApiLogger } from "./api-logger";
+} from "./api.model";
 import { MusicStreamingApiToken, type MusicStreamingApi } from "./music-streaming-api/music-streaming-api.model";
 
 const logger = getApiLogger("EndpointService");
 
-export const EndpointService_INJECT_TOKEN = Symbol("EndpointService_INJECT_TOKEN");
 @singleton()
 export class EndpointService {
-    constructor(@inject(MusicStreamingApiToken) private musicStreamingApi: MusicStreamingApi) {}
+    constructor(@inject(MusicStreamingApiToken) private readonly musicStreamingApi: MusicStreamingApi) {}
 
     public init() {
         this.subscribeToBrowserMessages();
@@ -47,11 +46,11 @@ export class EndpointService {
         }
     }
 
-    private getCurrentPlayingSong(): Promise<GetCurrentPlayingSongResponse> {
+    public getCurrentPlayingSong(): Promise<GetCurrentPlayingSongResponse> {
         return this.musicStreamingApi.getCurrentPlayingSong();
     }
 
-    private getCurrentViewSongs(): Promise<GetCurrentViewSongsResponse> {
+    public getCurrentViewSongs(): Promise<GetCurrentViewSongsResponse> {
         return this.musicStreamingApi.getCurrentViewSongs();
     }
 }

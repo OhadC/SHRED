@@ -1,4 +1,4 @@
 import "@abraham/reflection";
-import Popup from "./popup";
+import { Popup } from "~ui/popup/Popup";
 
 export default Popup;
