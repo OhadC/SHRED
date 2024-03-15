@@ -4,7 +4,7 @@ import type { Api } from "~api/api";
 import type { EndpointService } from "~api/endpoint-service";
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://*.spotify.com/*", "https://*.tidal.com/*"],
+    matches: ["*://open.spotify.com/*", "*://listen.tidal.com/*"],
 };
 
 declare let window: Window & {

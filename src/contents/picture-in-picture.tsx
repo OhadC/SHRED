@@ -4,6 +4,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { StyleSheetManager } from "styled-components";
 import { PictureInPicture } from "~ui/picture-in-picture/PictureInPicture";
+import { PictureInPictureButton } from "~ui/picture-in-picture/PictureInPictureButton";
 
 declare let window: {
     documentPictureInPicture?: {
@@ -21,8 +22,8 @@ export const getRootContainer = () => {
     const container = document.createElement("div");
     container.setAttribute("id", "shred-pip-container");
     container.style.position = "fixed";
-    container.style.top = "240px";
-    container.style.right = "0";
+    container.style.top = "70px";
+    container.style.right = "26px";
     container.style.zIndex = "99";
 
     document.body.append(container);
@@ -66,7 +67,7 @@ const PipTriggerUi = ({ anchor }: PlasmoCSUIProps) => {
         pipWindow.addEventListener("pagehide", () => (showButton.value = true), { once: true });
     };
 
-    return <>{showButton.value && <div onClick={openPipContainer}>asdasdasdas</div>}</>;
+    return <>{showButton.value && <PictureInPictureButton onClick={openPipContainer} />}</>;
 };
 
 export default PipTriggerUi;
