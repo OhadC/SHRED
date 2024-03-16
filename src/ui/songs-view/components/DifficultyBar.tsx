@@ -1,32 +1,22 @@
 import _ from "lodash";
-import styled from "styled-components";
+import { cn } from "~util/cn";
 import { SongDifficulty } from "../../shread/models/models";
 import { useSongsViewTranslations } from "../SongsView.translations";
-import { songDifficultySorted, songDifficultyToNumberMap } from "../helpers/song-difficulty-number";
+import { songDifficultyToNumberMap } from "../helpers/song-difficulty-number";
 
-export function DifficultyBar({ songDifficulty }: { songDifficulty: SongDifficulty }) {
+export type DifficultyBarProperties = { songDifficulty: SongDifficulty; className?: string };
+
+export function DifficultyBar({ songDifficulty, className }: DifficultyBarProperties) {
     const translations = useSongsViewTranslations();
 
     const difficultyAsNumber: number | undefined = songDifficulty && +songDifficultyToNumberMap[songDifficulty];
     const difficultyAsString: string = songDifficulty && translations.value.SongDifficulty[songDifficulty.toString()];
 
     return (
-        <StyledDifficultyBar title={difficultyAsString}>
+        <div title={difficultyAsString} className={cn("grid grid-cols-8 gap-0.5 p-0.5 border border-zinc-500", className)}>
             {_.times(difficultyAsNumber, index => (
-                <div key={index}></div>
+                <div key={index} className="bg-zinc-500 w-[3px]"></div>
             ))}
-        </StyledDifficultyBar>
+        </div>
     );
 }
-
-const StyledDifficultyBar = styled.div`
-    display: grid;
-    grid-template-columns: repeat(${songDifficultySorted.length + 1}, 3px);
-    grid-gap: 2px;
-    padding: 2px;
-    border: 1px solid hsla(0, 0%, 100%, 32%);
-
-    > div {
-        background-color: hsla(0, 0%, 100%, 32%);
-    }
-`;

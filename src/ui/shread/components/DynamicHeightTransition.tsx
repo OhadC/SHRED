@@ -1,5 +1,5 @@
-import { useComputed } from "@preact/signals-react";
-import styled from "styled-components";
+import { computed, useComputed } from "@preact/signals-react";
+import { cn } from "~util/cn";
 import { useResizeOberver } from "../hooks/useResizeOberver.hook";
 import { useTimeout } from "../hooks/useTimeout.hook";
 
@@ -12,27 +12,19 @@ export function DynamicHeightTransition({ children, className, startAfterMs }: D
 
     const { isReady } = useTimeout(startAfterMs ?? 200);
 
+    const height = computed<string>(() => (isReady.value && containerSize.value ? containerSize.value + "px" : "intital"));
+
     return (
-        <WrapperContainer $containerSize={isReady.value ? containerSize.value : undefined}>
-            <ContentContainer ref={nodeRef} className={className}>
+        <div className="transition-all overflow-hidden" style={{ height: height.value }}>
+            <div
+                ref={nodeRef}
+                className={cn(
+                    "before:content-[''] before:block before:overflow-hidden after:block after:overflow-hidden", // fix for case where first/last element inside ContentContainer has margin-box
+                    className,
+                )}
+            >
                 {children}
-            </ContentContainer>
-        </WrapperContainer>
+            </div>
+        </div>
     );
 }
-
-const WrapperContainer = styled.div<{ $containerSize: number | undefined }>`
-    height: ${props => (props.$containerSize ? props.$containerSize + "px" : "intital")};
-    transition: height 0.3s ease-in-out;
-    overflow: hidden;
-`;
-
-const ContentContainer = styled.div`
-    &::before,
-    &::after {
-        /* fix for case where first/last element inside ContentContainer has margin-box */
-        content: "";
-        display: block;
-        overflow: hidden;
-    }
-`;

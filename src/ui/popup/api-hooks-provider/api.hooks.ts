@@ -1,8 +1,10 @@
-import { Signal, useComputed, useSignal, useSignalEffect } from "@preact/signals-react";
+import { useComputed, useSignalEffect } from "@preact/signals-react";
+import { useMemo } from "react";
 import { container } from "tsyringe";
 import type { StreamingServiceSong } from "~api/api.model";
 import type { ApiHooks } from "../../shread/hooks/apiHooks.hook";
-import { useAsyncSignalComputed, type UseAsyncSignalState } from "../../shread/hooks/useAsyncSignal.hook";
+import { useAsyncSignalComputed } from "../../shread/hooks/useAsyncSignal.hook";
+import { PromiseSignal, type ReadonlyPromiseSignal } from "../../shread/util/promise-signal";
 import { getUiLogger } from "../../shread/util/ui-logger";
 import { useCurrentTab } from "./CurrentTab.context";
 import { ApiProxy } from "./api-proxy";
@@ -14,12 +16,13 @@ export const apiHooks: ApiHooks = {
     useCurrentViewStreamingServiceSong,
 };
 
-function useCurrentPlayingStreamingServiceSong(): Signal<StreamingServiceSong> {
+function useCurrentPlayingStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong> {
+    const _promiseSignal = useMemo(() => new PromiseSignal<StreamingServiceSong | undefined>(undefined), []);
+
     const currentTab = useCurrentTab();
 
     const currentTabId = useComputed<number>(() => currentTab.value?.id);
 
-    const currentPlayingStreamingServiceSong = useSignal<StreamingServiceSong | undefined>(undefined);
     useSignalEffect(() => {
         if (currentTabId.value === undefined) {
             return;
@@ -29,14 +32,14 @@ function useCurrentPlayingStreamingServiceSong(): Signal<StreamingServiceSong> {
             .resolve(ApiProxy)
             .subscribeToCurrentPlayingSongFromTab(
                 currentTabId.value,
-                currentPlayingSong => (currentPlayingStreamingServiceSong.value = currentPlayingSong),
+                currentPlayingSong => (_promiseSignal.promise = Promise.resolve(currentPlayingSong)),
             );
     });
 
-    return currentPlayingStreamingServiceSong;
+    return _promiseSignal;
 }
 
-function useCurrentViewStreamingServiceSong(): UseAsyncSignalState<StreamingServiceSong[]> {
+function useCurrentViewStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong[]> {
     const currentTab = useCurrentTab();
 
     return useAsyncSignalComputed(async () => {

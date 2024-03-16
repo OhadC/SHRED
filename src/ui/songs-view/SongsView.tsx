@@ -12,7 +12,7 @@ export function SongsView() {
     const translations = useSongsViewTranslations();
 
     return (
-        <>
+        <div className="space-y-2">
             <SongList
                 songList={useComputed<SongInfo[]>(() => (currentPlayingSong.value ? [currentPlayingSong.value] : undefined))}
                 title={translations.value.songsView.playingNow}
@@ -25,7 +25,8 @@ export function SongsView() {
                 title={translations.value.songsView.currentView}
                 isLoading={loadingCurrentViewSongs}
                 emptyListText={translations.value.songsView.currentViewEmpty}
+                skeletonCount={5}
             />
-        </>
+        </div>
     );
 }

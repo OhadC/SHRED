@@ -1,5 +1,7 @@
 import { batch, signal, type ReadonlySignal } from "@preact/signals-react";
 
+export type ReadonlyPromiseSignal<T> = Omit<PromiseSignal<T>, "promise">;
+
 export function promiseSignal<T>(promise: Promise<T>): PromiseSignal<T> {
     return new PromiseSignal(promise);
 }

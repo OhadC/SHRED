@@ -1,75 +1,87 @@
-import { useMemo } from "react";
-import styled from "styled-components";
+import { useMemo, type PropsWithChildren } from "react";
+import { cn } from "~util/cn";
 import { EllipsisOneLine } from "../../shread/components/EllipsisOneLine";
 import { type SongInfo } from "../../shread/models/models";
 import { tuningNumberToString } from "../helpers/tuning-number-to-string.helper";
 import { DifficultyBar } from "./DifficultyBar";
 
-export function SongItem({ songInfo, className }: { songInfo: SongInfo; className?: string }) {
+export function SongItem({ songInfo }: { songInfo: SongInfo }) {
     const tuningAsString = useMemo(() => songInfo.tuning?.map(tuningNumberToString).reverse().join(" "), [songInfo.tuning]);
 
     return (
-        <StyledSongItem href={songInfo.url} target="_blank" rel="noopener noreferrer" $disabled={!songInfo.url} className={className}>
-            <Title>
+        <SongItemContainer url={songInfo.url}>
+            <SongItemContainer.Title>
                 <EllipsisOneLine text={songInfo.title}></EllipsisOneLine>
-            </Title>
+            </SongItemContainer.Title>
             {songInfo.difficulty && (
-                <Difficulty>
-                    <DifficultyBar songDifficulty={songInfo.difficulty} />
-                </Difficulty>
+                <SongItemContainer.Difficulty>
+                    <DifficultyBar songDifficulty={songInfo.difficulty} className="h-3" />
+                </SongItemContainer.Difficulty>
             )}
-            <Artist>
+            <SongItemContainer.Artist>
                 <EllipsisOneLine text={songInfo.artist}></EllipsisOneLine>
-            </Artist>
-            <Tuning>{tuningAsString}</Tuning>
-        </StyledSongItem>
+            </SongItemContainer.Artist>
+            <SongItemContainer.Tuning>{tuningAsString}</SongItemContainer.Tuning>
+        </SongItemContainer>
     );
 }
 
-const StyledSongItem = styled.a<{ $disabled: boolean }>`
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto;
-    grid-template-areas: "title difficulty" "artist tuning";
-    grid-gap: 0.5em;
-    border-radius: calc(var(--inline-padding) / 2);
-    opacity: ${p => (p.$disabled ? 0.5 : 1)};
+export function SongItemLoading() {
+    return (
+        <SongItemContainer>
+            <SongItemContainer.Title>
+                <div className="h-3 w-28 bg-zinc-700 rounded col-span-2 animate-pulse"></div>
+            </SongItemContainer.Title>
+            <SongItemContainer.Difficulty>
+                <div className="h-3 w-14 bg-zinc-700 rounded col-span-2 animate-pulse"></div>
+            </SongItemContainer.Difficulty>
+            <SongItemContainer.Artist>
+                <div className="h-3 w-11 bg-zinc-700 rounded col-span-2 animate-pulse"></div>
+            </SongItemContainer.Artist>
+            <SongItemContainer.Tuning>
+                <div className="h-3 w-16 bg-zinc-700 rounded col-span-2 animate-pulse"></div>
+            </SongItemContainer.Tuning>
+        </SongItemContainer>
+    );
+}
 
-    &:hover {
-        background: hsla(0, 0%, 100%, 12%);
-    }
-`;
+export function SongItemEmpty({ text }: { text: string }) {
+    return (
+        <SongItemContainer className="justify-center content-center">
+            <>{text}</>
+        </SongItemContainer>
+    );
+}
 
-const Title = styled.div`
-    grid-column: title;
+function SongItemContainer({ url, className, children }: PropsWithChildren<{ url?: string; className?: string }>) {
+    return (
+        <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+                "h-[58px] p-2 rounded-lg hover:bg-zinc-800 hover:shadow-md",
+                " grid gap-1 [grid-template-areas:'title_difficulty''artist_tuning'] ",
+                !url && "opacity-50",
+                className,
+            )}
+        >
+            {children}
+        </a>
+    );
+}
 
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-weight: bold;
-`;
-const Artist = styled.div`
-    grid-column: artist;
+SongItemContainer.Title = ({ children }: PropsWithChildren<{}>) => {
+    return <div className="[grid-column:title] flex justify-start content-center font-bold">{children}</div>;
+};
 
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-`;
-const Difficulty = styled.div`
-    grid-column: difficulty;
+SongItemContainer.Difficulty = ({ children }: PropsWithChildren<{}>) => {
+    return <div className="[grid-column:difficulty] flex justify-end content-center">{children}</div>;
+};
 
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-
-    > * {
-        height: 1em;
-    }
-`;
-const Tuning = styled.div`
-    grid-column: tuning;
-
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-`;
+SongItemContainer.Artist = ({ children }: PropsWithChildren<{}>) => {
+    return <div className="[grid-column:artist] flex justify-start content-center">{children}</div>;
+};
+SongItemContainer.Tuning = ({ children }: PropsWithChildren<{}>) => {
+    return <div className="[grid-column:tuning] flex justify-end content-center">{children}</div>;
+};
