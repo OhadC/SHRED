@@ -28,20 +28,21 @@ export function SongItemLoading() {
     return (
         <SongItemContainer>
             <SongItemContainer.Title>
-                <div className="h-3 w-28 bg-zinc-700 rounded col-span-2 animate-pulse"></div>
+                <div className={cn(skeletonRowStyle, "w-28")}></div>
             </SongItemContainer.Title>
             <SongItemContainer.Difficulty>
-                <div className="h-3 w-14 bg-zinc-700 rounded col-span-2 animate-pulse"></div>
+                <div className={cn(skeletonRowStyle, "w-14")}></div>
             </SongItemContainer.Difficulty>
             <SongItemContainer.Artist>
-                <div className="h-3 w-11 bg-zinc-700 rounded col-span-2 animate-pulse"></div>
+                <div className={cn(skeletonRowStyle, "w-11")}></div>
             </SongItemContainer.Artist>
             <SongItemContainer.Tuning>
-                <div className="h-3 w-16 bg-zinc-700 rounded col-span-2 animate-pulse"></div>
+                <div className={cn(skeletonRowStyle, "w-16")}></div>
             </SongItemContainer.Tuning>
         </SongItemContainer>
     );
 }
+const skeletonRowStyle = "h-3 bg-zinc-700 rounded col-span-2 animate-pulse";
 
 export function SongItemEmpty({ text }: { text: string }) {
     return (
@@ -70,17 +71,20 @@ function SongItemContainer({ url, className, children }: PropsWithChildren<{ url
 }
 
 SongItemContainer.Title = ({ children }: PropsWithChildren<{}>) => {
-    return <div className="[grid-column:title] flex justify-start content-center overflow-hidden font-bold">{children}</div>;
+    return <div className={cn(leftGridCellStyle, "[grid-column:title] font-bold")}>{children}</div>;
 };
 
 SongItemContainer.Difficulty = ({ children }: PropsWithChildren<{}>) => {
-    return <div className="[grid-column:difficulty] flex justify-end content-center">{children}</div>;
+    return <div className={cn(rightGridCellStyle, "[grid-column:difficulty]")}>{children}</div>;
 };
 
 SongItemContainer.Artist = ({ children }: PropsWithChildren<{}>) => {
-    return <div className="[grid-column:artist] flex justify-start content-center overflow-hidden">{children}</div>;
+    return <div className={cn(leftGridCellStyle, "[grid-column:artist]")}>{children}</div>;
 };
 
 SongItemContainer.Tuning = ({ children }: PropsWithChildren<{}>) => {
-    return <div className="[grid-column:tuning] flex justify-end content-center">{children}</div>;
+    return <div className={cn(rightGridCellStyle, "[grid-column:tuning]")}>{children}</div>;
 };
+
+const leftGridCellStyle = "flex justify-start content-center overflow-hidden";
+const rightGridCellStyle = "flex justify-end content-center";
