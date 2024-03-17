@@ -46,7 +46,7 @@ const skeletonRowStyle = "h-3 bg-zinc-700 rounded col-span-2 animate-pulse";
 
 export function SongItemEmpty({ text }: { text: string }) {
     return (
-        <SongItemContainer className="justify-center content-center">
+        <SongItemContainer className="content-center text-center">
             <>{text}</>
         </SongItemContainer>
     );
