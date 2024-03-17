@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { inject, singleton } from "tsyringe";
-import { type StreamingServiceSong } from "~shared/shared-api.model";
-import { waitForFunctionToResolve } from "~shared/wait-for-function-to-resolve";
+import { waitForFunctionToResolve } from "~util/wait-for-function-to-resolve";
 import { getApiLogger } from "../../api-logger";
+import { type StreamingServiceSong } from "../../api.model";
 import { DomApi } from "../../helpers/dom-api";
 import { MusicStreamingClassBasedConfigToken, type MusicStreamingApi } from "../music-streaming-api.model";
 import { type SelectorBasedMusicStreamingServiceConfig } from "./selector-based-music-streaming-api.model";

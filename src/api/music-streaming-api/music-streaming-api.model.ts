@@ -1,5 +1,5 @@
 import type { constructor } from "tsyringe/dist/typings/types";
-import type { StreamingServiceSong } from "~shared/shared-api.model";
+import type { StreamingServiceSong } from "../api.model";
 
 export const MusicStreamingApiToken = Symbol("MusicStreamingApiToken");
 export interface MusicStreamingApi {
