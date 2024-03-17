@@ -46,7 +46,7 @@ const skeletonRowStyle = "h-3 bg-zinc-700 rounded col-span-2 animate-pulse";
 
 export function SongItemEmpty({ text }: { text: string }) {
     return (
-        <SongItemContainer className="content-center text-center">
+        <SongItemContainer className="flex items-center justify-center">
             <>{text}</>
         </SongItemContainer>
     );
@@ -86,5 +86,5 @@ SongItemContainer.Tuning = ({ children }: PropsWithChildren<{}>) => {
     return <div className={cn(rightGridCellStyle, "[grid-column:tuning]")}>{children}</div>;
 };
 
-const leftGridCellStyle = "flex justify-start content-center overflow-hidden";
-const rightGridCellStyle = "flex justify-end content-center";
+const leftGridCellStyle = "flex justify-start items-center overflow-hidden";
+const rightGridCellStyle = "flex justify-end items-center";
