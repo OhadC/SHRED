@@ -13,11 +13,9 @@ export function SongItem({ songInfo }: { songInfo: SongInfo }) {
             <SongItemContainer.Title>
                 <EllipsisOneLine text={songInfo.title}></EllipsisOneLine>
             </SongItemContainer.Title>
-            {songInfo.difficulty && (
-                <SongItemContainer.Difficulty>
-                    <DifficultyBar songDifficulty={songInfo.difficulty} className="h-3" />
-                </SongItemContainer.Difficulty>
-            )}
+            <SongItemContainer.Difficulty>
+                {songInfo.difficulty && <DifficultyBar songDifficulty={songInfo.difficulty} className="h-3" />}
+            </SongItemContainer.Difficulty>
             <SongItemContainer.Artist>
                 <EllipsisOneLine text={songInfo.artist}></EllipsisOneLine>
             </SongItemContainer.Artist>
@@ -61,7 +59,7 @@ function SongItemContainer({ url, className, children }: PropsWithChildren<{ url
             rel="noopener noreferrer"
             className={cn(
                 "h-[58px] p-2 rounded-lg hover:bg-zinc-800 hover:shadow-md",
-                " grid gap-1 [grid-template-areas:'title_difficulty''artist_tuning'] ",
+                " grid gap-1 [grid-template-columns:_1fr_auto] [grid-template-areas:_'title_difficulty'_'artist_tuning']",
                 !url && "opacity-50",
                 className,
             )}
@@ -72,7 +70,7 @@ function SongItemContainer({ url, className, children }: PropsWithChildren<{ url
 }
 
 SongItemContainer.Title = ({ children }: PropsWithChildren<{}>) => {
-    return <div className="[grid-column:title] flex justify-start content-center font-bold">{children}</div>;
+    return <div className="[grid-column:title] flex justify-start content-center overflow-hidden font-bold">{children}</div>;
 };
 
 SongItemContainer.Difficulty = ({ children }: PropsWithChildren<{}>) => {
@@ -80,8 +78,9 @@ SongItemContainer.Difficulty = ({ children }: PropsWithChildren<{}>) => {
 };
 
 SongItemContainer.Artist = ({ children }: PropsWithChildren<{}>) => {
-    return <div className="[grid-column:artist] flex justify-start content-center">{children}</div>;
+    return <div className="[grid-column:artist] flex justify-start content-center overflow-hidden">{children}</div>;
 };
+
 SongItemContainer.Tuning = ({ children }: PropsWithChildren<{}>) => {
     return <div className="[grid-column:tuning] flex justify-end content-center">{children}</div>;
 };
