@@ -1,0 +1,35 @@
+shred-css-file {
+    display: initial;
+}
+
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+@layer base {
+    body {
+        @apply bg-zinc-900;
+        @apply text-zinc-100;
+        @apply text-xs;
+    }
+}
+
+@layer utilities {
+    ::-webkit-scrollbar {
+        @apply w-auto;
+        @apply max-w-1;
+        @apply max-h-1;
+
+        &-corner,
+        &-track {
+            @apply bg-none;
+        }
+
+        &-thumb {
+            @apply bg-zinc-700;
+            @apply border;
+            @apply border-zinc-800;
+            @apply rounded-md;
+        }
+    }
+}

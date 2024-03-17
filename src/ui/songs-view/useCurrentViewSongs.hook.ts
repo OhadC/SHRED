@@ -1,13 +1,14 @@
 import { useComputed } from "@preact/signals-react";
 import { apiHooks } from "../shread/hooks/apiHooks.hook";
-import { useAsyncSignalComputed, type UseAsyncSignalState } from "../shread/hooks/useAsyncSignal.hook";
+import { useAsyncSignalComputed } from "../shread/hooks/useAsyncSignal.hook";
 import { type SongInfo } from "../shread/models/models";
+import type { ReadonlyPromiseSignal } from "../shread/util/promise-signal";
 import { getUiLogger } from "../shread/util/ui-logger";
 import { getSongInfoFromSongsterr } from "./data-access/songsterr";
 
 const logger = getUiLogger("useCurrentViewSongs");
 
-export function useCurrentViewSongs(): UseAsyncSignalState<SongInfo[]> {
+export function useCurrentViewSongs(): ReadonlyPromiseSignal<SongInfo[]> {
     const currentViewStreamingServiceSong = apiHooks.useCurrentViewStreamingServiceSong();
 
     const currentViewSongs = useAsyncSignalComputed(async () => {

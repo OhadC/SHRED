@@ -1,11 +1,9 @@
-import { Signal, useSignal } from "@preact/signals-react";
 import { useEffect, useMemo } from "react";
 import { ApiEvents, type StreamingServiceSong } from "~api/api.model";
 import type { EndpointService } from "~api/endpoint-service";
 import { onUrlChange } from "~util/on-url-change";
 import type { ApiHooks } from "../../shread/hooks/apiHooks.hook";
-import type { UseAsyncSignalState } from "../../shread/hooks/useAsyncSignal.hook";
-import { PromiseSignal } from "../../shread/util/promise-signal";
+import { PromiseSignal, type ReadonlyPromiseSignal } from "../../shread/util/promise-signal";
 import { getUiLogger } from "../../shread/util/ui-logger";
 
 declare let window: Window & {
@@ -19,14 +17,11 @@ export const apiHooks: ApiHooks = {
     useCurrentViewStreamingServiceSong,
 };
 
-function useCurrentPlayingStreamingServiceSong(): Signal<StreamingServiceSong> {
-    const currentPlayingStreamingServiceSong = useSignal<StreamingServiceSong | undefined>(undefined);
+function useCurrentPlayingStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong> {
+    const _promiseSignal = useMemo(() => new PromiseSignal<StreamingServiceSong>(undefined), []);
 
     useEffect(() => {
-        const updateCurrentPlayingSong = () =>
-            window.endpointService
-                .getCurrentPlayingSong()
-                .then(streamingServiceSong => (currentPlayingStreamingServiceSong.value = streamingServiceSong));
+        const updateCurrentPlayingSong = () => (_promiseSignal.promise = window.endpointService.getCurrentPlayingSong());
 
         window.addEventListener(ApiEvents.CurrentPlayingSongChanged, updateCurrentPlayingSong);
 
@@ -37,10 +32,10 @@ function useCurrentPlayingStreamingServiceSong(): Signal<StreamingServiceSong> {
         };
     }, []);
 
-    return currentPlayingStreamingServiceSong;
+    return _promiseSignal;
 }
 
-function useCurrentViewStreamingServiceSong(): UseAsyncSignalState<StreamingServiceSong[]> {
+function useCurrentViewStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong[]> {
     const _promiseSignal = useMemo(() => new PromiseSignal<StreamingServiceSong[]>(undefined), []);
 
     useEffect(() => {

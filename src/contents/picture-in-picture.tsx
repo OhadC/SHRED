@@ -1,10 +1,11 @@
 import { useSignal } from "@preact/signals-react";
+import appStyles from "data-text:~ui/app.scss";
 import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { StyleSheetManager } from "styled-components";
 import { PictureInPicture } from "~ui/picture-in-picture/PictureInPicture";
 import { PictureInPictureButton } from "~ui/picture-in-picture/PictureInPictureButton";
+import type { Unsubscribe } from "~util/util.model";
 
 declare let window: {
     documentPictureInPicture?: {
@@ -44,30 +45,65 @@ const PipTriggerUi = ({ anchor }: PlasmoCSUIProps) => {
     const showButton = useSignal<boolean>(!!window?.documentPictureInPicture);
 
     const openPipContainer = async () => {
-        const pipWindow = await window.documentPictureInPicture?.requestWindow({
+        const pipWindow: Window = await window.documentPictureInPicture?.requestWindow({
             width: 360,
             height: 600,
         });
 
-        if (!pipWindow) return;
+        if (!pipWindow) {
+            return;
+        }
 
-        const container = pipWindow.document.createElement("div");
-        pipWindow.document.body.append(container);
+        const pipDocument: Document = pipWindow.document;
+
+        appendStylesToPip(pipDocument);
+        const unobserveExternalStyles = disableExternalStyles(pipDocument);
+
+        const container = pipDocument.createElement("div");
+        pipDocument.body.append(container);
 
         const pipRoot = createRoot(container);
         pipRoot.render(
             <StrictMode>
-                <StyleSheetManager target={pipWindow.document.head}>
-                    <PictureInPicture />
-                </StyleSheetManager>
+                <PictureInPicture />
             </StrictMode>,
         );
 
         showButton.value = false;
-        pipWindow.addEventListener("pagehide", () => (showButton.value = true), { once: true });
+        pipWindow.addEventListener(
+            "pagehide",
+            () => {
+                showButton.value = true;
+                unobserveExternalStyles();
+            },
+            { once: true },
+        );
     };
 
     return <>{showButton.value && <PictureInPictureButton onClick={openPipContainer} />}</>;
 };
 
 export default PipTriggerUi;
+
+function appendStylesToPip(pipDocument: Document) {
+    // https://docs.plasmo.com/quickstarts/with-tailwindcss#in-content-scripts-ui
+    // https://developer.mozilla.org/en-US/docs/Web/API/Document_Picture-in-Picture_API/Using#copy_style_sheets_to_the_picture-in-picture_window
+    const style = pipDocument.createElement("style");
+    style.textContent = appStyles;
+    pipDocument.head.appendChild(style);
+}
+
+function disableExternalStyles(pipDocument: Document): Unsubscribe {
+    const mutationObserver = new MutationObserver(() => {
+        for (const styleSheet of pipDocument.styleSheets) {
+            const isValid = !styleSheet.href && styleSheet.cssRules.item(0).cssText.startsWith("shred-css-file");
+            if (!isValid) {
+                styleSheet.disabled = true;
+            }
+        }
+    });
+
+    mutationObserver.observe(pipDocument.head, { subtree: true, characterData: true, childList: true });
+
+    return () => mutationObserver.disconnect();
+}

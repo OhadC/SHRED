@@ -1,10 +1,10 @@
-import { AppComponent } from "../app";
+import { App } from "../app";
 import { PipApiHooksProvider } from "./api-hooks-provider";
 
 export function PictureInPicture() {
     return (
         <PipApiHooksProvider>
-            <AppComponent />
+            <App className="size-full overflow-y-scroll" />
         </PipApiHooksProvider>
     );
 }

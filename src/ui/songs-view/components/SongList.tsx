@@ -1,56 +1,31 @@
 import { type ReadonlySignal } from "@preact/signals-react";
-import styled, { css } from "styled-components";
+import _ from "lodash";
 import { DynamicHeightTransition } from "../../shread/components/DynamicHeightTransition";
-import { SectionTitle } from "../../shread/components/SectionTitle";
 import { type SongInfo } from "../../shread/models/models";
-import { useSongsViewTranslations } from "../SongsView.translations";
-import { SongItem } from "./SongItem";
+import { SongItem, SongItemEmpty, SongItemLoading } from "./SongItem";
 
-type SongListProps = { title: string; songList?: ReadonlySignal<SongInfo[]>; isLoading: ReadonlySignal<boolean>; emptyListText: string };
+type SongListProps = {
+    title: string;
+    songList?: ReadonlySignal<SongInfo[]>;
+    isLoading: ReadonlySignal<boolean>;
+    emptyListText: string;
+    skeletonCount?: number;
+};
 
-export function SongList({ title, songList, isLoading, emptyListText }: SongListProps) {
-    const translations = useSongsViewTranslations();
-
+export function SongList({ title, songList, isLoading, emptyListText, skeletonCount }: SongListProps) {
     return (
-        <DynamicHeightTransition>
-            {<SongListSectionTitle>{title}</SongListSectionTitle>}
+        <DynamicHeightTransition className="flex flex-col space-y-2">
+            {<h2 className="text-lg font-bold text-primary px-2">{title}</h2>}
 
-            <Container>
+            <div className="flex flex-col gap-1">
                 {isLoading.value ? (
-                    <TextItemContainer>{translations.value.songList.loading}</TextItemContainer>
+                    _.times(skeletonCount ?? 1, num => <SongItemLoading key={num} />)
                 ) : songList.value?.length ? (
-                    songList.value.map(songInfo => <SongListItem songInfo={songInfo} key={`${songInfo.artist}__${songInfo.title}`} />)
+                    songList.value.map(songInfo => <SongItem songInfo={songInfo} key={`${songInfo.artist}__${songInfo.title}`} />)
                 ) : (
-                    <TextItemContainer>{emptyListText}</TextItemContainer>
+                    <SongItemEmpty text={emptyListText} />
                 )}
-            </Container>
+            </div>
         </DynamicHeightTransition>
     );
 }
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-`;
-
-const SongListSectionTitle = styled(SectionTitle)`
-    padding-inline: calc(var(--inline-padding) / 2);
-`;
-
-const ListItemCss = css`
-    height: 58px;
-    padding: calc(var(--inline-padding) / 2);
-`;
-
-const SongListItem = styled(SongItem)`
-    ${ListItemCss}
-`;
-
-const TextItemContainer = styled.div`
-    ${ListItemCss}
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.7;
-`;

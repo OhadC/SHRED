@@ -1,16 +1,14 @@
 import { useComputed, useSignalEffect, type ReadonlySignal } from "@preact/signals-react";
 import { useMemo } from "react";
-import { PromiseSignal } from "../util/promise-signal";
+import { PromiseSignal, type ReadonlyPromiseSignal } from "../util/promise-signal";
 
-export type UseAsyncSignalState<T> = Pick<PromiseSignal<T>, "data" | "loading" | "error">;
-
-export function useAsyncSignalComputed<T>(callback: () => Promise<T>): PromiseSignal<T> {
+export function useAsyncSignalComputed<T>(callback: () => Promise<T>): ReadonlyPromiseSignal<T> {
     const computedCallback = useComputed(callback);
 
     return useAsyncSignal(computedCallback);
 }
 
-export function useAsyncSignal<T>(source: ReadonlySignal<Promise<T>>): PromiseSignal<T> {
+export function useAsyncSignal<T>(source: ReadonlySignal<Promise<T>>): ReadonlyPromiseSignal<T> {
     const _promiseSignal = useMemo(() => new PromiseSignal<T>(undefined), []);
 
     useSignalEffect(() => {
