@@ -3,9 +3,9 @@ import appStyles from "data-text:~ui/app.scss";
 import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { PictureInPicture } from "~ui/picture-in-picture/PictureInPicture";
-import { PictureInPictureButton } from "~ui/picture-in-picture/PictureInPictureButton";
-import type { Unsubscribe } from "~util/util.model";
+import { PictureInPicture } from "~/ui/picture-in-picture/PictureInPicture";
+import { PictureInPictureButton } from "~/ui/picture-in-picture/PictureInPictureButton";
+import type { Unsubscribe } from "~/util/util.model";
 
 declare let window: {
     documentPictureInPicture?: {

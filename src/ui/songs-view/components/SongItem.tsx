@@ -1,5 +1,5 @@
 import { useMemo, type PropsWithChildren } from "react";
-import { cn } from "~util/cn";
+import { cn } from "~/util/cn";
 import { EllipsisOneLine } from "../../shread/components/EllipsisOneLine";
 import { type SongInfo } from "../../shread/models/models";
 import { tuningNumberToString } from "../helpers/tuning-number-to-string.helper";
@@ -42,7 +42,7 @@ export function SongItemLoading() {
         </SongItemContainer>
     );
 }
-const skeletonRowStyle = "h-3 bg-zinc-700 rounded col-span-2 animate-pulse";
+const skeletonRowStyle = "h-3 bg-background-700 rounded col-span-2 animate-pulse";
 
 export function SongItemEmpty({ text }: { text: string }) {
     return (
@@ -59,8 +59,8 @@ function SongItemContainer({ url, className, children }: PropsWithChildren<{ url
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-                "h-[58px] p-2 rounded-lg hover:bg-zinc-800 hover:shadow-md",
-                " grid gap-1 [grid-template-columns:_1fr_auto] [grid-template-areas:_'title_difficulty'_'artist_tuning']",
+                "rounded-lg p-2 hover:bg-background-800 hover:shadow-md",
+                "grid gap-1 [grid-template-areas:_'title_difficulty'_'artist_tuning'] [grid-template-columns:_1fr_auto] [grid-template-rows:_1lh_1lh]",
                 !url && "opacity-50",
                 className,
             )}
@@ -71,7 +71,7 @@ function SongItemContainer({ url, className, children }: PropsWithChildren<{ url
 }
 
 SongItemContainer.Title = ({ children }: PropsWithChildren<{}>) => {
-    return <div className={cn(leftGridCellStyle, "[grid-column:title] font-bold")}>{children}</div>;
+    return <div className={cn(leftGridCellStyle, "font-semibold [grid-column:title]")}>{children}</div>;
 };
 
 SongItemContainer.Difficulty = ({ children }: PropsWithChildren<{}>) => {
@@ -79,11 +79,11 @@ SongItemContainer.Difficulty = ({ children }: PropsWithChildren<{}>) => {
 };
 
 SongItemContainer.Artist = ({ children }: PropsWithChildren<{}>) => {
-    return <div className={cn(leftGridCellStyle, "[grid-column:artist]")}>{children}</div>;
+    return <div className={cn(leftGridCellStyle, "text-foreground-light [grid-column:artist]")}>{children}</div>;
 };
 
 SongItemContainer.Tuning = ({ children }: PropsWithChildren<{}>) => {
-    return <div className={cn(rightGridCellStyle, "[grid-column:tuning]")}>{children}</div>;
+    return <div className={cn(rightGridCellStyle, "text-foreground-light [grid-column:tuning]")}>{children}</div>;
 };
 
 const leftGridCellStyle = "flex justify-start items-center overflow-hidden";

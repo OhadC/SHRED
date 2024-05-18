@@ -1,8 +1,8 @@
 import { singleton } from "tsyringe";
 import Browser, { type Runtime, type Tabs } from "webextension-polyfill";
-import type { ApiEndpoint, ApiEventMessage, ApiEvents, ApiRequest, ApiResponse } from "~api/api.model";
-import { generateId } from "~util/generate-id";
-import type { Unsubscribe } from "~util/util.model";
+import type { ApiEndpoint, ApiEventMessage, ApiEvents, ApiRequest, ApiResponse } from "~/api/api.model";
+import { generateId } from "~/util/generate-id";
+import type { Unsubscribe } from "~/util/util.model";
 import { getUiLogger } from "../../shread/util/ui-logger";
 
 const logger = getUiLogger("BrowserApi");

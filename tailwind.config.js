@@ -1,3 +1,5 @@
+const colors = require("tailwindcss/colors");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     mode: "jit",
@@ -10,8 +12,11 @@ module.exports = {
                 1: "1px",
             },
             colors: {
-                primary: "#f59e0b", // amber-500
-                accent: "#ea580c", // orange-600
+                primary: colors.amber[500],
+                accent: colors.orange[600],
+                background: colors.zinc,
+                foreground: colors.zinc[200],
+                "foreground-light": colors.zinc[400],
             },
         },
     },

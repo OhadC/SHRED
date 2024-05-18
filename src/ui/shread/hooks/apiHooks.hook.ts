@@ -1,5 +1,5 @@
 import { createFacade } from "react-facade";
-import type { StreamingServiceSong } from "~api/api.model";
+import type { StreamingServiceSong } from "~/api/api.model";
 import type { ReadonlyPromiseSignal } from "../util/promise-signal";
 
 export type ApiHooks = {

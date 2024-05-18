@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { inject, singleton } from "tsyringe";
-import { waitForFunctionToResolve } from "~util/wait-for-function-to-resolve";
+import { waitForFunctionToResolve } from "~/util/wait-for-function-to-resolve";
 import { getApiLogger } from "../../api-logger";
 import { type StreamingServiceSong } from "../../api.model";
 import { DomApi } from "../../helpers/dom-api";

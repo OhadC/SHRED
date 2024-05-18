@@ -1,7 +1,7 @@
 import { useComputed, useSignalEffect } from "@preact/signals-react";
 import { useMemo } from "react";
 import { container } from "tsyringe";
-import type { StreamingServiceSong } from "~api/api.model";
+import type { StreamingServiceSong } from "~/api/api.model";
 import type { ApiHooks } from "../../shread/hooks/apiHooks.hook";
 import { useAsyncSignalComputed } from "../../shread/hooks/useAsyncSignal.hook";
 import { PromiseSignal, type ReadonlyPromiseSignal } from "../../shread/util/promise-signal";

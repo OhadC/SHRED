@@ -15,7 +15,7 @@ type SongListProps = {
 export function SongList({ title, songList, isLoading, emptyListText, skeletonCount }: SongListProps) {
     return (
         <DynamicHeightTransition className="flex flex-col space-y-2">
-            {<h2 className="text-lg font-bold text-primary px-2">{title}</h2>}
+            {<h2 className="px-2 text-lg font-bold text-primary">{title}</h2>}
 
             <div className="flex flex-col gap-1">
                 {isLoading.value ? (

@@ -1,5 +1,5 @@
 import { sendToBackground } from "@plasmohq/messaging";
-import type { BackgroundFetchRequest, BackgroundFetchResponse } from "~background/messages/FETCH";
+import type { BackgroundFetchRequest, BackgroundFetchResponse } from "~/background/messages/FETCH";
 
 export async function fetchByBackground<Tdata = any>(input: NodeJS.fetch.RequestInfo, init?: RequestInit): Promise<Tdata> {
     const result = await sendToBackground<BackgroundFetchRequest, BackgroundFetchResponse>({

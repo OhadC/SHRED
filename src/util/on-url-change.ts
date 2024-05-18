@@ -1,4 +1,4 @@
-import type { Unsubscribe } from "~util/util.model";
+import type { Unsubscribe } from "~/util/util.model";
 
 // https://stackoverflow.com/a/67825703
 export function onUrlChange(listener: () => any): Unsubscribe {

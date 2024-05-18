@@ -1,4 +1,4 @@
-import type { StreamingServiceSong } from "~api/api.model";
+import type { StreamingServiceSong } from "~/api/api.model";
 
 export enum SongDifficulty {
     VaryEasy = "VaryEasy",

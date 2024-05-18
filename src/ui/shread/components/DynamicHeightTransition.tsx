@@ -1,5 +1,5 @@
 import { computed, useComputed } from "@preact/signals-react";
-import { cn } from "~util/cn";
+import { cn } from "~/util/cn";
 import { useResizeOberver } from "../hooks/useResizeOberver.hook";
 import { useTimeout } from "../hooks/useTimeout.hook";
 
@@ -15,11 +15,11 @@ export function DynamicHeightTransition({ children, className, startAfterMs }: D
     const height = computed<string>(() => (isReady.value && containerSize.value ? containerSize.value + "px" : "intital"));
 
     return (
-        <div className="transition-all overflow-hidden" style={{ height: height.value }}>
+        <div className="overflow-hidden transition-all" style={{ height: height.value }}>
             <div
                 ref={nodeRef}
                 className={cn(
-                    "before:content-[''] before:block before:overflow-hidden after:block after:overflow-hidden", // fix for case where first/last element inside ContentContainer has margin-box
+                    "before:block before:overflow-hidden before:content-[''] after:block after:overflow-hidden", // fix for case where first/last element inside ContentContainer has margin-box
                     className,
                 )}
             >

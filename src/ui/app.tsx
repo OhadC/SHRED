@@ -1,4 +1,4 @@
-import { cn } from "~util/cn";
+import { cn } from "~/util/cn";
 import { LocaleContextProvider } from "./shread/contexts/Locale.context";
 import { SongsView } from "./songs-view/SongsView";
 

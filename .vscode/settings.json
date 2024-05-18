@@ -1,0 +1,13 @@
+{
+    "files.eol": "\n",
+    "files.associations": {
+        "*.scss": "tailwindcss"
+    },
+
+    "tailwindCSS.classAttributes": ["class", "className", "ngClass", ".*Style"],
+
+    "prettier.singleQuote": false,
+    "prettier.useTabs": false,
+    "prettier.printWidth": 140,
+    "prettier.tabWidth": 4
+}

@@ -5,7 +5,7 @@ import {
     type GetCurrentPlayingSongResponse,
     type GetCurrentViewSongsResponse,
     type StreamingServiceSong,
-} from "~api/api.model";
+} from "~/api/api.model";
 import { BrowserProxy } from "./browser-proxy";
 
 @singleton()

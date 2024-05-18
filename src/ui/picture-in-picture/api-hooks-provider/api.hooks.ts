@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
-import { ApiEvents, type StreamingServiceSong } from "~api/api.model";
-import type { EndpointService } from "~api/endpoint-service";
-import { onUrlChange } from "~util/on-url-change";
+import { ApiEvents, type StreamingServiceSong } from "~/api/api.model";
+import type { EndpointService } from "~/api/endpoint-service";
+import { onUrlChange } from "~/util/on-url-change";
 import type { ApiHooks } from "../../shread/hooks/apiHooks.hook";
 import { PromiseSignal, type ReadonlyPromiseSignal } from "../../shread/util/promise-signal";
 import { getUiLogger } from "../../shread/util/ui-logger";
