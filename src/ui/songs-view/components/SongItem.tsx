@@ -59,8 +59,8 @@ function SongItemContainer({ url, className, children }: PropsWithChildren<{ url
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-                "rounded-lg p-2 hover:bg-background-800 hover:shadow-md",
-                "grid gap-1 [grid-template-areas:_'title_difficulty'_'artist_tuning'] [grid-template-columns:_1fr_auto] [grid-template-rows:_1lh_1lh]",
+                "h-16 rounded-lg p-2 hover:bg-background-800 hover:shadow-md",
+                "grid content-between gap-1 [grid-template-areas:_'title_difficulty'_'artist_tuning'] [grid-template-columns:_1fr_auto] [grid-template-rows:_1lh_1lh]",
                 !url && "opacity-50",
                 className,
             )}

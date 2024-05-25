@@ -1,4 +1,5 @@
 import { useSignal } from "@preact/signals-react";
+import { installAutoSignalTracking } from "@preact/signals-react/runtime";
 import appStyles from "data-text:~ui/app.scss";
 import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo";
 import { StrictMode } from "react";
@@ -61,6 +62,8 @@ const PipTriggerUi = ({ anchor }: PlasmoCSUIProps) => {
 
         const container = pipDocument.createElement("div");
         pipDocument.body.append(container);
+
+        installAutoSignalTracking();
 
         const pipRoot = createRoot(container);
         pipRoot.render(

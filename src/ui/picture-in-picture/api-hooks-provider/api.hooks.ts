@@ -1,9 +1,10 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { ApiEvents, type StreamingServiceSong } from "~/api/api.model";
 import type { EndpointService } from "~/api/endpoint-service";
 import { onUrlChange } from "~/util/on-url-change";
 import type { ApiHooks } from "../../shread/hooks/apiHooks.hook";
-import { PromiseSignal, type ReadonlyPromiseSignal } from "../../shread/util/promise-signal";
+import { useAsyncSignal } from "../../shread/hooks/useAsyncSignal.hook";
+import { type ReadonlyPromiseSignal } from "../../shread/util/promise-signal";
 import { getUiLogger } from "../../shread/util/ui-logger";
 
 declare let window: Window & {
@@ -18,7 +19,7 @@ export const apiHooks: ApiHooks = {
 };
 
 function useCurrentPlayingStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong> {
-    const _promiseSignal = useMemo(() => new PromiseSignal<StreamingServiceSong>(undefined), []);
+    const _promiseSignal = useAsyncSignal<StreamingServiceSong>(undefined);
 
     useEffect(() => {
         const updateCurrentPlayingSong = () => (_promiseSignal.promise = window.endpointService.getCurrentPlayingSong());
@@ -36,7 +37,7 @@ function useCurrentPlayingStreamingServiceSong(): ReadonlyPromiseSignal<Streamin
 }
 
 function useCurrentViewStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong[]> {
-    const _promiseSignal = useMemo(() => new PromiseSignal<StreamingServiceSong[]>(undefined), []);
+    const _promiseSignal = useAsyncSignal<StreamingServiceSong[]>(undefined);
 
     useEffect(() => {
         const updateCurrentViewSongs = () => (_promiseSignal.promise = window.endpointService.getCurrentViewSongs());

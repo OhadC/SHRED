@@ -1,10 +1,9 @@
 import { useComputed, useSignalEffect } from "@preact/signals-react";
-import { useMemo } from "react";
 import { container } from "tsyringe";
 import type { StreamingServiceSong } from "~/api/api.model";
 import type { ApiHooks } from "../../shread/hooks/apiHooks.hook";
-import { useAsyncSignalComputed } from "../../shread/hooks/useAsyncSignal.hook";
-import { PromiseSignal, type ReadonlyPromiseSignal } from "../../shread/util/promise-signal";
+import { useAsyncSignal, useAsyncSignalComputed } from "../../shread/hooks/useAsyncSignal.hook";
+import { type ReadonlyPromiseSignal } from "../../shread/util/promise-signal";
 import { getUiLogger } from "../../shread/util/ui-logger";
 import { useCurrentTab } from "./CurrentTab.context";
 import { ApiProxy } from "./api-proxy";
@@ -17,7 +16,7 @@ export const apiHooks: ApiHooks = {
 };
 
 function useCurrentPlayingStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong> {
-    const _promiseSignal = useMemo(() => new PromiseSignal<StreamingServiceSong | undefined>(undefined), []);
+    const _promiseSignal = useAsyncSignal<StreamingServiceSong | undefined>(undefined);
 
     const currentTab = useCurrentTab();
 
