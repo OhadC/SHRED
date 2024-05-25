@@ -1,7 +1,7 @@
-const colors = require("tailwindcss/colors");
+import { amber, orange, zinc } from "tailwindcss/colors";
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     mode: "jit",
     // darkMode: "class",
     content: ["./**/*.tsx"],
@@ -12,11 +12,11 @@ module.exports = {
                 1: "1px",
             },
             colors: {
-                primary: colors.amber[500],
-                accent: colors.orange[600],
-                background: colors.zinc,
-                foreground: colors.zinc[200],
-                "foreground-light": colors.zinc[400],
+                primary: amber[500],
+                accent: orange[600],
+                background: zinc,
+                foreground: zinc[200],
+                "foreground-light": zinc[400],
             },
         },
     },
