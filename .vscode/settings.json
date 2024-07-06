@@ -1,13 +1,15 @@
 {
     "files.eol": "\n",
+
+    "tailwindCSS.classAttributes": ["class", "className", "ngClass", ".*Style"],
     "files.associations": {
         "*.scss": "tailwindcss"
     },
 
-    "tailwindCSS.classAttributes": ["class", "className", "ngClass", ".*Style"],
-
     "prettier.singleQuote": false,
     "prettier.useTabs": false,
     "prettier.printWidth": 140,
-    "prettier.tabWidth": 4
+    "prettier.tabWidth": 4,
+
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }

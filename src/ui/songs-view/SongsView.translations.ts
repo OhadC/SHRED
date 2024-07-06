@@ -21,7 +21,8 @@ const enUS = {
     },
 };
 
-export const useSongsViewTranslations = () =>
-    useTranslationMap({
-        "en-US": enUS,
-    });
+const translationMap: Record<string, typeof enUS> = {
+    "en-US": enUS,
+};
+
+export const useSongsViewTranslations = () => useTranslationMap(translationMap);
