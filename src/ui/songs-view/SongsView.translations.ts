@@ -11,13 +11,14 @@ const enUS = {
         loading: "Loading...",
     },
     SongDifficulty: {
-        VaryEasy: "Vary easy",
-        Easy: "Easy",
-        BelowIntermediate: "Below intermediate",
-        Intermediate: "Intermediate",
-        UpperIntermediate: "Upper intermediate",
-        Hard: "Hard",
-        VaryHard: "Vary hard",
+        Difficulty1: "Beginner. Tier 1",
+        Difficulty2: "Beginner. Tier 2",
+        Difficulty3: "Intermediate. Tier 1",
+        Difficulty4: "Intermediate. Tier 2",
+        Difficulty5: "Intermediate. Tier 3",
+        Difficulty6: "Advanced. Tier 1",
+        Difficulty7: "Advanced. Tier 2",
+        Difficulty8: "Advanced. Tier 3",
     },
 };
 

@@ -1,13 +1,14 @@
 import type { StreamingServiceSong } from "~/api/api.model";
 
 export enum SongDifficulty {
-    VaryEasy = "VaryEasy",
-    Easy = "Easy",
-    BelowIntermediate = "BelowIntermediate",
-    Intermediate = "Intermediate",
-    UpperIntermediate = "UpperIntermediate",
-    Hard = "Hard",
-    VaryHard = "VaryHard",
+    Difficulty1 = 1,
+    Difficulty2,
+    Difficulty3,
+    Difficulty4,
+    Difficulty5,
+    Difficulty6,
+    Difficulty7,
+    Difficulty8,
 }
 
 export enum TabsWebsite {

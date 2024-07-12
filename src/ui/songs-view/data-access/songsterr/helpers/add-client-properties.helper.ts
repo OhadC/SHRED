@@ -33,11 +33,11 @@ function getSongUrl(songId: number, artist: string, title: string): string {
 }
 
 function isGuitarInstrumen(instrumentId: number): boolean {
-    return instrumentId >= 24 && instrumentId <= 31;
+    return 24 <= instrumentId && instrumentId <= 31;
 }
 
 function isBassInstrumen(instrumentId: number): boolean {
-    return instrumentId >= 32 && instrumentId <= 39;
+    return 32 <= instrumentId && instrumentId <= 39;
 }
 
 function toSongsterrTitle(string: string): string {
