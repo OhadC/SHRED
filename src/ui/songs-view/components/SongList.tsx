@@ -21,7 +21,9 @@ export function SongList({ title, songList, isLoading, emptyListText, skeletonCo
                 {isLoading.value ? (
                     _.times(skeletonCount ?? 1, num => <SongItem key={num} />)
                 ) : songList.value?.length ? (
-                    songList.value.map(songInfo => <SongItem songInfo={songInfo} key={`${songInfo.artist}__${songInfo.title}`} />)
+                    songList.value.map((songInfo, index) => (
+                        <SongItem songInfo={songInfo} key={`${songInfo.artist}__${songInfo.title}__${index}`} />
+                    ))
                 ) : (
                     <SongItemEmpty text={emptyListText} />
                 )}

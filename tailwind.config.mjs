@@ -4,7 +4,7 @@ import { amber, orange, zinc } from "tailwindcss/colors";
 export default {
     mode: "jit",
     // darkMode: "class",
-    content: ["./**/*.tsx"],
+    content: ["./src/**/*.tsx"],
     theme: {
         extend: {
             borderWidth: {
