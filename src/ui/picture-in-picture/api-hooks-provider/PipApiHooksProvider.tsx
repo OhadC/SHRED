@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { ApiEvents, type StreamingServiceSong } from "~/api/api.model";
 import type { EndpointService } from "~/api/endpoint-service";
-import { ApiHooksProvider, type ApiContextValue } from "~/ui/shread/contexts/Api.context";
+import { ApiHooksProvider, type ApiContextValue } from "~/ui/shared/contexts/Api.context";
 import { onUrlChange } from "~/util/on-url-change";
-import { useAsyncSignal } from "../../shread/hooks/useAsyncSignal.hook";
-import { type ReadonlyPromiseSignal } from "../../shread/util/promise-signal";
-import { getUiLogger } from "../../shread/util/ui-logger";
+import { useAsyncSignal } from "../../shared/hooks/useAsyncSignal.hook";
+import { type ReadonlyPromiseSignal } from "../../shared/util/promise-signal";
+import { getUiLogger } from "../../shared/util/ui-logger";
 
 declare let window: Window & {
     endpointService: EndpointService;

@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { cn } from "~/util/cn";
-import { SongDifficulty } from "../../shread/models/models";
+import { cn } from "~/util/tailwind/cn";
+import { SongDifficulty } from "../../shared/models/models";
 import { useSongsViewTranslations } from "../SongsView.translations";
 
 export type DifficultyBarProperties = { songDifficulty: SongDifficulty; className?: string };

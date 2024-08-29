@@ -1,4 +1,4 @@
-import { useTranslationMap } from "../shread/hooks/useTranslationMap";
+import { useTranslationMap } from "../shared/hooks/useTranslationMap";
 
 const enUS = {
     songsView: {

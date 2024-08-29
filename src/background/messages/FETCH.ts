@@ -1,17 +1,14 @@
 import type { PlasmoMessaging } from "@plasmohq/messaging";
 
-export type BackgroundFetchRequest = {
-    input: NodeJS.fetch.RequestInfo;
-    init?: RequestInit;
-};
+export type BackgroundFetchRequest = Parameters<typeof fetch>;
 
-export type BackgroundFetchResponse<Tdata = any> = {
-    response?: Tdata;
+export type BackgroundFetchResponse<TData = any> = {
+    response?: TData;
     error?: Error;
 };
 
 export const handler: PlasmoMessaging.MessageHandler<BackgroundFetchRequest, BackgroundFetchResponse> = (req, res) => {
-    fetch(req.body.input, req.body.init)
+    fetch(...req.body)
         .then(response => response.json())
         .then(response => res.send({ response }))
         .catch(error => res.send({ error }));

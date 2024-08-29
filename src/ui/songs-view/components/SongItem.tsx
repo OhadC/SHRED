@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { cn } from "~/util/cn";
-import { EllipsisOneLine } from "../../shread/components/EllipsisOneLine";
-import { type SongInfo } from "../../shread/models/models";
+import { cn } from "~/util/tailwind/cn";
+import { EllipsisOneLine } from "../../shared/components/EllipsisOneLine";
+import { type SongInfo } from "../../shared/models/models";
 import { tuningNumberToString } from "../helpers/tuning-number-to-string.helper";
 import { DifficultyBar } from "./DifficultyBar";
 

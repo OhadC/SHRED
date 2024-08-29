@@ -11,5 +11,6 @@
     "prettier.printWidth": 140,
     "prettier.tabWidth": 4,
 
-    "typescript.tsdk": "node_modules\\typescript\\lib"
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "cSpell.words": ["clsx", "Damerau", "Plasmo", "plasmohq", "preact", "Songsterr", "tailwindcss", "tsyringe", "webextension"]
 }

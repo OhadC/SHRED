@@ -1,4 +1,4 @@
-// this funciton is written by openAI chatbot, and it's more efficient than the original one (Damerau-Levenshtein [O(n+m)] instead of Levenshtein [O(n*m)]).
+// this function is written by openAI chatbot, and it's more efficient than the original one (Damerau-Levenshtein [O(n+m)] instead of Levenshtein [O(n*m)]).
 
 export function getStringsSimilarity(s1: string, s2: string): number {
     const longer = s1.length >= s2.length ? s1 : s2;

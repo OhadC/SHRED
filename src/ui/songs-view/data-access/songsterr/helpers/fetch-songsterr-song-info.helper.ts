@@ -1,9 +1,9 @@
 import { getStringsSimilarity } from "~/util/get-strings-similarity";
-import { fetchByBackground } from "../../../../shread/util/fetch-by-background";
+import { fetchByBackground } from "../../../../shared/util/fetch-by-background";
 import { addClientProperties } from "./add-client-properties.helper";
 import { type SongsterrSongInfo } from "./songsterr.model";
 
-const MIN_ACCEPTEBLE_SIMILARITY = 0.5;
+const MIN_ACCEPTABLE_SIMILARITY = 0.5;
 
 export async function fetchSongsterrSongInfo(title: string, artist?: string): Promise<SongsterrSongInfo | undefined> {
     const songsterrSongInfos = await fetchSongInfo(title, artist);
@@ -33,5 +33,5 @@ async function fetchPattern(pattern: string, numberOfResults = 5): Promise<Songs
 }
 
 function isSimilar(string1: string, string2: string): boolean {
-    return getStringsSimilarity(string1, string2) >= MIN_ACCEPTEBLE_SIMILARITY;
+    return getStringsSimilarity(string1, string2) >= MIN_ACCEPTABLE_SIMILARITY;
 }

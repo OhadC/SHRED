@@ -1,5 +1,5 @@
-import { cn } from "~/util/cn";
-import { LocaleContextProvider } from "./shread/contexts/Locale.context";
+import { cn } from "~/util/tailwind/cn";
+import { LocaleContextProvider } from "./shared/contexts/Locale.context";
 import { SongsView } from "./songs-view/SongsView";
 
 export type AppProperties = {

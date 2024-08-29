@@ -1,7 +1,7 @@
 import { type ReadonlySignal } from "@preact/signals-react";
 import _ from "lodash";
-import { DynamicHeightTransition } from "../../shread/components/DynamicHeightTransition";
-import { type SongInfo } from "../../shread/models/models";
+import { DynamicHeightTransition } from "../../shared/components/DynamicHeightTransition";
+import { type SongInfo } from "../../shared/models/models";
 import { SongItem, SongItemEmpty } from "./SongItem";
 
 type SongListProps = {

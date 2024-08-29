@@ -1,4 +1,4 @@
-import { cn } from "~/util/cn";
+import { cn } from "~/util/tailwind/cn";
 
 export function EllipsisOneLine({ text, className }: { text: string | undefined; className?: string }) {
     return (

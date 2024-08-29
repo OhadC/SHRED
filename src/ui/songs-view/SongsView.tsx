@@ -1,5 +1,5 @@
 import { useComputed } from "@preact/signals-react";
-import type { SongInfo } from "../shread/models/models";
+import type { SongInfo } from "../shared/models/models";
 import { useSongsViewTranslations } from "./SongsView.translations";
 import { SongList } from "./components/SongList";
 import { useCurrentPlayingSong } from "./useCurrentPlayingSong.hook";

@@ -2,7 +2,7 @@ import { useSignal, type ReadonlySignal } from "@preact/signals-react";
 import { useEffect } from "react";
 import { container } from "tsyringe";
 import { type Tabs } from "webextension-polyfill";
-import { createSafeContext } from "~/util/create-safe-context";
+import { createSafeContext } from "~/util/context/create-safe-context";
 import { BrowserProxy } from "./browser-proxy";
 
 const [useCurrentTab, Provider] = createSafeContext<ReadonlySignal<Tabs.Tab | undefined>>();

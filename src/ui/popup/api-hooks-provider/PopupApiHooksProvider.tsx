@@ -1,10 +1,10 @@
 import { useComputed, useSignalEffect } from "@preact/signals-react";
 import { container } from "tsyringe";
 import type { StreamingServiceSong } from "~/api/api.model";
-import { ApiHooksProvider, type ApiContextValue } from "~/ui/shread/contexts/Api.context";
-import { useAsyncSignal, useAsyncSignalComputed } from "../../shread/hooks/useAsyncSignal.hook";
-import { type ReadonlyPromiseSignal } from "../../shread/util/promise-signal";
-import { getUiLogger } from "../../shread/util/ui-logger";
+import { ApiHooksProvider, type ApiContextValue } from "~/ui/shared/contexts/Api.context";
+import { useAsyncSignal, useAsyncSignalComputed } from "../../shared/hooks/useAsyncSignal.hook";
+import { type ReadonlyPromiseSignal } from "../../shared/util/promise-signal";
+import { getUiLogger } from "../../shared/util/ui-logger";
 import { CurrentTabContextProvider, useCurrentTab } from "./CurrentTab.context";
 import { ApiProxy } from "./api-proxy";
 
@@ -54,7 +54,7 @@ function useCurrentViewStreamingServiceSong(): ReadonlyPromiseSignal<StreamingSe
             return;
         }
 
-        logger.log("useCurrentViewStreamingServiceSong requsing ApiProxy.getCurrentViewSongsFromTab");
+        logger.log("useCurrentViewStreamingServiceSong requesting ApiProxy.getCurrentViewSongsFromTab");
 
         return container.resolve(ApiProxy).getCurrentViewSongsFromTab(currentTab.value.id);
     });
