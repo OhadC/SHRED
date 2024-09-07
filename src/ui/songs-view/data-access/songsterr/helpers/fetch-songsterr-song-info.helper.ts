@@ -1,5 +1,5 @@
 import { getStringsSimilarity } from "~/util/get-strings-similarity";
-import { fetchByBackground } from "../../../../shared/util/fetch-by-background";
+import { fetchByBackground } from "../../../../util/fetch-by-background";
 import { addClientProperties } from "./add-client-properties.helper";
 import { type SongsterrSongInfo } from "./songsterr.model";
 

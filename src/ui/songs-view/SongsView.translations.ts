@@ -1,25 +1,11 @@
-import { useTranslationMap } from "../shared/hooks/useTranslationMap";
+import { useTranslationMap } from "../util/hooks/useTranslationMap";
 
 const enUS = {
-    songsView: {
-        playingNow: "Playing Now",
-        playingNowEmpty: "Not playing any song at the moment",
-        currentView: "Current View",
-        currentViewEmpty: "There are no songs in the current view",
-    },
-    songList: {
-        loading: "Loading...",
-    },
-    SongDifficulty: {
-        Difficulty1: "Beginner. Tier 1",
-        Difficulty2: "Beginner. Tier 2",
-        Difficulty3: "Intermediate. Tier 1",
-        Difficulty4: "Intermediate. Tier 2",
-        Difficulty5: "Intermediate. Tier 3",
-        Difficulty6: "Advanced. Tier 1",
-        Difficulty7: "Advanced. Tier 2",
-        Difficulty8: "Advanced. Tier 3",
-    },
+    playingNow: "Playing Now",
+    playingNowEmpty: "Not playing any song at the moment",
+    currentView: "Current View",
+    currentViewEmpty: "There are no songs in the current view",
+    loading: "Loading...",
 };
 
 const translationMap: Record<string, typeof enUS> = {

@@ -1,5 +1,5 @@
-import type { SongInfo } from "../../../shared/models/models";
-import { getUiLogger } from "../../../shared/util/ui-logger";
+import type { SongInfo } from "../../../models/models";
+import { getUiLogger } from "../../../util/ui-logger";
 import { fetchSongsterrSongInfo } from "./helpers/fetch-songsterr-song-info.helper";
 import { songsterrSongInfoToSongInfo } from "./helpers/songsterr-song-info-to-song-info.helper";
 

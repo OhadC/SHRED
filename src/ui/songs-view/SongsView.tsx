@@ -1,7 +1,5 @@
-import { useComputed } from "@preact/signals-react";
-import type { SongInfo } from "../shared/models/models";
+import { SongList } from "../components/SongList";
 import { useSongsViewTranslations } from "./SongsView.translations";
-import { SongList } from "./components/SongList";
 import { useCurrentPlayingSong } from "./useCurrentPlayingSong.hook";
 import { useCurrentViewSongs } from "./useCurrentViewSongs.hook";
 
@@ -14,17 +12,17 @@ export function SongsView() {
     return (
         <div className="space-y-2">
             <SongList
-                songList={useComputed<SongInfo[]>(() => (currentPlayingSong.value ? [currentPlayingSong.value] : undefined))}
-                title={translations.value.songsView.playingNow}
-                isLoading={loadingCurrentPlayingSong}
-                emptyListText={translations.value.songsView.playingNowEmpty}
+                songList={currentPlayingSong.value ? [currentPlayingSong.value] : undefined}
+                title={translations.playingNow}
+                isLoading={loadingCurrentPlayingSong.value}
+                emptyListText={translations.playingNowEmpty}
             />
 
             <SongList
-                songList={currentViewSongs}
-                title={translations.value.songsView.currentView}
-                isLoading={loadingCurrentViewSongs}
-                emptyListText={translations.value.songsView.currentViewEmpty}
+                songList={currentViewSongs.value}
+                title={translations.currentView}
+                isLoading={loadingCurrentViewSongs.value}
+                emptyListText={translations.currentViewEmpty}
                 skeletonCount={5}
             />
         </div>

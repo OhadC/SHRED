@@ -1,8 +1,8 @@
 import { useComputed } from "@preact/signals-react";
-import { useCurrentPlayingStreamingServiceSong } from "../shared/contexts/Api.context";
-import { useAsyncSignalComputed } from "../shared/hooks/useAsyncSignal.hook";
-import { type SongInfo } from "../shared/models/models";
-import type { ReadonlyPromiseSignal } from "../shared/util/promise-signal";
+import { type SongInfo } from "../models/models";
+import { useCurrentPlayingStreamingServiceSong } from "../state/Api.context";
+import { useAsyncSignalComputed } from "../util/hooks/useAsyncSignal.hook";
+import type { ReadonlyPromiseSignal } from "../util/promise-signal";
 import { getSongInfoFromSongsterr } from "./data-access/songsterr";
 
 export function useCurrentPlayingSong(): ReadonlyPromiseSignal<SongInfo> {
