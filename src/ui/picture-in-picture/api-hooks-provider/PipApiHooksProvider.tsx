@@ -1,10 +1,11 @@
+import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { ApiEvents, type StreamingServiceSong } from "~/api/api.model";
 import type { EndpointService } from "~/api/endpoint-service";
 import { ApiHooksProvider, type ApiContextValue } from "~/ui/shared/contexts/Api.context";
+import { useIncrementor } from "~/ui/shared/hooks/useIncrementor.hook";
+import type { AsyncState } from "~/ui/shared/models/async-state.model";
 import { onUrlChange } from "~/util/on-url-change";
-import { useAsyncSignal } from "../../shared/hooks/useAsyncSignal.hook";
-import { type ReadonlyPromiseSignal } from "../../shared/util/promise-signal";
 import { getUiLogger } from "../../shared/util/ui-logger";
 
 declare let window: Window & {
@@ -19,41 +20,35 @@ export function PipApiHooksProvider({ children }: React.PropsWithChildren) {
 
 const apiHooks: ApiContextValue = {
     useCurrentPlayingStreamingServiceSong,
-    useCurrentViewStreamingServiceSong,
+    useCurrentViewStreamingServiceSongs,
 };
 
-function useCurrentPlayingStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong> {
-    const _promiseSignal = useAsyncSignal<StreamingServiceSong>(undefined);
+function useCurrentPlayingStreamingServiceSong(): AsyncState<StreamingServiceSong> {
+    const [revision, increment] = useIncrementor();
 
     useEffect(() => {
-        const updateCurrentPlayingSong = () => (_promiseSignal.promise = window.endpointService.getCurrentPlayingSong());
+        window.addEventListener(ApiEvents.CurrentPlayingSongChanged, increment);
 
-        window.addEventListener(ApiEvents.CurrentPlayingSongChanged, updateCurrentPlayingSong);
-
-        updateCurrentPlayingSong();
-
-        return () => {
-            window.removeEventListener(ApiEvents.CurrentPlayingSongChanged, updateCurrentPlayingSong);
-        };
+        return () => window.removeEventListener(ApiEvents.CurrentPlayingSongChanged, increment);
     }, []);
 
-    return _promiseSignal;
+    return useQuery({
+        queryKey: ["currentPlayingStreamingServiceSong", revision],
+        queryFn: () => window.endpointService.getCurrentPlayingSong(),
+    });
 }
 
-function useCurrentViewStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong[]> {
-    const _promiseSignal = useAsyncSignal<StreamingServiceSong[]>(undefined);
+function useCurrentViewStreamingServiceSongs(): AsyncState<StreamingServiceSong[]> {
+    const [revision, increment] = useIncrementor();
 
     useEffect(() => {
-        const updateCurrentViewSongs = () => (_promiseSignal.promise = window.endpointService.getCurrentViewSongs());
+        const unsubscribe = onUrlChange(increment);
 
-        const unsubscribe = onUrlChange(updateCurrentViewSongs);
-
-        updateCurrentViewSongs();
-
-        return () => {
-            unsubscribe();
-        };
+        return () => unsubscribe();
     }, []);
 
-    return _promiseSignal;
+    return useQuery({
+        queryKey: ["currentViewStreamingServiceSongs", revision],
+        queryFn: async () => (await window.endpointService.getCurrentViewSongs()) ?? [],
+    });
 }

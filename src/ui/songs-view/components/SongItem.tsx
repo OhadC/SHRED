@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { cn } from "~/util/tailwind/cn";
 import { EllipsisOneLine } from "../../shared/components/EllipsisOneLine";
-import { type SongInfo } from "../../shared/models/models";
+import { type SongInfo } from "../../shared/models/song.models";
 import { tuningNumberToString } from "../helpers/tuning-number-to-string.helper";
 import { DifficultyBar } from "./DifficultyBar";
 

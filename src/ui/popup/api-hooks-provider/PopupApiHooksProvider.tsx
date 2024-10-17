@@ -1,9 +1,10 @@
-import { useComputed, useSignalEffect } from "@preact/signals-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { container } from "tsyringe";
 import type { StreamingServiceSong } from "~/api/api.model";
 import { ApiHooksProvider, type ApiContextValue } from "~/ui/shared/contexts/Api.context";
-import { useAsyncSignal, useAsyncSignalComputed } from "../../shared/hooks/useAsyncSignal.hook";
-import { type ReadonlyPromiseSignal } from "../../shared/util/promise-signal";
+import { useIncrementor } from "~/ui/shared/hooks/useIncrementor.hook";
+import type { AsyncState } from "~/ui/shared/models/async-state.model";
 import { getUiLogger } from "../../shared/util/ui-logger";
 import { CurrentTabContextProvider, useCurrentTab } from "./CurrentTab.context";
 import { ApiProxy } from "./api-proxy";
@@ -20,42 +21,48 @@ export const PopupApiHooksProvider: React.FunctionComponent<React.PropsWithChild
 
 const apiHooks: ApiContextValue = {
     useCurrentPlayingStreamingServiceSong,
-    useCurrentViewStreamingServiceSong,
+    useCurrentViewStreamingServiceSongs,
 };
 
-function useCurrentPlayingStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong> {
-    const _promiseSignal = useAsyncSignal<StreamingServiceSong | undefined>(undefined);
-
+function useCurrentPlayingStreamingServiceSong(): AsyncState<StreamingServiceSong> {
+    const queryClient = useQueryClient();
     const currentTab = useCurrentTab();
 
-    const currentTabId = useComputed<number>(() => currentTab.value?.id);
+    useEffect(() => {
+        const currentTabId = currentTab?.id;
 
-    useSignalEffect(() => {
-        if (currentTabId.value === undefined) {
+        if (currentTabId === undefined) {
             return;
         }
 
         return container
             .resolve(ApiProxy)
-            .subscribeToCurrentPlayingSongFromTab(
-                currentTabId.value,
-                currentPlayingSong => (_promiseSignal.promise = Promise.resolve(currentPlayingSong)),
+            .subscribeToCurrentPlayingSongFromTab(currentTabId, currentPlayingSong =>
+                queryClient.setQueryData(["currentPlayingStreamingServiceSong"], () => currentPlayingSong),
             );
-    });
+    }, [currentTab]);
 
-    return _promiseSignal;
+    return useQuery({
+        queryKey: ["currentPlayingStreamingServiceSong"],
+        queryFn: () => null,
+    });
 }
 
-function useCurrentViewStreamingServiceSong(): ReadonlyPromiseSignal<StreamingServiceSong[]> {
+function useCurrentViewStreamingServiceSongs(): AsyncState<StreamingServiceSong[]> {
     const currentTab = useCurrentTab();
+    const [revision, increment] = useIncrementor();
 
-    return useAsyncSignalComputed(async () => {
-        if (currentTab.value?.id === undefined) {
+    useEffect(() => {
+        if (currentTab?.id === undefined) {
             return;
         }
 
-        logger.log("useCurrentViewStreamingServiceSong requesting ApiProxy.getCurrentViewSongsFromTab");
+        increment();
+    }, [currentTab]);
 
-        return container.resolve(ApiProxy).getCurrentViewSongsFromTab(currentTab.value.id);
+    return useQuery({
+        queryKey: ["currentViewStreamingServiceSongs", revision],
+        enabled: !!currentTab?.id,
+        queryFn: async () => (await container.resolve(ApiProxy).getCurrentViewSongsFromTab(currentTab.id)) ?? [],
     });
 }

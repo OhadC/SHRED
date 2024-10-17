@@ -1,16 +1,15 @@
-import { useSignal, type ReadonlySignal } from "@preact/signals-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export type UseTimeoutReturn = {
-    isReady: ReadonlySignal<boolean>;
+    isReady: boolean;
 };
 
 export function useTimeout(ms?: number): UseTimeoutReturn {
-    const isReady = useSignal<boolean>(false);
+    const [isReady, setIsReady] = useState<boolean>(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            isReady.value = true;
+            setIsReady(true);
         }, ms || 0);
 
         return () => clearTimeout(timer);

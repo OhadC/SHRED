@@ -4,13 +4,13 @@ import { waitForFunctionToResolve } from "~/util/wait-for-function-to-resolve";
 import { getApiLogger } from "../../api-logger";
 import { type StreamingServiceSong } from "../../api.model";
 import { DomApi } from "../../helpers/dom-api";
-import { MusicStreamingClassBasedConfigToken, type MusicStreamingApi } from "../music-streaming-api.model";
+import { MusicStreamingClassBasedConfigToken, type IMusicStreamingApi } from "../music-streaming-api.model";
 import { type SelectorBasedMusicStreamingServiceConfig } from "./selector-based-music-streaming-api.model";
 
 const logger = getApiLogger("SelectorBasedMusicStreamingApi");
 
 @singleton()
-export class SelectorBasedMusicStreamingApi implements MusicStreamingApi {
+export class SelectorBasedMusicStreamingApi implements IMusicStreamingApi {
     constructor(
         @inject(DomApi) private domApi: DomApi,
         @inject(MusicStreamingClassBasedConfigToken) private config: SelectorBasedMusicStreamingServiceConfig,
@@ -61,7 +61,7 @@ export class SelectorBasedMusicStreamingApi implements MusicStreamingApi {
                 return [];
             }
 
-            const artistElementParent = selectors.isArtistFromRow ?? true ? songRowDomElement : this.domApi;
+            const artistElementParent = (selectors.isArtistFromRow ?? true) ? songRowDomElement : this.domApi;
             const artistsDomElement = artistElementParent.querySelector<HTMLElement>(selectors.artistDomElement);
             const artist = artistsDomElement?.innerText;
 

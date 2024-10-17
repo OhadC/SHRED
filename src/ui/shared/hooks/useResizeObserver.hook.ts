@@ -1,17 +1,16 @@
-import { Signal, useSignal } from "@preact/signals-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type UseResizeObserverCallback = (resizeObserverEntry: ResizeObserverEntry) => void;
 
 export type UseResizeObserverReturn = {
     nodeRef: ReturnType<typeof useRef<HTMLDivElement>>;
-    resizeObserverEntry: Signal<ResizeObserverEntry | undefined>;
+    resizeObserverEntry: ResizeObserverEntry | undefined;
 };
 
 export function useResizeObserver(): UseResizeObserverReturn {
     const nodeRef = useRef<HTMLDivElement>(null);
 
-    const resizeObserverEntry = useSignal<ResizeObserverEntry | undefined>(undefined);
+    const [resizeObserverEntry, setResizeObserverEntry] = useState<ResizeObserverEntry | undefined>(undefined);
 
     useEffect(() => {
         const node = nodeRef.current;
@@ -20,7 +19,7 @@ export function useResizeObserver(): UseResizeObserverReturn {
         }
 
         const resizeObserver = new ResizeObserver(entries => {
-            resizeObserverEntry.value = entries[0];
+            setResizeObserverEntry(entries[0]);
         });
 
         resizeObserver.observe(node);

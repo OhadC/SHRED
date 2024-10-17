@@ -1,8 +1,6 @@
-import { useSignal } from "@preact/signals-react";
-import { installAutoSignalTracking } from "@preact/signals-react/runtime";
 import appStyles from "data-text:~ui/app.scss";
 import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo";
-import { StrictMode } from "react";
+import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { PictureInPicture } from "~/ui/picture-in-picture/PictureInPicture";
 import { PictureInPictureButton } from "~/ui/picture-in-picture/PictureInPictureButton";
@@ -43,7 +41,7 @@ export const getRootContainer = () => {
 };
 
 const PipTriggerUi = ({ anchor }: PlasmoCSUIProps) => {
-    const showButton = useSignal<boolean>(!!window?.documentPictureInPicture);
+    const [showButton, setShowButton] = useState<boolean>(!!window?.documentPictureInPicture);
 
     const openPipContainer = async () => {
         const pipWindow: Window = await window.documentPictureInPicture?.requestWindow({
@@ -63,8 +61,6 @@ const PipTriggerUi = ({ anchor }: PlasmoCSUIProps) => {
         const container = pipDocument.createElement("div");
         pipDocument.body.append(container);
 
-        installAutoSignalTracking();
-
         const pipRoot = createRoot(container);
         pipRoot.render(
             <StrictMode>
@@ -72,18 +68,18 @@ const PipTriggerUi = ({ anchor }: PlasmoCSUIProps) => {
             </StrictMode>,
         );
 
-        showButton.value = false;
+        setShowButton(false);
         pipWindow.addEventListener(
             "pagehide",
             () => {
-                showButton.value = true;
+                setShowButton(true);
                 unobserveExternalStyles();
             },
             { once: true },
         );
     };
 
-    return <>{showButton.value && <PictureInPictureButton onClick={openPipContainer} />}</>;
+    return <>{showButton && <PictureInPictureButton onClick={openPipContainer} />}</>;
 };
 
 export default PipTriggerUi;

@@ -1,33 +1,28 @@
-import { useComputed } from "@preact/signals-react";
-import { useCurrentViewStreamingServiceSong } from "../shared/contexts/Api.context";
-import { useAsyncSignalComputed } from "../shared/hooks/useAsyncSignal.hook";
-import { type SongInfo } from "../shared/models/models";
-import type { ReadonlyPromiseSignal } from "../shared/util/promise-signal";
+import { useQuery } from "@tanstack/react-query";
+import { useCurrentViewStreamingServiceSongs } from "../shared/contexts/Api.context";
+import type { AsyncState } from "../shared/models/async-state.model";
+import { type SongInfo } from "../shared/models/song.models";
 import { getUiLogger } from "../shared/util/ui-logger";
-import { getSongInfoFromSongsterr } from "./data-access/songsterr";
+import { getSongInfoFromSongsterr } from "./data-access/songsterr/get-song-info-from-songsterr";
 
 const logger = getUiLogger("useCurrentViewSongs");
 
-export function useCurrentViewSongs(): ReadonlyPromiseSignal<SongInfo[]> {
-    const currentViewStreamingServiceSong = useCurrentViewStreamingServiceSong();
+export function useCurrentViewSongs(): AsyncState<SongInfo[]> {
+    const currentViewStreamingServiceSong = useCurrentViewStreamingServiceSongs();
 
-    const currentViewSongs = useAsyncSignalComputed(async () => {
-        if (!currentViewStreamingServiceSong.data.value) {
-            return;
-        }
-
-        logger.log("Updating currentViewSongs by", currentViewStreamingServiceSong.data.value);
-
-        const songInfoPromises: Promise<SongInfo>[] | undefined = currentViewStreamingServiceSong.data.value?.map(song =>
-            getSongInfoFromSongsterr(song.title, song.artist).then(songInfo => songInfo ?? song),
-        );
-
-        return Promise.all(songInfoPromises ?? []);
+    const currentViewSongs = useQuery({
+        queryKey: ["currentViewSongs", currentViewStreamingServiceSong.data],
+        enabled: !!currentViewStreamingServiceSong.data,
+        queryFn: () => {
+            return Promise.all(
+                currentViewStreamingServiceSong.data.map(async song => (await getSongInfoFromSongsterr(song.title, song.artist)) || song),
+            );
+        },
     });
 
     return {
         data: currentViewSongs.data,
-        loading: useComputed(() => currentViewStreamingServiceSong.loading.value || currentViewSongs.loading.value),
-        error: useComputed(() => currentViewStreamingServiceSong.error.value || currentViewSongs.error.value),
+        isPending: currentViewStreamingServiceSong.isPending || currentViewSongs.isPending,
+        error: currentViewStreamingServiceSong.error || currentViewSongs.error,
     };
 }
