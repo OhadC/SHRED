@@ -1,30 +1,28 @@
-import { useComputed } from "@preact/signals-react";
-import type { SongInfo } from "../shared/models/models";
 import { useSongsViewTranslations } from "./SongsView.translations";
 import { SongList } from "./components/SongList";
 import { useCurrentPlayingSong } from "./useCurrentPlayingSong.hook";
 import { useCurrentViewSongs } from "./useCurrentViewSongs.hook";
 
 export function SongsView() {
-    const { data: currentPlayingSong, loading: loadingCurrentPlayingSong } = useCurrentPlayingSong();
-    const { data: currentViewSongs, loading: loadingCurrentViewSongs } = useCurrentViewSongs();
+    const { data: currentPlayingSong, isPending: PendingCurrentPlayingSong } = useCurrentPlayingSong();
+    const { data: currentViewSongs, isPending: PendingCurrentViewSongs } = useCurrentViewSongs();
 
     const translations = useSongsViewTranslations();
 
     return (
         <div className="space-y-2">
             <SongList
-                songList={useComputed<SongInfo[]>(() => (currentPlayingSong.value ? [currentPlayingSong.value] : undefined))}
-                title={translations.value.songsView.playingNow}
-                isLoading={loadingCurrentPlayingSong}
-                emptyListText={translations.value.songsView.playingNowEmpty}
+                songList={currentPlayingSong && [currentPlayingSong]}
+                title={translations.songsView.playingNow}
+                isPending={PendingCurrentPlayingSong}
+                emptyListText={translations.songsView.playingNowEmpty}
             />
 
             <SongList
                 songList={currentViewSongs}
-                title={translations.value.songsView.currentView}
-                isLoading={loadingCurrentViewSongs}
-                emptyListText={translations.value.songsView.currentViewEmpty}
+                title={translations.songsView.currentView}
+                isPending={PendingCurrentViewSongs}
+                emptyListText={translations.songsView.currentViewEmpty}
                 skeletonCount={5}
             />
         </div>

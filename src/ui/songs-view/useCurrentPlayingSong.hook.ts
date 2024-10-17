@@ -1,22 +1,20 @@
-import { useComputed } from "@preact/signals-react";
+import { useQuery } from "@tanstack/react-query";
 import { useCurrentPlayingStreamingServiceSong } from "../shared/contexts/Api.context";
-import { useAsyncSignalComputed } from "../shared/hooks/useAsyncSignal.hook";
-import { type SongInfo } from "../shared/models/models";
-import type { ReadonlyPromiseSignal } from "../shared/util/promise-signal";
-import { getSongInfoFromSongsterr } from "./data-access/songsterr";
+import type { AsyncState } from "../shared/models/async-state.model";
+import { type SongInfo } from "../shared/models/song.models";
+import { getSongInfoFromSongsterr } from "./data-access/songsterr/get-song-info-from-songsterr";
 
-export function useCurrentPlayingSong(): ReadonlyPromiseSignal<SongInfo> {
+export function useCurrentPlayingSong(): AsyncState<SongInfo> {
     const currentPlayingStreamingServiceSong = useCurrentPlayingStreamingServiceSong();
 
-    const songInfo = useAsyncSignalComputed(async () => {
-        const song = currentPlayingStreamingServiceSong.data.value;
-
-        return song && getSongInfoFromSongsterr(song.title, song.artist).then(songInfo => songInfo ?? song);
+    return useQuery({
+        queryKey: [
+            "SongInfoFromSongsterr",
+            currentPlayingStreamingServiceSong.data?.title,
+            currentPlayingStreamingServiceSong.data?.artist,
+        ],
+        enabled: !!currentPlayingStreamingServiceSong.data,
+        queryFn: () =>
+            getSongInfoFromSongsterr(currentPlayingStreamingServiceSong.data.title, currentPlayingStreamingServiceSong.data.artist),
     });
-
-    return {
-        data: songInfo.data,
-        loading: useComputed(() => currentPlayingStreamingServiceSong.loading.value || songInfo.loading.value),
-        error: useComputed(() => currentPlayingStreamingServiceSong.error.value || songInfo.error.value),
-    };
 }

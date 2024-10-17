@@ -1,4 +1,4 @@
-export interface SelectorBasedMusicStreamingServiceConfig {
+export type SelectorBasedMusicStreamingServiceConfig = {
     currentPlayingSong: {
         selectors: {
             containerDomElement: string;
@@ -12,12 +12,12 @@ export interface SelectorBasedMusicStreamingServiceConfig {
             selectors: MusicStreamingServiceConfigCurrentViewSongsSelectors;
         }[];
     };
-}
+};
 
-export interface MusicStreamingServiceConfigCurrentViewSongsSelectors {
+export type MusicStreamingServiceConfigCurrentViewSongsSelectors = {
     songsTable: string;
     songRowDomElements: string;
     titleDomElement: string;
     artistDomElement: string;
     isArtistFromRow?: boolean; // default is true
-}
+};

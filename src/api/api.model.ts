@@ -1,7 +1,7 @@
-export interface StreamingServiceSong {
+export type StreamingServiceSong = {
     artist?: string;
     title: string;
-}
+};
 
 export enum ApiEndpoint {
     GetCurrentPlayingSong = "GetCurrentPlayingSong",
@@ -12,21 +12,21 @@ export enum ApiEvents {
     CurrentPlayingSongChanged = "CurrentPlayingSongChanged",
 }
 
-export interface ApiRequest {
+export type ApiRequest = {
     endpoint: ApiEndpoint;
     data?: any;
     requestId?: string;
-}
+};
 
-export interface ApiResponse<T> {
+export type ApiResponse<T> = {
     data: T;
     requestId?: string;
-}
+};
 
-export interface ApiEventMessage<T> {
+export type ApiEventMessage<T> = {
     event: ApiEvents;
     data: T;
-}
+};
 
 export type GetCurrentPlayingSongResponse = StreamingServiceSong | undefined;
 

@@ -1,4 +1,5 @@
-import type { SongInfo } from "../../../shared/models/models";
+import type { SongInfo } from "~/ui/shared/models/song.models";
+import { promiseResult } from "~/util/promise-result";
 import { getUiLogger } from "../../../shared/util/ui-logger";
 import { fetchSongsterrSongInfo } from "./helpers/fetch-songsterr-song-info.helper";
 import { songsterrSongInfoToSongInfo } from "./helpers/songsterr-song-info-to-song-info.helper";
@@ -8,11 +9,11 @@ import { songsterrSongInfoToSongInfo } from "./helpers/songsterr-song-info-to-so
 const logger = getUiLogger("getSongInfoFromSongsterr");
 
 export async function getSongInfoFromSongsterr(title: string, artist?: string): Promise<SongInfo | undefined> {
-    try {
-        const songsterrTrackInfo = await fetchSongsterrSongInfo(title, artist);
-
-        return songsterrTrackInfo && songsterrSongInfoToSongInfo(songsterrTrackInfo);
-    } catch (error) {
+    const [error, songsterrTrackInfo] = await promiseResult(fetchSongsterrSongInfo(title, artist));
+    if (error) {
         logger.error("error", error);
+        return;
     }
+
+    return songsterrTrackInfo && songsterrSongInfoToSongInfo(songsterrTrackInfo);
 }

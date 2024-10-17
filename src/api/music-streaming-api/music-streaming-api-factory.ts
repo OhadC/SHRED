@@ -4,7 +4,7 @@ import { DomApi } from "../helpers/dom-api";
 import {
     MusicStreamingApiToken,
     MusicStreamingClassBasedConfigToken,
-    type MusicStreamingApi,
+    type IMusicStreamingApi,
     type MusicStreamingServiceConfig,
 } from "./music-streaming-api.model";
 import { SPOTIFY_CONFIG } from "./music-streaming-service-configs/spotify-config";
@@ -12,7 +12,7 @@ import { TIDAL_CONFIG } from "./music-streaming-service-configs/tidal-config";
 
 const logger = getApiLogger("MusicStreamingApiFactory");
 
-container.register<MusicStreamingApi>(MusicStreamingApiToken, {
+container.register<IMusicStreamingApi>(MusicStreamingApiToken, {
     useFactory: container => container.resolve(getCurrentMusicStreamingApiConfig().musicStreamingApiClass),
 });
 container.register<any>(MusicStreamingClassBasedConfigToken, {

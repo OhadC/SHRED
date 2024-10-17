@@ -8,13 +8,13 @@ import {
     type GetCurrentPlayingSongResponse,
     type GetCurrentViewSongsResponse,
 } from "./api.model";
-import { MusicStreamingApiToken, type MusicStreamingApi } from "./music-streaming-api/music-streaming-api.model";
+import { MusicStreamingApiToken, type IMusicStreamingApi } from "./music-streaming-api/music-streaming-api.model";
 
 const logger = getApiLogger("EndpointService");
 
 @singleton()
 export class EndpointService {
-    constructor(@inject(MusicStreamingApiToken) private readonly musicStreamingApi: MusicStreamingApi) {}
+    constructor(@inject(MusicStreamingApiToken) private readonly musicStreamingApi: IMusicStreamingApi) {}
 
     public init() {
         this.subscribeToBrowserMessages();

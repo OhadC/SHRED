@@ -1,15 +1,18 @@
 import { sendToBackground } from "@plasmohq/messaging";
 import type { BackgroundFetchRequest, BackgroundFetchResponse } from "~/background/messages/FETCH";
+import { promiseResult } from "~/util/promise-result";
 
 export async function fetchByBackground<TData = any>(...body: BackgroundFetchRequest): Promise<TData> {
-    const result = await sendToBackground<BackgroundFetchRequest, BackgroundFetchResponse>({
-        name: "FETCH",
-        body,
-    });
+    const [error, result] = await promiseResult(
+        sendToBackground<BackgroundFetchRequest, BackgroundFetchResponse>({
+            name: "FETCH",
+            body,
+        }),
+    );
 
-    if (result.error) {
-        throw result.error;
+    if (error || result.error) {
+        throw error || result.error;
     }
 
-    return result.response;
+    return result.result;
 }

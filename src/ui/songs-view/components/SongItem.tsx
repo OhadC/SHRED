@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { cn } from "~/util/tailwind/cn";
 import { EllipsisOneLine } from "../../shared/components/EllipsisOneLine";
-import { type SongInfo } from "../../shared/models/models";
+import { type SongInfo } from "../../shared/models/song.models";
 import { tuningNumberToString } from "../helpers/tuning-number-to-string.helper";
 import { DifficultyBar } from "./DifficultyBar";
 
@@ -15,7 +15,7 @@ export const SongItem: React.FC<{ songInfo?: SongInfo }> = ({ songInfo }) => {
             rel="noopener noreferrer"
             className={cn(
                 songItemContainerStyle,
-                "grid content-between gap-1 [grid-template-areas:_'title_difficulty'_'artist_tuning'] [grid-template-columns:_1fr_auto] [grid-template-rows:_1lh_1lh]",
+                "grid content-between gap-x-1.5 [grid-template-areas:_'title_difficulty'_'artist_tuning'] [grid-template-columns:_1fr_auto]",
                 !songInfo?.url && noUrlStyle,
             )}
         >
@@ -54,5 +54,5 @@ const OneLineSkeleton: React.FC<{ wClassName: `w-${number}` }> = ({ wClassName }
 
 const leftGridCellStyle = "flex justify-start items-center overflow-hidden";
 const rightGridCellStyle = "flex justify-end items-center";
-const songItemContainerStyle = "h-16 rounded-lg p-2 hover:bg-background-800 hover:shadow-md";
+const songItemContainerStyle = "h-14 rounded-lg px-2.5 py-1.5 hover:bg-background-800 hover:shadow-md";
 const noUrlStyle = "opacity-50";

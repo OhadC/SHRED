@@ -15,9 +15,9 @@ export enum TabsWebsite {
     Songsterr = "Songsterr",
 }
 
-export interface SongInfo extends StreamingServiceSong {
+export type SongInfo = StreamingServiceSong & {
     url?: string;
     tuning?: number[];
     difficulty?: SongDifficulty;
     from?: TabsWebsite;
-}
+};
