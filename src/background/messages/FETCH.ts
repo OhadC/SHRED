@@ -13,13 +13,13 @@ const resultsCache: Record<string, any> = {};
 export const handler: PlasmoMessaging.MessageHandler<BackgroundFetchRequest, BackgroundFetchResponse> = (req, res) => {
     const url: string | undefined = req.body.length === 1 && _.isString(req[0]) ? (req.body[0] as string) : undefined;
     if (url && url in resultsCache) {
-        return resultsCache[url as string];
+        return resultsCache[url];
     }
 
     fetch(...req.body)
         .then(response => response.json())
         .then(response => {
-            resultsCache[url as string] = response;
+            resultsCache[url] = response;
 
             res.send({ result: response });
         })
