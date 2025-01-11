@@ -1,11 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ApiEvents, type StreamingServiceSong } from "~/api/api.model";
 import type { EndpointService } from "~/api/endpoint-service";
 import { ApiHooksProvider, type ApiContextValue } from "~/ui/shared/contexts/Api.context";
-import { useIncrementor } from "~/ui/shared/hooks/useIncrementor.hook";
 import type { AsyncState } from "~/ui/shared/models/async-state.model";
-import { onUrlChange } from "~/util/on-url-change";
 import { getUiLogger } from "../../shared/util/ui-logger";
 
 declare let window: Window & {
@@ -24,31 +21,28 @@ const apiHooks: ApiContextValue = {
 };
 
 function useCurrentPlayingStreamingServiceSong(): AsyncState<StreamingServiceSong> {
-    const [revision, increment] = useIncrementor();
-
-    useEffect(() => {
-        window.addEventListener(ApiEvents.CurrentPlayingSongChanged, increment);
-
-        return () => window.removeEventListener(ApiEvents.CurrentPlayingSongChanged, increment);
-    }, []);
-
-    return useQuery({
-        queryKey: ["currentPlayingStreamingServiceSong", revision],
-        queryFn: () => window.endpointService.getCurrentPlayingSong(),
-    });
+    return useApiState<AsyncState<StreamingServiceSong>>(
+        window.endpointService.getCurrentPlayingSong(),
+        ApiEvents.CurrentPlayingSongChanged,
+    );
 }
 
 function useCurrentViewStreamingServiceSongs(): AsyncState<StreamingServiceSong[]> {
-    const [revision, increment] = useIncrementor();
+    return useApiState<AsyncState<StreamingServiceSong[]>>(window.endpointService.getCurrentViewSongs(), ApiEvents.CurrentViewSongsChanged);
+}
+
+function useApiState<T>(initialState: T, changeEvent: ApiEvents) {
+    const [state, setState] = useState<T>(initialState);
 
     useEffect(() => {
-        const unsubscribe = onUrlChange(increment);
+        const callback = (event: CustomEvent<T>) => {
+            setState(event.detail);
+        };
 
-        return () => unsubscribe();
+        window.addEventListener(changeEvent, callback);
+
+        return () => window.removeEventListener(changeEvent, callback);
     }, []);
 
-    return useQuery({
-        queryKey: ["currentViewStreamingServiceSongs", revision],
-        queryFn: async () => (await window.endpointService.getCurrentViewSongs()) ?? [],
-    });
+    return state;
 }

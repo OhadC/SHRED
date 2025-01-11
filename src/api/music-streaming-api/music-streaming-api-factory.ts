@@ -13,10 +13,10 @@ import { TIDAL_CONFIG } from "./music-streaming-service-configs/tidal-config";
 const logger = getApiLogger("MusicStreamingApiFactory");
 
 container.register<IMusicStreamingApi>(MusicStreamingApiToken, {
-    useFactory: container => container.resolve(getCurrentMusicStreamingApiConfig().musicStreamingApiClass),
+    useFactory: container => container.resolve(getCurrentMusicStreamingApiConfig()?.musicStreamingApiClass),
 });
 container.register<any>(MusicStreamingClassBasedConfigToken, {
-    useFactory: container => getCurrentMusicStreamingApiConfig().classBasedConfig,
+    useFactory: container => getCurrentMusicStreamingApiConfig()?.classBasedConfig,
 });
 
 const MUSIC_STREAMING_SERVICE_CONFIGS: MusicStreamingServiceConfig<any>[] = [TIDAL_CONFIG, SPOTIFY_CONFIG];

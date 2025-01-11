@@ -1,13 +1,8 @@
 import { inject, singleton } from "tsyringe";
 import browser, { type Runtime } from "webextension-polyfill";
+import type { AsyncState } from "~/ui/shared/models/async-state.model";
 import { getApiLogger } from "./api-logger";
-import {
-    ApiEndpoint,
-    type ApiRequest,
-    type ApiResponse,
-    type GetCurrentPlayingSongResponse,
-    type GetCurrentViewSongsResponse,
-} from "./api.model";
+import { ApiEndpoint, type ApiRequest, type ApiResponse, type StreamingServiceSong } from "./api.model";
 import { MusicStreamingApiToken, type IMusicStreamingApi } from "./music-streaming-api/music-streaming-api.model";
 
 const logger = getApiLogger("EndpointService");
@@ -36,21 +31,21 @@ export class EndpointService {
         });
     }
 
-    private handleEndpointRequest(request: ApiRequest) {
+    private async handleEndpointRequest(request: ApiRequest) {
         switch (request.endpoint) {
             case ApiEndpoint.GetCurrentPlayingSong:
-                return this.getCurrentPlayingSong();
+                return this.musicStreamingApi.currentPlayingSongState;
 
             case ApiEndpoint.GetCurrentViewSongs:
-                return this.getCurrentViewSongs();
+                return this.musicStreamingApi.currentViewSongsState;
         }
     }
 
-    public getCurrentPlayingSong(): Promise<GetCurrentPlayingSongResponse> {
-        return this.musicStreamingApi.getCurrentPlayingSong();
+    public getCurrentPlayingSong(): AsyncState<StreamingServiceSong> {
+        return this.musicStreamingApi.currentPlayingSongState;
     }
 
-    public getCurrentViewSongs(): Promise<GetCurrentViewSongsResponse> {
-        return this.musicStreamingApi.getCurrentViewSongs();
+    public getCurrentViewSongs(): AsyncState<StreamingServiceSong[]> {
+        return this.musicStreamingApi.currentViewSongsState;
     }
 }

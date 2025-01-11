@@ -1,5 +1,5 @@
 import { singleton } from "tsyringe";
-import Browser, { type Runtime, type Tabs } from "webextension-polyfill";
+import Browser from "webextension-polyfill";
 import type { ApiEndpoint, ApiEventMessage, ApiEvents, ApiRequest, ApiResponse } from "~/api/api.model";
 import { generateId } from "~/util/generate-id";
 import type { Unsubscribe } from "~/util/util.model";
@@ -9,46 +9,22 @@ const logger = getUiLogger("BrowserApi");
 
 @singleton()
 export class BrowserProxy {
-    getActiveTab(): Promise<Tabs.Tab> {
-        return Browser.tabs.query({ currentWindow: true, active: true }).then(([currentTab]) => currentTab);
-    }
+    private readonly activeTab = Browser.tabs.query({ currentWindow: true, active: true }).then(([currentTab]) => currentTab);
 
-    sendMessageToTab<T>(tabId: number, endpoint: ApiEndpoint, data?: any): Promise<ApiResponse<T>> {
+    async sendMessageToTab<T>(endpoint: ApiEndpoint, data?: any): Promise<T> {
         const request: ApiRequest = { endpoint, data, requestId: generateId() };
 
-        logger.log("sendMessageToTab", { tabId, endpoint, data });
+        logger.log("sendMessageToTab", { endpoint, data });
 
-        return Browser.tabs.sendMessage(tabId, request).catch(error => logger.error("sendMessageToTab error", error));
+        const tab = await this.activeTab;
+        const response = await Browser.tabs.sendMessage<ApiRequest, ApiResponse<T>>(tab.id, request);
+
+        return response?.data;
     }
 
-    subscribeToActiveTabUrlChanges(
-        callback: (tabId: number, changeInfo: Tabs.OnUpdatedChangeInfoType, tab: Tabs.Tab) => void,
-    ): Unsubscribe {
-        let waitingForPageToComplete = false;
-
-        const onUpdateCallback = (tabId: number, changeInfo: Tabs.OnUpdatedChangeInfoType, tab: Tabs.Tab) => {
-            if (tab.active) {
-                if (changeInfo.status === "loading") {
-                    waitingForPageToComplete = true;
-                }
-
-                if (waitingForPageToComplete && changeInfo.status === "complete") {
-                    callback(tabId, changeInfo, tab);
-                }
-            }
-        };
-
-        Browser.tabs.onUpdated.addListener(onUpdateCallback);
-        const unsubscribeFunction = () => Browser.tabs.onUpdated.removeListener(onUpdateCallback);
-
-        return unsubscribeFunction;
-    }
-
-    subscribeToEvent<T>(event: ApiEvents, callback: (eventMessage: ApiEventMessage<T>, tabId: number, tab: Tabs.Tab) => void): Unsubscribe {
-        const onMessageCallback = (message: ApiEventMessage<T>, sender: Runtime.MessageSender) => {
-            if (message?.event === event && sender.tab?.active) {
-                callback(message, sender.tab.id!, sender.tab);
-            }
+    subscribeToEvent<T>(event: ApiEvents, callback: (eventMessage: ApiEventMessage<T>) => void): Unsubscribe {
+        const onMessageCallback = (message: ApiEventMessage<T>): undefined => {
+            message?.event === event && callback(message);
         };
 
         Browser.runtime.onMessage.addListener(onMessageCallback);

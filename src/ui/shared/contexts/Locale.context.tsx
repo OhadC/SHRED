@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createSafeContext } from "~/util/context/create-safe-context";
+import { createSafeContext } from "~/ui/shared/contexts/create-safe-context";
 
 export const DEFAULT_LOCALE = "en-US";
 

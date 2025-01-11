@@ -93,16 +93,27 @@ function appendStylesToPip(pipDocument: Document) {
 }
 
 function disableExternalStyles(pipDocument: Document): Unsubscribe {
-    const mutationObserver = new MutationObserver(() => {
+    const mutationObserver = new MutationObserver(changes => {
+        const isDirectChildListMutation = changes.some(change => change.type === "childList");
+        if (!isDirectChildListMutation) {
+            return;
+        }
+
         for (const styleSheet of pipDocument.styleSheets) {
             const isValid = !styleSheet.href && styleSheet.cssRules.item(0).cssText.startsWith("shred-css-file");
             if (!isValid) {
                 styleSheet.disabled = true;
             }
         }
+
+        setTimeout(() => {
+            for (const linkElem of pipDocument.querySelectorAll("link[rel=stylesheet]")) {
+                linkElem.remove();
+            }
+        }, 0);
     });
 
-    mutationObserver.observe(pipDocument.head, { subtree: true, characterData: true, childList: true });
+    mutationObserver.observe(pipDocument.body, { childList: true, subtree: false });
 
     return () => mutationObserver.disconnect();
 }

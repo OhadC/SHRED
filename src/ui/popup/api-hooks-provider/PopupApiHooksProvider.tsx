@@ -1,22 +1,15 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { container } from "tsyringe";
-import type { StreamingServiceSong } from "~/api/api.model";
+import { ApiEndpoint, ApiEvents, type StreamingServiceSong } from "~/api/api.model";
 import { ApiHooksProvider, type ApiContextValue } from "~/ui/shared/contexts/Api.context";
-import { useIncrementor } from "~/ui/shared/hooks/useIncrementor.hook";
 import type { AsyncState } from "~/ui/shared/models/async-state.model";
 import { getUiLogger } from "../../shared/util/ui-logger";
-import { CurrentTabContextProvider, useCurrentTab } from "./CurrentTab.context";
-import { ApiProxy } from "./api-proxy";
+import { BrowserProxy } from "./browser-proxy";
 
 const logger = getUiLogger("Popup-Api-hooks");
 
 export const PopupApiHooksProvider: React.FunctionComponent<React.PropsWithChildren<{}>> = ({ children }) => {
-    return (
-        <CurrentTabContextProvider>
-            <ApiHooksProvider value={apiHooks}>{children}</ApiHooksProvider>
-        </CurrentTabContextProvider>
-    );
+    return <ApiHooksProvider value={apiHooks}>{children}</ApiHooksProvider>;
 };
 
 const apiHooks: ApiContextValue = {
@@ -25,44 +18,33 @@ const apiHooks: ApiContextValue = {
 };
 
 function useCurrentPlayingStreamingServiceSong(): AsyncState<StreamingServiceSong> {
-    const queryClient = useQueryClient();
-    const currentTab = useCurrentTab();
-
-    useEffect(() => {
-        const currentTabId = currentTab?.id;
-
-        if (currentTabId === undefined) {
-            return;
-        }
-
-        return container
-            .resolve(ApiProxy)
-            .subscribeToCurrentPlayingSongFromTab(currentTabId, currentPlayingSong =>
-                queryClient.setQueryData(["currentPlayingStreamingServiceSong"], () => currentPlayingSong),
-            );
-    }, [currentTab]);
-
-    return useQuery({
-        queryKey: ["currentPlayingStreamingServiceSong"],
-        queryFn: () => null,
-    });
+    return useApiState<AsyncState<StreamingServiceSong>>(
+        { isPending: true },
+        ApiEndpoint.GetCurrentPlayingSong,
+        ApiEvents.CurrentPlayingSongChanged,
+    );
 }
 
 function useCurrentViewStreamingServiceSongs(): AsyncState<StreamingServiceSong[]> {
-    const currentTab = useCurrentTab();
-    const [revision, increment] = useIncrementor();
+    return useApiState<AsyncState<StreamingServiceSong[]>>(
+        { isPending: true },
+        ApiEndpoint.GetCurrentViewSongs,
+        ApiEvents.CurrentViewSongsChanged,
+    );
+}
+
+function useApiState<T>(initialState: T, initialStateApiEndpoint: ApiEndpoint, changeEvent: ApiEvents) {
+    const [state, setState] = useState<T>(initialState);
 
     useEffect(() => {
-        if (currentTab?.id === undefined) {
-            return;
-        }
+        (async () => {
+            const currentViewSongs = await container.resolve(BrowserProxy).sendMessageToTab<T>(initialStateApiEndpoint);
 
-        increment();
-    }, [currentTab]);
+            setState(currentViewSongs);
+        })();
 
-    return useQuery({
-        queryKey: ["currentViewStreamingServiceSongs", revision],
-        enabled: !!currentTab?.id,
-        queryFn: async () => (await container.resolve(ApiProxy).getCurrentViewSongsFromTab(currentTab.id)) ?? [],
-    });
+        return container.resolve(BrowserProxy).subscribeToEvent<T>(changeEvent, event => setState(event.data));
+    }, []);
+
+    return state;
 }
