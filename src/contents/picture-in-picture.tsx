@@ -40,7 +40,8 @@ export const getRootContainer = () => {
     return container;
 };
 
-const PipTriggerUi = ({ anchor }: PlasmoCSUIProps) => {
+// eslint-disable-next-line no-empty-pattern
+const PipTriggerUi = ({}: PlasmoCSUIProps) => {
     const [showButton, setShowButton] = useState<boolean>(!!window?.documentPictureInPicture);
 
     const openPipContainer = async () => {

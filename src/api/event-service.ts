@@ -24,6 +24,8 @@ export class EventService {
 
         try {
             window.dispatchEvent(new CustomEvent(event, { detail: data }));
-        } catch (e) {}
+        } catch (_e) {
+            /* empty */
+        }
     }
 }

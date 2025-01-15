@@ -174,6 +174,6 @@ const removeMatch = _.curry((regexp: string | RegExp, text: string): string => {
 });
 
 const waitForElementToDisplay = (selector: string) =>
-    waitForFunctionToResolve(() => document.querySelector(selector)).catch(error => {
+    waitForFunctionToResolve(() => document.querySelector(selector)).catch(() => {
         throw Error(`Could not resolve selector: ${selector}`);
     });

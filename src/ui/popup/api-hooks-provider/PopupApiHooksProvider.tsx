@@ -8,7 +8,7 @@ import { BrowserProxy } from "./browser-proxy";
 
 const logger = getUiLogger("Popup-Api-hooks");
 
-export const PopupApiHooksProvider: React.FunctionComponent<React.PropsWithChildren<{}>> = ({ children }) => {
+export const PopupApiHooksProvider: React.FunctionComponent<React.PropsWithChildren> = ({ children }) => {
     return <ApiHooksProvider value={apiHooks}>{children}</ApiHooksProvider>;
 };
 
@@ -44,7 +44,7 @@ function useApiState<T>(initialState: T, initialStateApiEndpoint: ApiEndpoint, c
         })();
 
         return container.resolve(BrowserProxy).subscribeToEvent<T>(changeEvent, event => setState(event.data));
-    }, []);
+    }, [changeEvent, initialStateApiEndpoint]);
 
     return state;
 }

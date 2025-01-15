@@ -42,7 +42,7 @@ function useApiState<T>(initialState: T, changeEvent: ApiEvents) {
         window.addEventListener(changeEvent, callback);
 
         return () => window.removeEventListener(changeEvent, callback);
-    }, []);
+    }, [changeEvent]);
 
     return state;
 }

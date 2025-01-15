@@ -8,7 +8,7 @@ const [useLocale, Provider] = createSafeContext<string>();
 export { useLocale };
 
 export const LocaleContextProvider: React.FunctionComponent<React.PropsWithChildren> = ({ children }) => {
-    const [locale, setLocale] = useState<string>(DEFAULT_LOCALE);
+    const [locale, _setLocale] = useState<string>(DEFAULT_LOCALE);
 
     return <Provider value={locale}>{children}</Provider>;
 };

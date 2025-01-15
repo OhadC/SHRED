@@ -20,5 +20,17 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        ({ addUtilities }) => {
+            addUtilities({
+                ".pile": {
+                    // https://www.youtube.com/watch?v=6qpEOBkDr88
+                    display: "grid",
+                    "> *": {
+                        "grid-area": "1/1",
+                    },
+                },
+            });
+        },
+    ],
 };
