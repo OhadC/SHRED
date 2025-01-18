@@ -2,7 +2,6 @@
 
 import { SUPPORTED_HOSTS } from "~/config/supported-hosts";
 
-
 function listenToPageChangesForActionAvailability() {
     // https://developer.chrome.com/docs/extensions/reference/action/#emulating-pageactions-with-declarativecontent
     chrome.action.disable(undefined!);

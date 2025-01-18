@@ -1,6 +1,6 @@
 import { useCurrentPlayingStreamingServiceSong, useCurrentViewStreamingServiceSongs } from "../shared/contexts/Api.context";
-import { useSongsViewTranslations } from "./SongsView.translations";
 import { SongList } from "./components/SongList";
+import { useSongsViewTranslations } from "./SongsView.translations";
 
 export function SongsView() {
     const { data: currentPlayingSong, isPending: PendingCurrentPlayingSong } = useCurrentPlayingStreamingServiceSong();

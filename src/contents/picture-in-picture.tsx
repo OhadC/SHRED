@@ -2,7 +2,7 @@ import appStyles from "data-text:~ui/app.scss";
 import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo";
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { SUPPORTED_HOSTS_MATCHES } from "~/config/supported-hosts";
+import { verifyMatches } from "~/config/supported-hosts";
 import { PictureInPicture } from "~/ui/picture-in-picture/PictureInPicture";
 import { PictureInPictureButton } from "~/ui/picture-in-picture/PictureInPictureButton";
 import type { Unsubscribe } from "~/util/util.model";
@@ -15,9 +15,9 @@ declare let window: {
 };
 
 export const config: PlasmoCSConfig = {
-    matches: SUPPORTED_HOSTS_MATCHES,
-    all_frames: true,
+    matches: ["*://open.spotify.com/*", "*://listen.tidal.com/*", "*://music.youtube.com/*"],
 };
+verifyMatches(config.matches);
 
 export const getRootContainer = () => {
     const container = document.createElement("div");

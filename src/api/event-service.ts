@@ -20,9 +20,8 @@ export class EventService {
 
         logger.log("sendEvent", message);
 
-        Browser.runtime.sendMessage(message).catch(error => logger.error("sendEvent error", error));
-
         try {
+            Browser.runtime.sendMessage(message).catch(error => logger.error("sendEvent error", error));
             window.dispatchEvent(new CustomEvent(event, { detail: data }));
         } catch (_e) {
             /* empty */
