@@ -2,11 +2,12 @@ import type { PlasmoCSConfig } from "plasmo";
 import { getApi } from "~/api";
 import type { Api } from "~/api/api";
 import type { EndpointService } from "~/api/endpoint-service";
-import { SUPPORTED_HOSTS_MATCHES } from "~/config/supported-hosts";
+import { verifyMatches } from "~/config/supported-hosts";
 
 export const config: PlasmoCSConfig = {
-    matches: SUPPORTED_HOSTS_MATCHES,
+    matches: ["*://open.spotify.com/*", "*://listen.tidal.com/*", "*://music.youtube.com/*"],
 };
+verifyMatches(config.matches);
 
 declare let window: Window & {
     endpointService: EndpointService;
