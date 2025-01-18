@@ -1,6 +1,6 @@
 import type { StreamingServiceSong } from "~/api/api.model";
-import { createSafeContext } from "~/util/context/create-safe-context";
 import type { AsyncState } from "../models/async-state.model";
+import { createSafeContext } from "./create-safe-context";
 
 export type ApiContextValue = {
     useCurrentPlayingStreamingServiceSong: () => AsyncState<StreamingServiceSong>;

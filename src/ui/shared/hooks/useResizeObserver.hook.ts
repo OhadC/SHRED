@@ -25,6 +25,7 @@ export function useResizeObserver(): UseResizeObserverReturn {
         resizeObserver.observe(node);
 
         return () => resizeObserver.unobserve(node);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [nodeRef.current]);
 
     return { nodeRef, resizeObserverEntry };

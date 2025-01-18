@@ -1,4 +1,3 @@
-import type React from "react";
 import { createContext, useContext } from "react";
 
 const CONTEXT_NOT_PROVIDED = Symbol("CONTEXT_NOT_PROVIDED");

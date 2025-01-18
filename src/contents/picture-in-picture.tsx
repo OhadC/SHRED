@@ -2,6 +2,7 @@ import appStyles from "data-text:~ui/app.scss";
 import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo";
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { SUPPORTED_HOSTS_MATCHES } from "~/config/supported-hosts";
 import { PictureInPicture } from "~/ui/picture-in-picture/PictureInPicture";
 import { PictureInPictureButton } from "~/ui/picture-in-picture/PictureInPictureButton";
 import type { Unsubscribe } from "~/util/util.model";
@@ -14,7 +15,7 @@ declare let window: {
 };
 
 export const config: PlasmoCSConfig = {
-    matches: ["*://open.spotify.com/*", "*://listen.tidal.com/*"],
+    matches: SUPPORTED_HOSTS_MATCHES,
     all_frames: true,
 };
 
@@ -40,7 +41,8 @@ export const getRootContainer = () => {
     return container;
 };
 
-const PipTriggerUi = ({ anchor }: PlasmoCSUIProps) => {
+// eslint-disable-next-line no-empty-pattern
+const PipTriggerUi = ({}: PlasmoCSUIProps) => {
     const [showButton, setShowButton] = useState<boolean>(!!window?.documentPictureInPicture);
 
     const openPipContainer = async () => {
@@ -93,16 +95,27 @@ function appendStylesToPip(pipDocument: Document) {
 }
 
 function disableExternalStyles(pipDocument: Document): Unsubscribe {
-    const mutationObserver = new MutationObserver(() => {
+    const mutationObserver = new MutationObserver(changes => {
+        const isDirectChildListMutation = changes.some(change => change.type === "childList");
+        if (!isDirectChildListMutation) {
+            return;
+        }
+
         for (const styleSheet of pipDocument.styleSheets) {
             const isValid = !styleSheet.href && styleSheet.cssRules.item(0).cssText.startsWith("shred-css-file");
             if (!isValid) {
                 styleSheet.disabled = true;
             }
         }
+
+        setTimeout(() => {
+            for (const linkElem of pipDocument.querySelectorAll("link[rel=stylesheet]")) {
+                linkElem.remove();
+            }
+        }, 0);
     });
 
-    mutationObserver.observe(pipDocument.head, { subtree: true, characterData: true, childList: true });
+    mutationObserver.observe(pipDocument.body, { childList: true, subtree: false });
 
     return () => mutationObserver.disconnect();
 }

@@ -1,3 +1,5 @@
+import type { AsyncState } from "~/ui/shared/models/async-state.model";
+
 export type StreamingServiceSong = {
     artist?: string;
     title: string;
@@ -10,6 +12,7 @@ export enum ApiEndpoint {
 
 export enum ApiEvents {
     CurrentPlayingSongChanged = "CurrentPlayingSongChanged",
+    CurrentViewSongsChanged = "CurrentViewSongsChanged",
 }
 
 export type ApiRequest = {
@@ -28,6 +31,6 @@ export type ApiEventMessage<T> = {
     data: T;
 };
 
-export type GetCurrentPlayingSongResponse = StreamingServiceSong | undefined;
+export type GetCurrentPlayingSongResponse = AsyncState<StreamingServiceSong>;
 
-export type GetCurrentViewSongsResponse = StreamingServiceSong[] | undefined;
+export type GetCurrentViewSongsResponse = AsyncState<StreamingServiceSong[]>;

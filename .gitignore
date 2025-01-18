@@ -11,6 +11,7 @@
 
 #cache
 .turbo
+.eslintcache
 
 # misc
 .DS_Store

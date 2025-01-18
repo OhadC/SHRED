@@ -1,3 +1,4 @@
+import { SupportedHost } from "~/config/supported-hosts";
 import { type MusicStreamingServiceConfig } from "../music-streaming-api.model";
 import { SelectorBasedMusicStreamingApi } from "../selector-based-music-streaming-api/selector-based-music-streaming-api";
 import {
@@ -13,7 +14,7 @@ const sharedTableSelectors = {
 } satisfies Partial<MusicStreamingServiceConfigCurrentViewSongsSelectors>;
 
 export const SPOTIFY_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStreamingServiceConfig> = {
-    urlMatch: "open.spotify.com/",
+    urlMatch: SupportedHost.Spotify,
     musicStreamingApiClass: SelectorBasedMusicStreamingApi,
     classBasedConfig: {
         currentPlayingSong: {

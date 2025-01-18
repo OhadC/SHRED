@@ -3,7 +3,14 @@ import { cn } from "~/util/tailwind/cn";
 import { LocaleContextProvider } from "./shared/contexts/Locale.context";
 import { SongsView } from "./songs-view/SongsView";
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            gcTime: Infinity,
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
 export type AppProperties = {
     className?: string;

@@ -13,7 +13,7 @@ export function useTimeout(ms?: number): UseTimeoutReturn {
         }, ms || 0);
 
         return () => clearTimeout(timer);
-    }, []);
+    }, [ms]);
 
     return { isReady };
 }

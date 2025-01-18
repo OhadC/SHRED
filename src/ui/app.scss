@@ -7,6 +7,10 @@ shred-css-file {
 @tailwind components;
 
 @layer base {
+    html {
+        @apply overflow-y-scroll;
+    }
+
     body {
         @apply bg-background-900 text-sm text-foreground;
     }

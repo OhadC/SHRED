@@ -9,6 +9,7 @@ export type SelectorBasedMusicStreamingServiceConfig = {
     currentViewSongs: {
         views: {
             urlMatch: string;
+            predicate?: () => boolean;
             selectors: MusicStreamingServiceConfigCurrentViewSongsSelectors;
         }[];
     };
