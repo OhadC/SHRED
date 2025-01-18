@@ -8,7 +8,6 @@ import { switchMapAsyncState } from "~/util/rxjs/switch-map-async-state";
 import { waitForFunctionToResolve } from "~/util/wait-for-function-to-resolve";
 import { getApiLogger } from "../../api-logger";
 import { type StreamingServiceSong } from "../../api.model";
-import { DomApi } from "../../helpers/dom-api";
 import { MusicStreamingClassBasedConfigToken, type IMusicStreamingApi } from "../music-streaming-api.model";
 import {
     type MusicStreamingServiceConfigCurrentViewSongsSelectors,
@@ -35,10 +34,7 @@ export class SelectorBasedMusicStreamingApi implements IMusicStreamingApi {
         return this._currentViewSongsState;
     }
 
-    constructor(
-        @inject(DomApi) private domApi: DomApi,
-        @inject(MusicStreamingClassBasedConfigToken) private config: SelectorBasedMusicStreamingServiceConfig,
-    ) {}
+    constructor(@inject(MusicStreamingClassBasedConfigToken) private config: SelectorBasedMusicStreamingServiceConfig) {}
 
     private getCurrentPlayingSong$(): Observable<AsyncState<StreamingServiceSong>> {
         return of(null).pipe(
@@ -48,7 +44,7 @@ export class SelectorBasedMusicStreamingApi implements IMusicStreamingApi {
                         element
                             ? fromMutation(element, { childList: true, subtree: true }).pipe(
                                   startWith(null),
-                                  debounceTime(200),
+                                  debounceTime(100),
                                   switchMap(() => this.getCurrentPlayingSong()),
                               )
                             : of(undefined),
@@ -70,7 +66,7 @@ export class SelectorBasedMusicStreamingApi implements IMusicStreamingApi {
                         element
                             ? fromMutation(element, { childList: true, subtree: true }).pipe(
                                   startWith(null),
-                                  debounceTime(200),
+                                  debounceTime(100),
                                   switchMap(() => this.getCurrentViewSongs()),
                               )
                             : of([]),
@@ -110,8 +106,7 @@ export class SelectorBasedMusicStreamingApi implements IMusicStreamingApi {
 
         await waitForElementToDisplay(`${selectors.songsTable} ${selectors.songRowDomElements}`);
 
-        const songsTable = this.domApi.querySelector(selectors.songsTable);
-        const songRowDomElements = Array.from(songsTable?.querySelectorAll(selectors.songRowDomElements) ?? []);
+        const songRowDomElements = Array.from(document.querySelectorAll(`${selectors.songsTable} ${selectors.songRowDomElements}`) ?? []);
         if (!songRowDomElements.length) {
             return;
         }
@@ -123,7 +118,7 @@ export class SelectorBasedMusicStreamingApi implements IMusicStreamingApi {
                 return [];
             }
 
-            const artistElementParent = (selectors.isArtistFromRow ?? true) ? songRowDomElement : this.domApi;
+            const artistElementParent = (selectors.isArtistFromRow ?? true) ? songRowDomElement : document;
             const artistsDomElement = artistElementParent.querySelector<HTMLElement>(selectors.artistDomElement);
             const artist = artistsDomElement?.innerText;
 
@@ -147,8 +142,9 @@ export class SelectorBasedMusicStreamingApi implements IMusicStreamingApi {
     }
 
     private getCurrentViewSongsSelectors(): MusicStreamingServiceConfigCurrentViewSongsSelectors | undefined {
-        const currentUrl: string = this.domApi.getCurrentUrl();
-        const currentViewConfig = this.config.currentViewSongs.views.find(view => currentUrl.includes(view.urlMatch));
+        const currentViewConfig = this.config.currentViewSongs.views.find(
+            view => document.URL.includes(view.urlMatch) && (!view.predicate || view.predicate()),
+        );
 
         return currentViewConfig?.selectors;
     }

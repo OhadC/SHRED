@@ -1,3 +1,4 @@
+import { SupportedHost } from "~/config/supported-hosts";
 import { type MusicStreamingServiceConfig } from "../music-streaming-api.model";
 import { SelectorBasedMusicStreamingApi } from "../selector-based-music-streaming-api/selector-based-music-streaming-api";
 import {
@@ -13,14 +14,14 @@ const sharedTableSelectors = {
 } satisfies Partial<MusicStreamingServiceConfigCurrentViewSongsSelectors>;
 
 export const TIDAL_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStreamingServiceConfig> = {
-    urlMatch: "listen.tidal.com/",
+    urlMatch: SupportedHost.Tidal,
     musicStreamingApiClass: SelectorBasedMusicStreamingApi,
     classBasedConfig: {
         currentPlayingSong: {
             selectors: {
                 containerDomElement: `[data-test="left-column-footer-player"] > *:nth-child(2)`,
                 titleDomElement: `[data-test="footer-track-title"] a`,
-                artistsDomElement: `[class^="mediaArtists"] a`,
+                artistsDomElement: `[data-test="grid-item-detail-text-title-artist"]`,
             },
         },
         currentViewSongs: {
@@ -39,6 +40,10 @@ export const TIDAL_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStreami
                 },
                 {
                     urlMatch: "/view/pages/single-module-page/",
+                    selectors: { ...sharedTableSelectors },
+                },
+                {
+                    urlMatch: "/my-collection/tracks",
                     selectors: { ...sharedTableSelectors },
                 },
             ],

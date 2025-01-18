@@ -1,6 +1,5 @@
-import { container, type DependencyContainer } from "tsyringe";
+import { container } from "tsyringe";
 import { getApiLogger } from "../api-logger";
-import { DomApi } from "../helpers/dom-api";
 import {
     MusicStreamingApiToken,
     MusicStreamingClassBasedConfigToken,
@@ -9,21 +8,21 @@ import {
 } from "./music-streaming-api.model";
 import { SPOTIFY_CONFIG } from "./music-streaming-service-configs/spotify-config";
 import { TIDAL_CONFIG } from "./music-streaming-service-configs/tidal-config";
+import { YOUTUBE_MUSIC_CONFIG } from "./music-streaming-service-configs/youtube-music-config";
 
 const logger = getApiLogger("MusicStreamingApiFactory");
 
+const MUSIC_STREAMING_SERVICE_CONFIGS: MusicStreamingServiceConfig<any>[] = [TIDAL_CONFIG, SPOTIFY_CONFIG, YOUTUBE_MUSIC_CONFIG];
+
 container.register<IMusicStreamingApi>(MusicStreamingApiToken, {
-    useFactory: container => container.resolve(getCurrentMusicStreamingApiConfig(container)?.musicStreamingApiClass),
+    useFactory: container => container.resolve(getCurrentMusicStreamingApiConfig()?.musicStreamingApiClass),
 });
 container.register<any>(MusicStreamingClassBasedConfigToken, {
-    useFactory: container => getCurrentMusicStreamingApiConfig(container)?.classBasedConfig,
+    useFactory: () => getCurrentMusicStreamingApiConfig()?.classBasedConfig,
 });
 
-const MUSIC_STREAMING_SERVICE_CONFIGS: MusicStreamingServiceConfig<any>[] = [TIDAL_CONFIG, SPOTIFY_CONFIG];
-export function getCurrentMusicStreamingApiConfig(container: DependencyContainer): MusicStreamingServiceConfig<any> {
-    const currentUrl: string = container.resolve<DomApi>(DomApi).getCurrentUrl();
-
-    return getMusicStreamingServiceConfigByUrl(currentUrl);
+export function getCurrentMusicStreamingApiConfig(): MusicStreamingServiceConfig<any> {
+    return getMusicStreamingServiceConfigByUrl(document.URL);
 }
 
 function getMusicStreamingServiceConfigByUrl(url: string): MusicStreamingServiceConfig<any> | undefined {

@@ -1,7 +1,7 @@
 {
     "name": "SHRED",
     "displayName": "SHRED",
-    "version": "3.0.2",
+    "version": "3.0.4",
     "description": "Browser Extension: Guitar tabs for music streaming services",
     "author": "Plasmo Corp. <foss@plasmo.com>",
     "scripts": {
