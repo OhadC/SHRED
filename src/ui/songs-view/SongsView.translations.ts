@@ -9,6 +9,9 @@ const enUS = {
     },
     songList: {
         loading: "Loading...",
+        search: "Search",
+        close: "Close",
+        searchPlaceholder: "Search...",
     },
     SongDifficulty: {
         Difficulty1: "Beginner. Tier 1",

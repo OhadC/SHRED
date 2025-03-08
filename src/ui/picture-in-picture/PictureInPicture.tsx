@@ -6,7 +6,7 @@ export function PictureInPicture() {
     return (
         <QueryClientProvider client={queryClient}>
             <PipApiHooksProvider>
-                <App className="size-full overflow-y-scroll" />
+                <App className="h-screen w-screen overflow-y-scroll" />
             </PipApiHooksProvider>
         </QueryClientProvider>
     );

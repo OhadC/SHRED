@@ -1,11 +1,10 @@
 import _ from "lodash";
+import type { PropsWithClassName } from "~/ui/shared/models/with-class-name";
 import { cn } from "~/util/tailwind/cn";
 import { SongDifficulty } from "../../shared/models/song.models";
 import { useSongsViewTranslations } from "../SongsView.translations";
 
-export type DifficultyBarProperties = { songDifficulty: SongDifficulty; className?: string };
-
-export function DifficultyBar({ songDifficulty, className }: DifficultyBarProperties) {
+export function DifficultyBar({ songDifficulty, className }: PropsWithClassName & { songDifficulty: SongDifficulty }) {
     const translations = useSongsViewTranslations();
 
     const difficultyAsString: string = songDifficulty && translations.SongDifficulty[SongDifficulty[songDifficulty]];

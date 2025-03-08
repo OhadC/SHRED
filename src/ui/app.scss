@@ -8,7 +8,7 @@ shred-css-file {
 
 @layer base {
     html {
-        @apply overflow-y-scroll;
+        @apply overflow-hidden;
     }
 
     body {
