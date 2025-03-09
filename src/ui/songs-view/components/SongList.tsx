@@ -32,7 +32,7 @@ export function SongList({ title, songList, isPending, emptyListText, skeletonCo
 
     return (
         <div className="flex flex-col">
-            <div className="sticky top-0 z-10 flex items-center border-b-1 border-background-800 bg-background-900 px-2 pb-2 pt-4 pile">
+            <div className="sticky top-0 z-10 flex items-center border-b-1 border-background-700 bg-background-900 p-2 pt-4 pile">
                 <h2 className="text-xl font-bold text-primary">{title}</h2>
 
                 {searchable && <Search searchText={searchText} setSearchText={setSearchText} className="relative w-full" />}
@@ -93,7 +93,11 @@ function Search({
             />
 
             <button
-                className={cn(searchBoxSharedStyle, "absolute end-0 flex items-center justify-center", open && "bg-none")}
+                className={cn(
+                    searchBoxSharedStyle,
+                    "absolute end-0 flex items-center justify-center hover:bg-background-700",
+                    open && "bg-none",
+                )}
                 onClick={open ? closeSearch : openSearch}
                 aria-label={open ? translations.songList.close : translations.songList.search}
                 title={open ? translations.songList.close : translations.songList.search}

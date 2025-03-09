@@ -54,5 +54,5 @@ const OneLineSkeleton: React.FC<{ wClassName: `w-${number}` }> = ({ wClassName }
 
 const leftGridCellStyle = "flex justify-start items-center overflow-hidden";
 const rightGridCellStyle = "flex justify-end items-center";
-const songItemContainerStyle = "h-14 rounded-lg px-2.5 py-1.5 hover:bg-background-800 hover:shadow-md";
+const songItemContainerStyle = "h-14 rounded-lg px-3 py-2 hover:bg-background-800 hover:shadow-md transition-all";
 const noUrlStyle = "opacity-50";

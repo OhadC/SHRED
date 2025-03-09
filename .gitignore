@@ -34,6 +34,7 @@ dist/
 .plasmo
 
 # bpp - http://bpp.browser.market/
+key.json
 keys.json
 
 # typescript
