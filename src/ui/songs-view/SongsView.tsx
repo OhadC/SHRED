@@ -9,7 +9,7 @@ export function SongsView() {
     const translations = useSongsViewTranslations();
 
     return (
-        <div className="space-y-2">
+        <div>
             <SongList
                 songList={currentPlayingSong && [currentPlayingSong]}
                 title={translations.songsView.playingNow}
@@ -23,6 +23,7 @@ export function SongsView() {
                 isPending={PendingCurrentViewSongs}
                 emptyListText={translations.songsView.currentViewEmpty}
                 skeletonCount={5}
+                searchable
             />
         </div>
     );
