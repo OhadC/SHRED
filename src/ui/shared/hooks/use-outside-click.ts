@@ -6,7 +6,8 @@ export function useOutsideClick(callback: () => void, enabled = true) {
 
     return useCallback<RefCallback<HTMLElement>>(
         node => {
-            if (!node || !enabled) {
+            const ownerDocument = node?.ownerDocument;
+            if (!ownerDocument || !enabled) {
                 return;
             }
 
@@ -16,9 +17,9 @@ export function useOutsideClick(callback: () => void, enabled = true) {
                 }
             }
 
-            document.addEventListener("mousedown", handleClick);
+            ownerDocument.addEventListener("mousedown", handleClick);
 
-            return () => document.removeEventListener("mousedown", handleClick);
+            return () => ownerDocument.removeEventListener("mousedown", handleClick);
         },
         [enabled],
     );
