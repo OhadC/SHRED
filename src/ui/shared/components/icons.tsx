@@ -13,14 +13,9 @@ export function IconsSwitcher({
     isFirst: boolean;
 }) {
     return (
-        <div className={cn("relative", className)}>
-            <First className={cn("size-full transition-transform duration-300", isFirst ? "opacity-100" : "rotate-90 opacity-0")} />
-            <Second
-                className={cn(
-                    "absolute top-0 size-full transition-transform duration-300",
-                    isFirst ? "-rotate-90 opacity-0" : "rotate-0 opacity-100",
-                )}
-            />
+        <div className={cn("pile", className)}>
+            <First className={cn("size-full transition-transform duration-300", !isFirst && "rotate-90 opacity-0")} />
+            <Second className={cn("size-full transition-transform duration-300", isFirst && "-rotate-90 opacity-0")} />
         </div>
     );
 }
@@ -28,8 +23,6 @@ export function IconsSwitcher({
 export function SearchIcon(props: SVGProps<SVGSVGElement>) {
     return (
         <svg
-            className={`size-5 transition-transform duration-300 ${open ? "rotate-90 opacity-0" : "opacity-100"}`}
-            key="search"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="none"
@@ -48,8 +41,6 @@ export function SearchIcon(props: SVGProps<SVGSVGElement>) {
 export function CloseIcon(props: SVGProps<SVGSVGElement>) {
     return (
         <svg
-            className={`absolute size-5 transition-transform duration-300 ${open ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"}`}
-            key="close"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="none"

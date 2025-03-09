@@ -22,6 +22,7 @@ export function useMergeRefs<T>(...refs: Ref<T>[]): Ref<T> {
                 cleanups.forEach(cleanup => cleanup());
             };
         },
-        [refs],
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        refs,
     );
 }

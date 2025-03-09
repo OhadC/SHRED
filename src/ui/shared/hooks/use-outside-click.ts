@@ -6,12 +6,12 @@ export function useOutsideClick(callback: () => void, enabled = true) {
 
     return useCallback<RefCallback<HTMLElement>>(
         node => {
-            if (!enabled) {
+            if (!node || !enabled) {
                 return;
             }
 
             function handleClick(event: MouseEvent) {
-                if (node && !node.contains(event.target as Node)) {
+                if (!node.contains(event.target as Node)) {
                     callbackRef.current();
                 }
             }
