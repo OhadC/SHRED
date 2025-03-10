@@ -1,15 +1,16 @@
 import { useCurrentPlayingStreamingServiceSong, useCurrentViewStreamingServiceSongs } from "../shared/contexts/Api.context";
+import type { PropsWithClassName } from "../shared/models/with-class-name";
 import { SongList } from "./components/SongList";
 import { useSongsViewTranslations } from "./SongsView.translations";
 
-export function SongsView() {
+export function SongsView({ className }: PropsWithClassName) {
     const { data: currentPlayingSong, isPending: PendingCurrentPlayingSong } = useCurrentPlayingStreamingServiceSong();
     const { data: currentViewSongs, isPending: PendingCurrentViewSongs } = useCurrentViewStreamingServiceSongs();
 
     const translations = useSongsViewTranslations();
 
     return (
-        <div>
+        <div className={className}>
             <SongList
                 songList={currentPlayingSong && [currentPlayingSong]}
                 title={translations.songsView.playingNow}
