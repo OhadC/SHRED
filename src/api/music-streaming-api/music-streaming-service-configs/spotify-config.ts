@@ -45,7 +45,7 @@ export const SPOTIFY_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStrea
                     urlMatch: "/artist/",
                     selectors: {
                         ...sharedTableSelectors,
-                        artistDomElement: `[data-testid="entityTitle"]`,
+                        artistDomElement: `[data-encore-id="adaptiveTitle"]`,
                         isArtistFromRow: false,
                     },
                 },

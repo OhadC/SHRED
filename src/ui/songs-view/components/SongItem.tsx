@@ -20,23 +20,23 @@ export const SongItem: React.FC<{ songInfo?: SongInfo }> = ({ songInfo }) => {
             )}
         >
             <div className={cn(leftGridCellStyle, "font-semibold [grid-column:title]")}>
-                {songInfo ? <EllipsisOneLine text={songInfo.title}></EllipsisOneLine> : <OneLineSkeleton wClassName={"w-28"} />}
+                {songInfo ? <EllipsisOneLine text={songInfo.title}></EllipsisOneLine> : <OneLineSkeleton wClassName="w-28" />}
             </div>
 
             <div className={cn(rightGridCellStyle, "[grid-column:difficulty]")}>
                 {songInfo ? (
                     songInfo.difficulty && <DifficultyBar songDifficulty={songInfo.difficulty} className="h-3" />
                 ) : (
-                    <OneLineSkeleton wClassName={"w-14"} />
+                    <OneLineSkeleton wClassName="w-14" />
                 )}
             </div>
 
             <div className={cn(leftGridCellStyle, "text-foreground-light [grid-column:artist]")}>
-                {songInfo ? <EllipsisOneLine text={songInfo.artist}></EllipsisOneLine> : <OneLineSkeleton wClassName={"w-11"} />}
+                {songInfo ? <EllipsisOneLine text={songInfo.artist}></EllipsisOneLine> : <OneLineSkeleton wClassName="w-11" />}
             </div>
 
             <div className={cn(rightGridCellStyle, "text-foreground-light [grid-column:tuning]")}>
-                {songInfo ? tuningAsString : <OneLineSkeleton wClassName={"w-16"} />}
+                {songInfo ? tuningAsString : <OneLineSkeleton wClassName="w-16" />}
             </div>
         </a>
     );

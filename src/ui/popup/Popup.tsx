@@ -10,7 +10,7 @@ export function Popup() {
         <StrictMode>
             <QueryClientProvider client={queryClient}>
                 <PopupApiHooksProvider>
-                    <App className="h-[580px] overflow-y-scroll" />
+                    <App className="max-h-[580px] overflow-y-scroll" />
                 </PopupApiHooksProvider>
             </QueryClientProvider>
         </StrictMode>
