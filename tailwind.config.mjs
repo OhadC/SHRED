@@ -14,7 +14,7 @@ export default {
             colors: {
                 primary: amber[500],
                 accent: orange[600],
-                background: zinc,
+                background: zinc[950],
                 foreground: zinc[200],
                 "foreground-light": zinc[400],
             },

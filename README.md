@@ -1,33 +1,90 @@
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
+<a href="https://chromewebstore.google.com/detail/shred/lkdhepgfcenmcehhjiongbcokflijana">
+    <p align="center">
+        <img src="assets/icon.png" alt="Extension Icon" width="100" height="100">
+    </p>
+</a>
 
-## Getting Started
+<h1 align="center">SHRED: A Chrome Extension for Guitar Tabs</h1>
 
-First, run the development server:
+[![Install SHRED](https://img.shields.io/badge/Chrome%20Web%20Store-Install-blue?style=for-the-badge&logo=googlechrome)](https://chromewebstore.google.com/detail/shred/lkdhepgfcenmcehhjiongbcokflijana)
 
-```bash
-pnpm dev
-# or
-npm run dev
-```
+## Table of Contents
 
-Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
+- [Overview](#overview)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technology Stack](#technology-stack)
+- [Contributing](#contributing)
+- [License](#license)
 
-You can start editing the popup by modifying `popup.tsx`. It should auto-update as you make changes. To add an options page, simply add a `options.tsx` file to the root of the project, with a react component default exported. Likewise to add a content page, add a `content.ts` file to the root of the project, importing some module and do some logic, then reload the extension on your browser.
+## Overview
 
-For further guidance, [visit our Documentation](https://docs.plasmo.com/)
+SHRED is a Chrome extension designed to help guitarists quickly find essential information about songs while streaming music. It seamlessly integrates with **Spotify, Tidal, and YouTube Music**, providing:
 
-## Making production build
+- **Tuning Information**
+- **Difficulty Level**
+- **Guitar Tab Links**
 
-Run the following:
+SHRED is an open-source project aimed at enhancing the learning experience for guitarists by simplifying the process of finding relevant song details.
 
-```bash
-pnpm build
-# or
-npm run build
-```
+## Installation
 
-This should create a production bundle for your extension, ready to be zipped and published to the stores.
+### Prerequisites
 
-## Submit to the webstores
+Before installing, ensure you have the following installed:
 
-The easiest way to deploy your Plasmo extension is to use the built-in [bpp](https://bpp.browser.market) GitHub action. Prior to using this action however, make sure to build your extension and upload the first version to the store to establish the basic credentials. Then, simply follow [this setup instruction](https://docs.plasmo.com/framework/workflows/submit) and you should be on your way for automated submission!
+- [pnpm](https://pnpm.io/) (install globally with npm i -g pnpm if needed)
+- [Node.js](https://nodejs.org/) (recommended version: 18+)
+
+### Steps to Install
+
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/OhadC/SHRED.git
+    cd SHRED
+    ```
+2. Install dependencies:
+    ```sh
+    pnpm install
+    ```
+3. Build the extension:
+    ```sh
+    pnpm build
+    ```
+4. Load into Chrome:
+    - Open `chrome://extensions/`.
+    - Enable **Developer mode** (top-right corner).
+    - Click **Load unpacked** and select the `dist` folder inside the project.
+
+## Usage
+
+1. Open **Spotify**, **Tidal**, or **YouTube Music**.
+2. Play any song.
+3. Click the **SHRED** extension icon in your Chrome toolbar or open Picture-in-Picture mode.
+4. Instantly view tuning, difficulty, and tab links.
+
+## Technology Stack
+
+SHRED is built using modern web technologies for efficiency and maintainability:
+
+- [Plasmo](https://www.plasmo.com/) – Extension framework
+- [React](https://react.dev/) – UI library
+- [TanStack Query](https://tanstack.com/query) – Data fetching & caching
+- [tsyringe](https://github.com/microsoft/tsyringe) – Dependency injection
+- [TypeScript](https://www.typescriptlang.org/) – Strongly typed JavaScript
+
+## Contributing
+
+We welcome contributions! If you would like to contribute:
+
+1. Fork the repository.
+2. Create a new feature branch.
+3. Submit a pull request for review.
+
+## License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+For feedback or suggestions, feel free to open an issue.
+
+🚀 Happy shredding! 🎸

@@ -1,19 +1,27 @@
 import _ from "lodash";
 
-export type PromiseResult<TData, TError = any> = [error: TError, data: null] | [error: null, data: TData];
+export type PromiseResult<TData, TError = Error> = [error: TError, data: null] | [error: null, data: TData];
 
-export async function promiseResult<TData, TError = any>(promise: Promise<TData>): Promise<PromiseResult<TData, TError>> {
+/**
+ * @description
+ *  returns a tuple of error and result of the promise
+ * @example
+ * const [error, result] = await promiseResult(somePromise);
+ */
+export async function promiseResult<TData, TError = Error>(promise: Promise<TData>): Promise<PromiseResult<Awaited<TData>, TError>> {
     try {
-        return [null, await promise];
+        const result = await promise;
+
+        return [null, result];
     } catch (error) {
-        if (error) {
-            return [error, null];
+        if (_.isNil(error)) {
+            return [new Error() as TError, null];
         }
 
-        if (!_.isNil(error) && error + "" !== "") {
-            return [(error + "") as any, null];
+        if (!error) {
+            return ["" + error || (new Error(error as any) as any), null];
         }
 
-        return [new Error(error) as any, null];
+        return [error, null];
     }
 }

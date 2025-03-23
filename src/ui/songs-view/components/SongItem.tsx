@@ -49,10 +49,10 @@ export const SongItemEmpty: React.FC<{ text: string }> = ({ text }) => (
 );
 
 const OneLineSkeleton: React.FC<{ wClassName: `w-${number}` }> = ({ wClassName }) => (
-    <div className={cn("col-span-2 h-3 animate-pulse rounded bg-background-700", wClassName)}></div>
+    <div className={cn("col-span-2 h-3 animate-pulse rounded bg-foreground/20", wClassName)}></div>
 );
 
 const leftGridCellStyle = "flex justify-start items-center overflow-hidden";
 const rightGridCellStyle = "flex justify-end items-center";
-const songItemContainerStyle = "h-14 rounded-lg px-3 py-2 hover:bg-background-800 hover:shadow-md transition-all";
+const songItemContainerStyle = "h-14 rounded-lg px-3 py-2 hover:bg-foreground/10 hover:shadow-md transition-all";
 const noUrlStyle = "opacity-50";

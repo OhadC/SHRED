@@ -1,15 +1,10 @@
 import _ from "lodash";
-import { useMemo, useRef, useState, type PropsWithChildren } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
+import { useMemo, useState, type PropsWithChildren } from "react";
 import type { StreamingServiceSong } from "~/api/api.model";
-import { IconButton } from "~/ui/shared/components/button";
-import { CloseIcon, IconsSwitcher, SearchIcon } from "~/ui/shared/components/icons";
-import { useMergeRefs } from "~/ui/shared/hooks/use-merge-refs";
-import { useOutsideClick } from "~/ui/shared/hooks/use-outside-click";
-import type { PropsWithClassName } from "~/ui/shared/models/with-class-name";
+import { useIsSticky } from "~/ui/shared/hooks/use-is-sticky";
 import { cn } from "~/util/tailwind/cn";
 import { useSongInfo } from "../hooks/use-song-info";
-import { useSongsViewTranslations } from "../SongsView.translations";
+import { Search } from "./search";
 import { SongItem, SongItemEmpty } from "./SongItem";
 
 type SongListProps = {
@@ -31,15 +26,22 @@ export function SongList({ title, songList, isPending, emptyListText, skeletonCo
         [uniqSongList, searchText],
     );
 
-    return (
-        <div className="flex flex-col">
-            <div className="sticky top-0 z-10 flex items-center border-b-1 border-background-700 bg-background-900 p-2 pt-3 pile">
-                <h2 className="text-xl font-bold text-primary">{title}</h2>
+    const { isStickyRef, isSticky } = useIsSticky();
 
-                {searchable && <Search searchText={searchText} setSearchText={setSearchText} className="relative w-full" />}
+    return (
+        <div className="flex flex-col pt-2">
+            <div
+                className={cn("sticky top-0 z-10 h-12 px-2", isSticky && "bg-background bg-gradient-to-b from-primary/15 to-primary/15")}
+                ref={isStickyRef}
+            >
+                <div className="flex size-full items-center border-b-1 border-foreground/10 px-2 pile">
+                    <h2 className="text-xl font-bold text-primary">{title}</h2>
+
+                    {searchable && <Search searchText={searchText} setSearchText={setSearchText} className="relative w-full" />}
+                </div>
             </div>
 
-            <div className="flex flex-col pt-1">
+            <div className="flex flex-col px-2 pt-1">
                 {isPending ? (
                     _.times(skeletonCount ?? 1, num => <SongItem key={num} />)
                 ) : filteredSongList?.length ? (
@@ -48,58 +50,6 @@ export function SongList({ title, songList, isPending, emptyListText, skeletonCo
                     <SongItemEmpty text={emptyListText} />
                 )}
             </div>
-        </div>
-    );
-}
-
-function Search({
-    searchText,
-    setSearchText,
-    className,
-}: PropsWithClassName & {
-    searchText: string;
-    setSearchText: (text: string) => void;
-}) {
-    const translations = useSongsViewTranslations();
-    const [open, setOpen] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
-
-    const openSearch = () => {
-        setOpen(true);
-        inputRef.current?.focus();
-    };
-
-    const closeSearch = () => {
-        setOpen(false);
-        setSearchText("");
-        inputRef.current?.blur();
-    };
-
-    useHotkeys("ctrl+f", openSearch, { preventDefault: true, document: inputRef.current?.ownerDocument });
-    const escRef = useHotkeys("esc", closeSearch, { preventDefault: true, enableOnFormTags: true });
-    const clickOutsideRef = useOutsideClick(closeSearch, open && !searchText);
-
-    const listenersRef = useMergeRefs<HTMLDivElement>(escRef, clickOutsideRef);
-
-    return (
-        <div className={cn("flex justify-end", className)} ref={listenersRef}>
-            <input
-                ref={inputRef}
-                type="text"
-                placeholder={translations.songList.searchPlaceholder}
-                className={cn("size-8 rounded-lg bg-background-800 p-2 transition-all", open && "w-full")}
-                value={searchText}
-                onChange={e => setSearchText(e.target.value)}
-                tabIndex={open ? 0 : -1}
-            />
-
-            <IconButton
-                className={cn("absolute end-0 flex", open && "bg-none")}
-                onClick={open ? closeSearch : openSearch}
-                title={open ? translations.songList.close : translations.songList.search}
-            >
-                <IconsSwitcher First={SearchIcon} Second={CloseIcon} isFirst={!open} className="size-5" />
-            </IconButton>
         </div>
     );
 }

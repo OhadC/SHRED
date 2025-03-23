@@ -15,7 +15,7 @@ export const queryClient = new QueryClient({
 
 export function App({ className }: PropsWithClassName) {
     return (
-        <div className={cn("flex flex-col justify-between px-2 pb-2", className)}>
+        <div className={cn("flex flex-col justify-between pb-2", className)}>
             <LocaleContextProvider>
                 <SongsView />
 
@@ -34,8 +34,9 @@ function Footer({ className }: PropsWithClassName) {
                     Chrome Web Store
                 </Link>
             </div>
-            <div className="flex justify-center gap-3">
+            <div className="flex justify-center gap-2">
                 <Link href="mailto:ohadc.me@gmail.com">Get in touch</Link>
+                <span>•</span>
                 <Link href="https://github.com/OhadC/SHRED">Source code</Link>
             </div>
         </div>
