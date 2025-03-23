@@ -15,7 +15,7 @@ export const queryClient = new QueryClient({
 
 export function App({ className }: PropsWithClassName) {
     return (
-        <div className={cn("flex flex-col justify-between px-2 pb-2", className)}>
+        <div className={cn("flex flex-col justify-between pb-2", className)}>
             <LocaleContextProvider>
                 <SongsView />
 

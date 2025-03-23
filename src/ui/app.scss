@@ -12,13 +12,17 @@ shred-css-file {
     }
 
     body {
-        @apply bg-background-900 text-sm text-foreground;
+        @apply bg-background bg-gradient-to-b from-primary/15 from-[48px] to-background text-sm text-foreground;
+
+        &::selection {
+            @apply bg-accent/50 text-foreground;
+        }
     }
 }
 
 @layer utilities {
     ::-webkit-scrollbar {
-        @apply max-h-1 w-auto max-w-1;
+        @apply max-h-1 w-auto max-w-1.5;
 
         &-corner,
         &-track {
@@ -26,7 +30,7 @@ shred-css-file {
         }
 
         &-thumb {
-            @apply rounded-md border border-background-800 bg-background-700;
+            @apply rounded-md border border-foreground/10 bg-foreground/15;
         }
     }
 }
