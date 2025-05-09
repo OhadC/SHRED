@@ -7,8 +7,6 @@ export interface SongsterrSongInfo {
     songId: number;
     defaultTrack?: number;
     tracks: SongsterrTrackInfo[];
-    defaultTrackIndex?: number; // client side
-    url?: string; // client side
 }
 
 export interface SongsterrTrackInfo {
