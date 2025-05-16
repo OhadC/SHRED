@@ -16,7 +16,7 @@ export async function getSongInfoFromSongsterr(title: string, artist?: string): 
     }
 
     if (!songsterrTrackInfo) {
-        logger.error("no songsterr track info");
+        logger.info("no songsterr track info");
         return;
     }
 

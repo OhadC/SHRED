@@ -3,9 +3,9 @@ import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo";
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { verifyMatches } from "~/config/supported-hosts";
-import { PictureInPicture } from "~/ui/picture-in-picture/PictureInPicture";
-import { PictureInPictureButton } from "~/ui/picture-in-picture/PictureInPictureButton";
 import type { Unsubscribe } from "~/util/util.model";
+import { PictureInPicture } from "./picture-in-picture";
+import { PictureInPictureButton } from "./picture-in-picture-button";
 
 declare let window: {
     documentPictureInPicture?: {

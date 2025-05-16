@@ -3,12 +3,12 @@ import { container } from "tsyringe";
 import { ApiEndpoint, ApiEvents, type StreamingServiceSong } from "~/api/api.model";
 import { ApiHooksProvider, type ApiContextValue } from "~/ui/shared/contexts/Api.context";
 import type { AsyncState } from "~/ui/shared/models/async-state.model";
-import { getUiLogger } from "../../shared/util/ui-logger";
+import { getUiLogger } from "../shared/util/ui-logger";
 import { BrowserProxy } from "./browser-proxy";
 
 const logger = getUiLogger("Popup-Api-hooks");
 
-export const PopupApiHooksProvider: React.FunctionComponent<React.PropsWithChildren> = ({ children }) => {
+export const BrowserBasedApiHooksProvider: React.FunctionComponent<React.PropsWithChildren> = ({ children }) => {
     return <ApiHooksProvider value={apiHooks}>{children}</ApiHooksProvider>;
 };
 

@@ -3,7 +3,7 @@ import Browser from "webextension-polyfill";
 import type { ApiEndpoint, ApiEventMessage, ApiEvents, ApiRequest, ApiResponse } from "~/api/api.model";
 import { generateId } from "~/util/generate-id";
 import type { Unsubscribe } from "~/util/util.model";
-import { getUiLogger } from "../../shared/util/ui-logger";
+import { getUiLogger } from "../shared/util/ui-logger";
 
 const logger = getUiLogger("BrowserApi");
 

@@ -19,7 +19,7 @@ export async function fetchSongsterrSongInfo(title: string, artist?: string): Pr
     const bestMatch = _.maxBy(songInfosWithSimilarity, info => info.similarity);
 
     if (bestMatch?.similarity < MIN_ACCEPTABLE_SIMILARITY) {
-        logger.error("best match similarity is too low", { title, artist, bestMatch });
+        logger.info("best match similarity is too low", { title, artist, bestMatch });
         return undefined;
     }
 

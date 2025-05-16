@@ -12,7 +12,7 @@ shred-css-file {
     }
 
     body {
-        @apply bg-background bg-gradient-to-b from-primary/15 from-[48px] to-background text-sm text-foreground;
+        @apply bg-background bg-gradient-to-b from-primary/15 from-[48px] to-background bg-no-repeat text-sm text-foreground;
 
         &::selection {
             @apply bg-accent/50 text-foreground;

@@ -3,7 +3,7 @@ import { ApiEvents, type StreamingServiceSong } from "~/api/api.model";
 import type { EndpointService } from "~/api/endpoint-service";
 import { ApiHooksProvider, type ApiContextValue } from "~/ui/shared/contexts/Api.context";
 import type { AsyncState } from "~/ui/shared/models/async-state.model";
-import { getUiLogger } from "../../shared/util/ui-logger";
+import { getUiLogger } from "../shared/util/ui-logger";
 
 declare let window: Window & {
     endpointService: EndpointService;
@@ -11,7 +11,7 @@ declare let window: Window & {
 
 const logger = getUiLogger("PIP ApiHooks");
 
-export function PipApiHooksProvider({ children }: React.PropsWithChildren) {
+export function WindowBasedApiHooksProvider({ children }: React.PropsWithChildren) {
     return <ApiHooksProvider value={apiHooks}>{children}</ApiHooksProvider>;
 }
 

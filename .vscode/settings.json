@@ -15,5 +15,5 @@
     "prettier.printWidth": 140,
     "prettier.tabWidth": 4,
 
-    "cSpell.words": ["clsx", "Damerau", "Plasmo", "plasmohq", "preact", "Songsterr", "tailwindcss", "tsyringe", "webextension"]
+    "cSpell.words": ["clsx", "Damerau", "Plasmo", "plasmohq", "preact", "sidepanel", "Songsterr", "tailwindcss", "tsyringe", "webextension"]
 }
