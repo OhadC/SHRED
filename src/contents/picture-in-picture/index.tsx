@@ -1,6 +1,6 @@
 import appStyles from "data-text:~ui/app.scss";
 import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo";
-import { StrictMode, useState } from "react";
+import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import { verifyMatches } from "~/config/supported-hosts";
 import type { Unsubscribe } from "~/util/util.model";
@@ -64,11 +64,7 @@ const PipTriggerUi = ({}: PlasmoCSUIProps) => {
         pipDocument.body.append(container);
 
         const pipRoot = createRoot(container);
-        pipRoot.render(
-            <StrictMode>
-                <PictureInPicture />
-            </StrictMode>,
-        );
+        pipRoot.render(<PictureInPicture />);
 
         setShowButton(false);
         pipWindow.addEventListener(

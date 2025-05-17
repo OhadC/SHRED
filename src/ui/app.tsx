@@ -1,4 +1,5 @@
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { StrictMode, type PropsWithChildren } from "react";
 import { cn } from "~/util/tailwind/cn";
 import { LocaleContextProvider } from "./shared/contexts/Locale.context";
 import type { PropsWithClassName } from "./shared/models/with-class-name";
@@ -12,6 +13,14 @@ export const queryClient = new QueryClient({
         },
     },
 });
+
+export function AppProviders({ children }: PropsWithChildren) {
+    return (
+        <StrictMode>
+            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        </StrictMode>
+    );
+}
 
 export function App({ className }: PropsWithClassName) {
     return (

@@ -1,19 +1,15 @@
 import "@abraham/reflection";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { StrictMode } from "react";
+import { BrowserBasedApiHooksProvider } from "~/ui/api-hooks-provider/browser-based-api-hooks-provider";
+import { App, AppProviders } from "~/ui/app";
 import "~/ui/app.scss";
 import "./popup.scss";
-import { BrowserBasedApiHooksProvider } from "~/ui/api-hooks-provider/browser-based-api-hooks-provider";
-import { App, queryClient } from "~/ui/app";
 
 export default function Popup() {
     return (
-        <StrictMode>
-            <QueryClientProvider client={queryClient}>
-                <BrowserBasedApiHooksProvider>
-                    <App className="max-h-[580px] overflow-y-scroll" />
-                </BrowserBasedApiHooksProvider>
-            </QueryClientProvider>
-        </StrictMode>
+        <AppProviders>
+            <BrowserBasedApiHooksProvider>
+                <App className="max-h-[580px] overflow-y-scroll" />
+            </BrowserBasedApiHooksProvider>
+        </AppProviders>
     );
 }
