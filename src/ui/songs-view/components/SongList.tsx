@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { useMemo, useState, type PropsWithChildren } from "react";
 import type { StreamingServiceSong } from "~/api/api.model";
-import { useIsSticky } from "~/ui/shared/hooks/use-is-sticky";
+import { useIsSticky } from "~/ui/hooks/use-is-sticky";
 import { cn } from "~/util/tailwind/cn";
 import { useSongInfo } from "../hooks/use-song-info";
 import { Search } from "./search";

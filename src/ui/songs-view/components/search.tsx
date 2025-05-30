@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { IconButton } from "~/ui/shared/components/button";
-import { CloseIcon, IconsSwitcher, SearchIcon } from "~/ui/shared/components/icons";
-import { useMergeRefs } from "~/ui/shared/hooks/use-merge-refs";
-import { useOutsideClick } from "~/ui/shared/hooks/use-outside-click";
-import type { PropsWithClassName } from "~/ui/shared/models/with-class-name";
+import { IconButton } from "~/ui/components/button";
+import { CloseIcon, IconsSwitcher, SearchIcon } from "~/ui/components/icons";
+import { useMergeRefs } from "~/ui/hooks/use-merge-refs";
+import { useOutsideClick } from "~/ui/hooks/use-outside-click";
+import type { PropsWithClassName } from "~/ui/models/with-class-name";
 import { cn } from "~/util/tailwind/cn";
 import { useSongsViewTranslations } from "../SongsView.translations";
 

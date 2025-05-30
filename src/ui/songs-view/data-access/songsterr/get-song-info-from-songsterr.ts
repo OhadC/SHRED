@@ -1,6 +1,6 @@
-import type { SongInfo } from "~/ui/shared/models/song.models";
+import type { SongInfo } from "~/ui/models/song.models";
 import { promiseResult } from "~/util/promise-result";
-import { getUiLogger } from "../../../shared/util/ui-logger";
+import { getUiLogger } from "../../../util/ui-logger";
 import { fetchSongsterrSongInfo } from "./helpers/fetch-songsterr-song-info.helper";
 import { songsterrSongInfoToSongInfo } from "./helpers/songsterr-song-info-to-song-info.helper";
 
@@ -15,5 +15,10 @@ export async function getSongInfoFromSongsterr(title: string, artist?: string): 
         return;
     }
 
-    return songsterrTrackInfo && songsterrSongInfoToSongInfo(songsterrTrackInfo);
+    if (!songsterrTrackInfo) {
+        logger.info("no songsterr track info");
+        return;
+    }
+
+    return songsterrSongInfoToSongInfo(songsterrTrackInfo);
 }

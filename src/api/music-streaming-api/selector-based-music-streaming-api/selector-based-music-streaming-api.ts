@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { debounceTime, distinctUntilChanged, from, Observable, of, share, startWith, switchMap, tap, throttleTime } from "rxjs";
 import { inject, singleton } from "tsyringe";
-import { type AsyncState } from "~/ui/shared/models/async-state.model";
+import { type AsyncState } from "~/ui/models/async-state.model";
 import { fromMutation } from "~/util/rxjs/from-mutation";
 import { fromUrl } from "~/util/rxjs/from-url";
 import { switchMapAsyncState } from "~/util/rxjs/switch-map-async-state";

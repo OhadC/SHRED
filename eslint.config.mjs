@@ -1,32 +1,30 @@
-import { fixupPluginRules } from "@eslint/compat";
 import eslint from "@eslint/js";
 import pluginQuery from "@tanstack/eslint-plugin-query";
 import prettierConfig from "eslint-config-prettier";
 import eslintPluginReact from "eslint-plugin-react";
-import eslintPluginReactHooks from "eslint-plugin-react-hooks";
+import reactHooks from "eslint-plugin-react-hooks";
 import tseslint from "typescript-eslint";
 
 // const customHooksWithDeps = [];
 
 export default tseslint.config(
-    eslint.configs.recommended,
-    ...tseslint.configs.recommended,
-    ...tseslint.configs.stylistic,
-    eslintPluginReact.configs.flat.recommended,
-    ...pluginQuery.configs["flat/recommended"],
+    { ignores: ["dist/", "node_modules/", "auto-generated/", ".plasmo/"] },
     {
+        extends: [
+            eslint.configs.recommended,
+            ...tseslint.configs.recommended,
+            ...tseslint.configs.stylistic,
+            eslintPluginReact.configs.flat.recommended,
+            ...pluginQuery.configs["flat/recommended"],
+            reactHooks.configs["recommended-latest"],
+        ],
         settings: {
             react: {
                 // see https://github.com/jsx-eslint/eslint-plugin-react#configuration
                 version: "detect",
             },
         },
-        plugins: {
-            "react-hooks": fixupPluginRules(eslintPluginReactHooks),
-        },
         rules: {
-            ...eslintPluginReactHooks.configs.recommended.rules,
-
             "@typescript-eslint/consistent-type-definitions": "off",
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-namespace": "off",
@@ -54,9 +52,6 @@ export default tseslint.config(
             "no-duplicate-imports": "error",
             curly: "error", // Enforce consistent brace style for all control statements
         },
-    },
-    {
-        ignores: ["dist/", "node_modules/", "auto-generated/"],
     },
     prettierConfig, // Turns off all rules that are unnecessary or might conflict with Prettier.
 );

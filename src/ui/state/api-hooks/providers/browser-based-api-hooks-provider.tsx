@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { container } from "tsyringe";
 import { ApiEndpoint, ApiEvents, type StreamingServiceSong } from "~/api/api.model";
-import { ApiHooksProvider, type ApiContextValue } from "~/ui/shared/contexts/Api.context";
-import type { AsyncState } from "~/ui/shared/models/async-state.model";
-import { getUiLogger } from "../../shared/util/ui-logger";
+import type { AsyncState } from "~/ui/models/async-state.model";
+import { getUiLogger } from "~/ui/util/ui-logger";
+import { ApiHooksProvider, type ApiHooksContextValue } from "../api-hooks.context";
 import { BrowserProxy } from "./browser-proxy";
 
 const logger = getUiLogger("Popup-Api-hooks");
 
-export const PopupApiHooksProvider: React.FunctionComponent<React.PropsWithChildren> = ({ children }) => {
+export const BrowserBasedApiHooksProvider: React.FunctionComponent<React.PropsWithChildren> = ({ children }) => {
     return <ApiHooksProvider value={apiHooks}>{children}</ApiHooksProvider>;
 };
 
-const apiHooks: ApiContextValue = {
+const apiHooks: ApiHooksContextValue = {
     useCurrentPlayingStreamingServiceSong,
     useCurrentViewStreamingServiceSongs,
 };

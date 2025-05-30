@@ -7,6 +7,7 @@ export default {
     tabWidth: 4,
     singleQuote: false,
     arrowParens: "avoid",
+
     importOrder: [
         "<BUILTIN_MODULES>", // Node.js built-in modules
         "<THIRD_PARTY_MODULES>", // Imports not matched by other special words or groups.

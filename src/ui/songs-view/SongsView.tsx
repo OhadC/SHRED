@@ -1,5 +1,5 @@
-import { useCurrentPlayingStreamingServiceSong, useCurrentViewStreamingServiceSongs } from "../shared/contexts/Api.context";
-import type { PropsWithClassName } from "../shared/models/with-class-name";
+import type { PropsWithClassName } from "../models/with-class-name";
+import { useCurrentPlayingStreamingServiceSong, useCurrentViewStreamingServiceSongs } from "../state/api-hooks/api-hooks.context";
 import { SongList } from "./components/SongList";
 import { useSongsViewTranslations } from "./SongsView.translations";
 
