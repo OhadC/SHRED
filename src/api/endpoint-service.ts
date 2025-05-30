@@ -1,6 +1,6 @@
 import { inject, singleton } from "tsyringe";
 import browser, { type Runtime } from "webextension-polyfill";
-import type { AsyncState } from "~/ui/shared/models/async-state.model";
+import type { AsyncState } from "~/ui/models/async-state.model";
 import { getApiLogger } from "./api-logger";
 import { ApiEndpoint, type ApiRequest, type ApiResponse, type StreamingServiceSong } from "./api.model";
 import { MusicStreamingApiToken, type IMusicStreamingApi } from "./music-streaming-api/music-streaming-api.model";

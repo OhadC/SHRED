@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { StrictMode, type PropsWithChildren } from "react";
+import { StrictMode, type ComponentProps, type PropsWithChildren } from "react";
 import { cn } from "~/util/tailwind/cn";
-import { LocaleContextProvider } from "./shared/contexts/Locale.context";
-import type { PropsWithClassName } from "./shared/models/with-class-name";
+import type { PropsWithClassName } from "./models/with-class-name";
 import { SongsView } from "./songs-view/SongsView";
+import { LocaleContextProvider } from "./state/Locale.context";
 
 export const queryClient = new QueryClient({
     defaultOptions: {
@@ -14,22 +14,29 @@ export const queryClient = new QueryClient({
     },
 });
 
-export function AppProviders({ children }: PropsWithChildren) {
+export function App({
+    ApiHooksProvider,
+    ...appProps
+}: { ApiHooksProvider: React.FunctionComponent<PropsWithChildren> } & ComponentProps<typeof AppWithProviders>) {
     return (
         <StrictMode>
-            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+            <QueryClientProvider client={queryClient}>
+                <LocaleContextProvider>
+                    <ApiHooksProvider>
+                        <AppWithProviders {...appProps} />
+                    </ApiHooksProvider>
+                </LocaleContextProvider>
+            </QueryClientProvider>
         </StrictMode>
     );
 }
 
-export function App({ className }: PropsWithClassName) {
+function AppWithProviders({ className }: PropsWithClassName) {
     return (
         <div className={cn("flex flex-col justify-between pb-2", className)}>
-            <LocaleContextProvider>
-                <SongsView />
+            <SongsView />
 
-                <Footer className="mb-1 mt-5" />
-            </LocaleContextProvider>
+            <Footer className="mb-1 mt-5" />
         </div>
     );
 }

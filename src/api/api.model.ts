@@ -1,4 +1,4 @@
-import type { AsyncState } from "~/ui/shared/models/async-state.model";
+import type { AsyncState } from "~/ui/models/async-state.model";
 
 export type StreamingServiceSong = {
     artist?: string;

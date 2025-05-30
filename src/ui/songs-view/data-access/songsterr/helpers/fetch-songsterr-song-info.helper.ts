@@ -1,7 +1,7 @@
 import _ from "lodash";
-import { getUiLogger } from "~/ui/shared/util/ui-logger";
+import { getUiLogger } from "~/ui/util/ui-logger";
 import { getStringsSimilarity } from "~/util/get-strings-similarity";
-import { fetchByBackground } from "../../../../shared/util/fetch-by-background";
+import { fetchByBackground } from "../../../../util/fetch-by-background";
 import { type SongsterrSongInfo } from "./songsterr.model";
 
 const logger = getUiLogger("getSongInfoFromSongsterr");

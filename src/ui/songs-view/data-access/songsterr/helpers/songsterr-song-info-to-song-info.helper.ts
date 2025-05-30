@@ -1,4 +1,4 @@
-import { TabsWebsite, type SongInfo } from "~/ui/shared/models/song.models";
+import { TabsWebsite, type SongInfo } from "~/ui/models/song.models";
 import { type SongsterrSongInfo, type SongsterrTrackInfo } from "./songsterr.model";
 
 export function songsterrSongInfoToSongInfo(innerSongInfo: SongsterrSongInfo): SongInfo {

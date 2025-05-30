@@ -1,4 +1,4 @@
-import { useTranslationMap } from "../shared/hooks/useTranslationMap";
+import { useTranslationMap } from "../state/Locale.context";
 
 const enUS = {
     songsView: {
