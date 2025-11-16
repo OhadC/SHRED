@@ -1,5 +1,4 @@
-import "@abraham/reflection";
-import { container } from "tsyringe";
+import { container } from "tsyrinx";
 import "./music-streaming-api/music-streaming-api-factory";
 import { Api } from "./api";
 
