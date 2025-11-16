@@ -7,7 +7,7 @@ function listenToPageChangesForActionAvailability() {
     chrome.action.disable(undefined!);
 
     chrome.declarativeContent?.onPageChanged.removeRules(undefined, () => {
-        const isSupportedSiteRules = SUPPORTED_HOSTS.map(hostSuffix => ({
+        const isSupportedSiteRules = SUPPORTED_HOSTS.map<chrome.events.Rule>(hostSuffix => ({
             conditions: [
                 new chrome.declarativeContent.PageStateMatcher({
                     pageUrl: { hostSuffix },

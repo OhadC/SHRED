@@ -32,7 +32,7 @@ export function Search({
     };
 
     useHotkeys("ctrl+f", openSearch, { preventDefault: true, document: inputRef.current?.ownerDocument });
-    const escRef = useHotkeys("esc", closeSearch, { preventDefault: true, enableOnFormTags: true });
+    const escRef = useHotkeys<HTMLDivElement>("esc", closeSearch, { preventDefault: true, enableOnFormTags: true });
     const clickOutsideRef = useOutsideClick(closeSearch, open && !searchText);
 
     const listenersRef = useMergeRefs<HTMLDivElement>(escRef, clickOutsideRef);

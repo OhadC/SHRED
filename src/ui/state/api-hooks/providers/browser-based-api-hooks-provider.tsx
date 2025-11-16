@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { container } from "tsyringe";
+import { container } from "tsyrinx";
 import { ApiEndpoint, ApiEvents, type StreamingServiceSong } from "~/api/api.model";
 import type { AsyncState } from "~/ui/models/async-state.model";
 import { getUiLogger } from "~/ui/util/ui-logger";
