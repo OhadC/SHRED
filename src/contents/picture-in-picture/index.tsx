@@ -48,7 +48,7 @@ const PipTriggerUi = ({}: PlasmoCSUIProps) => {
     const openPipContainer = async () => {
         const pipWindow: Window = await window.documentPictureInPicture?.requestWindow({
             width: 360,
-            height: 600,
+            height: 700,
         });
 
         if (!pipWindow) {
