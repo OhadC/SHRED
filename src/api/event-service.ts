@@ -1,4 +1,4 @@
-import { inject, singleton } from "tsyringe";
+import { inject, singleton } from "tsyrinx";
 import Browser from "webextension-polyfill";
 import { getApiLogger } from "./api-logger";
 import { ApiEvents, type ApiEventMessage } from "./api.model";
@@ -8,7 +8,7 @@ const logger = getApiLogger("EventService");
 
 @singleton()
 export class EventService {
-    constructor(@inject(MusicStreamingApiToken) private readonly musicStreamingApi: IMusicStreamingApi) {}
+    public readonly musicStreamingApi = inject<IMusicStreamingApi>(MusicStreamingApiToken);
 
     public init() {
         this.musicStreamingApi.currentPlayingSong$.subscribe(state => this.sendEventMessage(ApiEvents.CurrentPlayingSongChanged, state));

@@ -10,7 +10,7 @@ export function switchMapAsyncState<T, R>(observableFunction: (value: T) => Obse
                 observableFunction(value).pipe(
                     map(data => ({ data, isPending: false })),
                     catchError(error => of({ error, isPending: false })),
-                    startWith({ error: null, isPending: true }),
+                    startWith({ isPending: true }),
                 ),
             ),
         );

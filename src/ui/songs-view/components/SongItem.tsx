@@ -15,7 +15,7 @@ export const SongItem: React.FC<{ songInfo?: SongInfo }> = ({ songInfo }) => {
             rel="noopener noreferrer"
             className={cn(
                 songItemContainerStyle,
-                "grid content-between gap-x-1.5 [grid-template-areas:_'title_difficulty'_'artist_tuning'] [grid-template-columns:_1fr_auto]",
+                "grid content-between gap-x-2 [grid-template-areas:_'title_difficulty'_'artist_tuning'] [grid-template-columns:_1fr_auto]",
                 !songInfo?.url && noUrlStyle,
             )}
         >
@@ -43,9 +43,7 @@ export const SongItem: React.FC<{ songInfo?: SongInfo }> = ({ songInfo }) => {
 };
 
 export const SongItemEmpty: React.FC<{ text: string }> = ({ text }) => (
-    <div className={cn(songItemContainerStyle, "flex items-center justify-center", noUrlStyle)}>
-        <>{text}</>
-    </div>
+    <div className={cn(songItemContainerStyle, "flex items-center justify-center", noUrlStyle)}>{text}</div>
 );
 
 const OneLineSkeleton: React.FC<{ wClassName: `w-${number}` }> = ({ wClassName }) => (
@@ -54,5 +52,6 @@ const OneLineSkeleton: React.FC<{ wClassName: `w-${number}` }> = ({ wClassName }
 
 const leftGridCellStyle = "flex justify-start items-center overflow-hidden";
 const rightGridCellStyle = "flex justify-end items-center";
-const songItemContainerStyle = "h-14 rounded-lg px-3 py-2 hover:bg-foreground/10 hover:shadow-md transition-all";
+const songItemContainerStyle =
+    "h-16 rounded-lg px-3.5 py-2.5 hover:bg-foreground/5 hover:shadow-lg transition-all duration-300 border border-transparent hover:border-foreground/10";
 const noUrlStyle = "opacity-50";

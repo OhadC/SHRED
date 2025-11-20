@@ -1,4 +1,4 @@
-import { inject, singleton } from "tsyringe";
+import { inject, singleton } from "tsyrinx";
 import browser, { type Runtime } from "webextension-polyfill";
 import type { AsyncState } from "~/ui/models/async-state.model";
 import { getApiLogger } from "./api-logger";
@@ -9,7 +9,7 @@ const logger = getApiLogger("EndpointService");
 
 @singleton()
 export class EndpointService {
-    constructor(@inject(MusicStreamingApiToken) private readonly musicStreamingApi: IMusicStreamingApi) {}
+    public readonly musicStreamingApi = inject<IMusicStreamingApi>(MusicStreamingApiToken);
 
     public init() {
         this.subscribeToBrowserMessages();

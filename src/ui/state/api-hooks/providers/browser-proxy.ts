@@ -1,4 +1,4 @@
-import { singleton } from "tsyringe";
+import { singleton } from "tsyrinx";
 import Browser from "webextension-polyfill";
 import type { ApiEndpoint, ApiEventMessage, ApiEvents, ApiRequest, ApiResponse } from "~/api/api.model";
 import { getUiLogger } from "~/ui/util/ui-logger";

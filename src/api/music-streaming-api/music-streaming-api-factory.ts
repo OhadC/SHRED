@@ -1,4 +1,4 @@
-import { container } from "tsyringe";
+import { container } from "tsyrinx";
 import { getApiLogger } from "../api-logger";
 import {
     MusicStreamingApiToken,

@@ -5,7 +5,7 @@ export function Button({ children, className, ...props }: DetailedHTMLProps<Butt
     return (
         <button
             className={cn(
-                "flex items-center justify-center rounded-lg bg-foreground/10 p-2 transition-all hover:bg-foreground/20",
+                "flex items-center justify-center rounded-lg bg-foreground/5 p-1.5 transition-all hover:bg-foreground/15",
                 className,
             )}
             type="button"

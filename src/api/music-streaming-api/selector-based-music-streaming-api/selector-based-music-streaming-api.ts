@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { debounceTime, distinctUntilChanged, from, Observable, of, share, startWith, switchMap, tap, throttleTime } from "rxjs";
-import { inject, singleton } from "tsyringe";
+import { inject, singleton } from "tsyrinx";
 import { type AsyncState } from "~/ui/models/async-state.model";
 import { fromMutation } from "~/util/rxjs/from-mutation";
 import { fromUrl } from "~/util/rxjs/from-url";
@@ -18,6 +18,8 @@ const logger = getApiLogger("SelectorBasedMusicStreamingApi");
 
 @singleton()
 export class SelectorBasedMusicStreamingApi implements IMusicStreamingApi {
+    private readonly config = inject<SelectorBasedMusicStreamingServiceConfig>(MusicStreamingClassBasedConfigToken);
+
     public readonly currentPlayingSong$ = this.getCurrentPlayingSong$();
     private _currentPlayingSongState: AsyncState<StreamingServiceSong> = {
         isPending: true,
@@ -33,8 +35,6 @@ export class SelectorBasedMusicStreamingApi implements IMusicStreamingApi {
     public get currentViewSongsState() {
         return this._currentViewSongsState;
     }
-
-    constructor(@inject(MusicStreamingClassBasedConfigToken) private config: SelectorBasedMusicStreamingServiceConfig) {}
 
     private getCurrentPlayingSong$(): Observable<AsyncState<StreamingServiceSong>> {
         return of(null).pipe(

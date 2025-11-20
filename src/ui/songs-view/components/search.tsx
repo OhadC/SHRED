@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { IconButton } from "~/ui/components/button";
-import { CloseIcon, IconsSwitcher, SearchIcon } from "~/ui/components/icons";
+import { CloseIcon, FilterListIcon, IconsSwitcher } from "~/ui/components/icons";
 import { useMergeRefs } from "~/ui/hooks/use-merge-refs";
 import { useOutsideClick } from "~/ui/hooks/use-outside-click";
 import type { PropsWithClassName } from "~/ui/models/with-class-name";
@@ -32,7 +32,7 @@ export function Search({
     };
 
     useHotkeys("ctrl+f", openSearch, { preventDefault: true, document: inputRef.current?.ownerDocument });
-    const escRef = useHotkeys("esc", closeSearch, { preventDefault: true, enableOnFormTags: true });
+    const escRef = useHotkeys<HTMLDivElement>("esc", closeSearch, { preventDefault: true, enableOnFormTags: true });
     const clickOutsideRef = useOutsideClick(closeSearch, open && !searchText);
 
     const listenersRef = useMergeRefs<HTMLDivElement>(escRef, clickOutsideRef);
@@ -50,11 +50,11 @@ export function Search({
             />
 
             <IconButton
-                className={cn("absolute end-0 flex", open && "bg-foreground/0")}
+                className={cn("absolute end-0 flex border border-transparent hover:border-foreground/10", open && "bg-foreground/0")}
                 onClick={open ? closeSearch : openSearch}
                 title={open ? translations.songList.close : translations.songList.search}
             >
-                <IconsSwitcher First={SearchIcon} Second={CloseIcon} isFirst={!open} className="size-5" />
+                <IconsSwitcher First={FilterListIcon} Second={CloseIcon} isFirst={!open} className="fill-foreground" />
             </IconButton>
         </div>
     );
