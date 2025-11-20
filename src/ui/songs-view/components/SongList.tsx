@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useMemo, useState, type PropsWithChildren } from "react";
+import { useEffect, useMemo, useState, type PropsWithChildren } from "react";
 import type { StreamingServiceSong } from "~/api/api.model";
 import { useIsSticky } from "~/ui/hooks/use-is-sticky";
 import { cn } from "~/util/tailwind/cn";
@@ -26,6 +26,10 @@ export function SongList({ title, songList, isPending, emptyListText, skeletonCo
         [uniqSongList, searchText],
     );
 
+    useEffect(() => {
+        setSearchText("");
+    }, [!!uniqSongList.length]);
+
     const { isStickyRef, isSticky } = useIsSticky();
 
     return (
@@ -37,7 +41,9 @@ export function SongList({ title, songList, isPending, emptyListText, skeletonCo
                 <div className="flex size-full items-center border-b-1 border-foreground/10 px-2 pile">
                     <h2 className="text-xl font-bold text-primary">{title}</h2>
 
-                    {searchable && <Search searchText={searchText} setSearchText={setSearchText} className="relative w-full" />}
+                    {searchable && !!uniqSongList.length && (
+                        <Search searchText={searchText} setSearchText={setSearchText} className="relative w-full" />
+                    )}
                 </div>
             </div>
 
