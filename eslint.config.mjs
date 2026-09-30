@@ -8,7 +8,7 @@ import tseslint from "typescript-eslint";
 // const customHooksWithDeps = [];
 
 export default tseslint.config(
-    { ignores: ["dist/", "node_modules/", "auto-generated/", ".plasmo/"] },
+    { ignores: ["dist/", "node_modules/", "auto-generated/", ".output/", ".wxt/"] },
     {
         extends: [
             eslint.configs.recommended,

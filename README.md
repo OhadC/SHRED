@@ -34,7 +34,7 @@ SHRED is an open-source project aimed at enhancing the learning experience for g
 Before installing, ensure you have the following installed:
 
 - [pnpm](https://pnpm.io/) (install globally with npm i -g pnpm if needed)
-- [Node.js](https://nodejs.org/) (recommended version: 18+)
+- [Node.js](https://nodejs.org/) (version 22+)
 
 ### Steps to Install
 
@@ -54,7 +54,7 @@ Before installing, ensure you have the following installed:
 4. Load into Chrome:
     - Open `chrome://extensions/`.
     - Enable **Developer mode** (top-right corner).
-    - Click **Load unpacked** and select the `dist` folder inside the project.
+    - Click **Load unpacked** and select the `.output/chrome-mv3` folder inside the project.
 
 ## Usage
 
@@ -67,7 +67,7 @@ Before installing, ensure you have the following installed:
 
 SHRED is built using modern web technologies for efficiency and maintainability:
 
-- [Plasmo](https://www.plasmo.com/) – Extension framework
+- [WXT](https://wxt.dev/) – Extension framework
 - [React](https://react.dev/) – UI library
 - [TanStack Query](https://tanstack.com/query) – Data fetching & caching
 - [TypeScript](https://www.typescriptlang.org/) – Strongly typed JavaScript

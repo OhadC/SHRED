@@ -1,9 +1,8 @@
-import appStyles from "data-text:~ui/app.scss";
-import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo";
 import { useState } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
 import { serveTabState } from "~/api/tab-state";
-import { verifyMatches } from "~/config/supported-hosts";
+import { SUPPORTED_HOSTS_MATCHES } from "~/config/supported-hosts";
+import appStyles from "~/ui/app.scss?inline";
 import type { Unsubscribe } from "~/util/util.model";
 import { PictureInPicture } from "./picture-in-picture";
 import { PictureInPictureButton } from "./picture-in-picture-button";
@@ -15,37 +14,30 @@ declare let window: {
     };
 };
 
-export const config: PlasmoCSConfig = {
-    matches: ["*://open.spotify.com/*", "*://listen.tidal.com/*", "*://music.youtube.com/*"],
-};
-verifyMatches(config.matches);
+export default defineContentScript({
+    matches: SUPPORTED_HOSTS_MATCHES,
+    async main(ctx) {
+        serveTabState();
 
-serveTabState();
+        const ui = await createShadowRootUi<Root>(ctx, {
+            name: "shred-pip",
+            position: "inline",
+            anchor: "body",
+            css: ":host { position: fixed !important; top: 70px !important; right: 26px !important; z-index: 99 !important; }",
+            onMount(container) {
+                const root = createRoot(container);
+                root.render(<PipTriggerUi />);
 
-export const getRootContainer = () => {
-    const container = document.createElement("div");
-    container.setAttribute("id", "shred-pip-container");
-    container.style.position = "fixed";
-    container.style.top = "70px";
-    container.style.right = "26px";
-    container.style.zIndex = "99";
+                return root;
+            },
+            onRemove: root => root?.unmount(),
+        });
 
-    document.body.append(container);
+        ui.mount();
+    },
+});
 
-    const style = document.createElement("style");
-    style.innerHTML = `
-  #shred-pip-container > .plasmo-csui-container {
-    position: unset !important;
-  }
-  `;
-
-    document.head.append(style);
-
-    return container;
-};
-
-// eslint-disable-next-line no-empty-pattern
-const PipTriggerUi = ({}: PlasmoCSUIProps) => {
+const PipTriggerUi = () => {
     const [showButton, setShowButton] = useState<boolean>(!!window?.documentPictureInPicture);
 
     const openPipContainer = async () => {
@@ -84,10 +76,7 @@ const PipTriggerUi = ({}: PlasmoCSUIProps) => {
     return <>{showButton && <PictureInPictureButton onClick={openPipContainer} />}</>;
 };
 
-export default PipTriggerUi;
-
 function appendStylesToPip(pipDocument: Document) {
-    // https://docs.plasmo.com/quickstarts/with-tailwindcss#in-content-scripts-ui
     // https://developer.mozilla.org/en-US/docs/Web/API/Document_Picture-in-Picture_API/Using#copy_style_sheets_to_the_picture-in-picture_window
     const style = pipDocument.createElement("style");
     style.textContent = appStyles;

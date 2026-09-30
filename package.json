@@ -5,18 +5,18 @@
     "description": "Browser Extension: Guitar tabs for music streaming services",
     "author": "Plasmo Corp. <foss@plasmo.com>",
     "scripts": {
-        "dev": "plasmo dev",
-        "build": "plasmo build",
-        "package": "plasmo package",
+        "dev": "wxt",
+        "build": "wxt build",
+        "package": "wxt zip",
         "test": "vitest run",
+        "typecheck": "tsc --noEmit",
+        "postinstall": "wxt prepare",
         "lint": "eslint src/** --cache && prettier --check '**/*.{ts,tsx,scss,json}' --cache --cache-strategy metadata",
         "format": "prettier --write **/*.{ts,tsx,scss,json}"
     },
     "dependencies": {
-        "@plasmohq/messaging": "^0.7.2",
         "@tanstack/react-query": "^5.90.7",
         "clsx": "^2.1.1",
-        "plasmo": "0.90.5",
         "react": "19.2.0",
         "react-dom": "19.2.0",
         "react-hotkeys-hook": "^5.2.1",
@@ -31,6 +31,8 @@
         "@types/node": "24.10.0",
         "@types/react": "19.2.2",
         "@types/react-dom": "19.2.2",
+        "@wxt-dev/auto-icons": "^1.1.2",
+        "@wxt-dev/module-react": "^1.2.2",
         "autoprefixer": "^10.4.21",
         "eslint": "^9.39.1",
         "eslint-config-prettier": "^10.1.8",
@@ -39,18 +41,11 @@
         "postcss": "^8.5.6",
         "prettier": "3.6.2",
         "prettier-plugin-tailwindcss": "^0.7.1",
+        "sass": "^1.105.0",
         "tailwindcss": "^3.4.17",
         "typescript": "5.9.3",
         "typescript-eslint": "^8.46.3",
-        "vitest": "^5.0.2"
-    },
-    "manifest": {
-        "host_permissions": [
-            "https://*.songsterr.com/*"
-        ],
-        "permissions": [
-            "tabs",
-            "declarativeContent"
-        ]
+        "vitest": "^5.0.2",
+        "wxt": "^0.21.4"
     }
 }

@@ -30,12 +30,9 @@ out/
 build/
 dist/
 
-# plasmo - https://www.plasmo.com
-.plasmo
-
-# bpp - http://bpp.browser.market/
-key.json
-keys.json
+# wxt - https://wxt.dev
+.output
+.wxt
 
 # typescript
 .tsbuildinfo

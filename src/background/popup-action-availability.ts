@@ -20,5 +20,7 @@ function listenToPageChangesForActionAvailability() {
     });
 }
 
-chrome.runtime.onInstalled.addListener(listenToPageChangesForActionAvailability);
-chrome.runtime.onStartup.addListener(listenToPageChangesForActionAvailability);
+export function servePopupActionAvailability() {
+    chrome.runtime.onInstalled.addListener(listenToPageChangesForActionAvailability);
+    chrome.runtime.onStartup.addListener(listenToPageChangesForActionAvailability);
+}
