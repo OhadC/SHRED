@@ -70,7 +70,6 @@ SHRED is built using modern web technologies for efficiency and maintainability:
 - [Plasmo](https://www.plasmo.com/) – Extension framework
 - [React](https://react.dev/) – UI library
 - [TanStack Query](https://tanstack.com/query) – Data fetching & caching
-- [tsyrinx]() – Dependency injection
 - [TypeScript](https://www.typescriptlang.org/) – Strongly typed JavaScript
 
 ## Contributing

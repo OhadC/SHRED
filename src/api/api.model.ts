@@ -5,32 +5,16 @@ export type StreamingServiceSong = {
     title: string;
 };
 
-export enum ApiEndpoint {
-    GetCurrentPlayingSong = "GetCurrentPlayingSong",
-    GetCurrentViewSongs = "GetCurrentViewSongs",
-}
-
-export enum ApiEvents {
-    CurrentPlayingSongChanged = "CurrentPlayingSongChanged",
-    CurrentViewSongsChanged = "CurrentViewSongsChanged",
-}
-
-export type ApiRequest = {
-    endpoint: ApiEndpoint;
-    data?: any;
-    requestId?: string;
+export type TabState = {
+    currentPlayingSong: AsyncState<StreamingServiceSong>;
+    currentViewSongs: AsyncState<StreamingServiceSong[]>;
 };
 
-export type ApiResponse<T> = {
-    data: T;
-    requestId?: string;
+export const PENDING_TAB_STATE: TabState = {
+    currentPlayingSong: { isPending: true },
+    currentViewSongs: { isPending: true },
 };
 
-export type ApiEventMessage<T> = {
-    event: ApiEvents;
-    data: T;
-};
+export const TAB_STATE_PORT_NAME = "SHRED_TAB_STATE";
 
-export type GetCurrentPlayingSongResponse = AsyncState<StreamingServiceSong>;
-
-export type GetCurrentViewSongsResponse = AsyncState<StreamingServiceSong[]>;
+export const TAB_READY_MESSAGE = "SHRED_TAB_READY";

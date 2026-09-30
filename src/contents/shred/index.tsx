@@ -2,6 +2,7 @@ import appStyles from "data-text:~ui/app.scss";
 import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo";
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
+import { serveTabState } from "~/api/tab-state";
 import { verifyMatches } from "~/config/supported-hosts";
 import type { Unsubscribe } from "~/util/util.model";
 import { PictureInPicture } from "./picture-in-picture";
@@ -18,6 +19,8 @@ export const config: PlasmoCSConfig = {
     matches: ["*://open.spotify.com/*", "*://listen.tidal.com/*", "*://music.youtube.com/*"],
 };
 verifyMatches(config.matches);
+
+serveTabState();
 
 export const getRootContainer = () => {
     const container = document.createElement("div");
@@ -70,6 +73,7 @@ const PipTriggerUi = ({}: PlasmoCSUIProps) => {
         pipWindow.addEventListener(
             "pagehide",
             () => {
+                pipRoot.unmount();
                 setShowButton(true);
                 unobserveExternalStyles();
             },

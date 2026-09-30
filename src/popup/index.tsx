@@ -1,8 +1,10 @@
 import { App } from "~/ui/app";
 import "~/ui/app.scss";
-import { BrowserBasedApiHooksProvider } from "~/ui/state/api-hooks/providers/browser-based-api-hooks-provider";
+import { useActiveTabState } from "~/ui/state/active-tab-state";
 import "./popup.scss";
 
 export default function Popup() {
-    return <App className="max-h-[580px] overflow-y-scroll" ApiHooksProvider={BrowserBasedApiHooksProvider} />;
+    const tabView = useActiveTabState();
+
+    return <App className="max-h-[580px] overflow-y-scroll" tabView={tabView} />;
 }

@@ -45,7 +45,7 @@ export default tseslint.config(
 
             "no-extra-boolean-cast": "off",
             "prefer-const": "warn",
-            "no-console": ["warn", { allow: ["groupCollapsed", "groupEnd"] }],
+            "no-console": ["warn", { allow: ["error", "groupCollapsed", "groupEnd"] }],
 
             "no-var": "error",
             "no-global-assign": "error",

@@ -1,6 +1,3 @@
-import { SupportedHost } from "~/config/supported-hosts";
-import { type MusicStreamingServiceConfig } from "../music-streaming-api.model";
-import { SelectorBasedMusicStreamingApi } from "../selector-based-music-streaming-api/selector-based-music-streaming-api";
 import {
     type MusicStreamingServiceConfigCurrentViewSongsSelectors,
     type SelectorBasedMusicStreamingServiceConfig,
@@ -13,40 +10,36 @@ const sharedTableSelectors = {
     songsTable: `[data-type="media-table"] [role="rowgroup"]`,
 } satisfies Partial<MusicStreamingServiceConfigCurrentViewSongsSelectors>;
 
-export const TIDAL_CONFIG: MusicStreamingServiceConfig<SelectorBasedMusicStreamingServiceConfig> = {
-    urlMatch: SupportedHost.Tidal,
-    musicStreamingApiClass: SelectorBasedMusicStreamingApi,
-    classBasedConfig: {
-        currentPlayingSong: {
-            selectors: {
-                containerDomElement: `[data-test="left-column-footer-player"] > *:nth-child(2)`,
-                titleDomElement: `[data-test="footer-track-title"] a`,
-                artistsDomElement: `[data-test="grid-item-detail-text-title-artist"]`,
+export const TIDAL_CONFIG: SelectorBasedMusicStreamingServiceConfig = {
+    currentPlayingSong: {
+        selectors: {
+            containerDomElement: `[data-test="left-column-footer-player"] > *:nth-child(2)`,
+            titleDomElement: `[data-test="footer-track-title"] a`,
+            artistsDomElement: `[data-test="grid-item-detail-text-title-artist"]`,
+        },
+    },
+    currentViewSongs: {
+        views: [
+            {
+                urlMatch: "/playlist/",
+                selectors: { ...sharedTableSelectors },
             },
-        },
-        currentViewSongs: {
-            views: [
-                {
-                    urlMatch: "/playlist/",
-                    selectors: { ...sharedTableSelectors },
-                },
-                {
-                    urlMatch: "/album/",
-                    selectors: { ...sharedTableSelectors },
-                },
-                {
-                    urlMatch: "/artist/",
-                    selectors: { ...sharedTableSelectors },
-                },
-                {
-                    urlMatch: "/view/pages/single-module-page/",
-                    selectors: { ...sharedTableSelectors },
-                },
-                {
-                    urlMatch: "/my-collection/tracks",
-                    selectors: { ...sharedTableSelectors },
-                },
-            ],
-        },
+            {
+                urlMatch: "/album/",
+                selectors: { ...sharedTableSelectors },
+            },
+            {
+                urlMatch: "/artist/",
+                selectors: { ...sharedTableSelectors },
+            },
+            {
+                urlMatch: "/view/pages/single-module-page/",
+                selectors: { ...sharedTableSelectors },
+            },
+            {
+                urlMatch: "/my-collection/tracks",
+                selectors: { ...sharedTableSelectors },
+            },
+        ],
     },
 };

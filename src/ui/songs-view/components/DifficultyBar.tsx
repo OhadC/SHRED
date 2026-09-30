@@ -1,4 +1,3 @@
-import _ from "lodash";
 import type { PropsWithClassName } from "~/ui/models/with-class-name";
 import { cn } from "~/util/tailwind/cn";
 import { SongDifficulty } from "../../models/song.models";
@@ -11,7 +10,7 @@ export function DifficultyBar({ songDifficulty, className }: PropsWithClassName 
 
     return (
         <div title={difficultyAsString} className={cn("grid grid-cols-8 gap-0.5 border border-foreground-light p-0.5", className)}>
-            {_.times(songDifficulty, index => (
+            {Array.from({ length: songDifficulty }, (_, index) => (
                 <div key={index} className="w-[3px] bg-foreground-light"></div>
             ))}
         </div>

@@ -7,8 +7,6 @@
             "@assets/*": ["./assets/*"],
             "~/*": ["./src/*"]
         },
-        "baseUrl": ".",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "baseUrl": "."
     }
 }
