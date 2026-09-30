@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TAB_READY_MESSAGE, TAB_STATE_PORT_NAME, type TabState } from "~/api/api.model";
-import { watchActiveTabState, type TabView } from "./active-tab-state";
+import { watchActiveTabState } from "./active-tab-state";
+import type { TabView } from "./tab-view.context";
 
 type Listener = (...args: any[]) => void;
 

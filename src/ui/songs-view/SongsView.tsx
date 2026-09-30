@@ -1,11 +1,12 @@
 import { PENDING_TAB_STATE } from "~/api/api.model";
 import type { PropsWithClassName } from "../models/with-class-name";
-import type { TabView } from "../state/active-tab-state";
+import { useTabView } from "../state/tab-view.context";
 import { SongItemEmpty } from "./components/SongItem";
 import { SongList } from "./components/SongList";
 import { useSongsViewTranslations } from "./SongsView.translations";
 
-export function SongsView({ className, tabView }: PropsWithClassName & { tabView: TabView }) {
+export function SongsView({ className }: PropsWithClassName) {
+    const tabView = useTabView();
     const translations = useSongsViewTranslations();
 
     if (tabView.status === "no-content-script") {

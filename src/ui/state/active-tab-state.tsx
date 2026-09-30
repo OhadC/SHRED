@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type PropsWithChildren } from "react";
 import { TAB_READY_MESSAGE, TAB_STATE_PORT_NAME, type TabState } from "~/api/api.model";
 import type { Unsubscribe } from "~/util/util.model";
+import { TabViewContextProvider, type TabView } from "./tab-view.context";
 
-export type TabView = { status: "connecting" } | { status: "no-content-script" } | { status: "connected"; state: TabState };
-
-export function useActiveTabState(): TabView {
+export function ActiveTabViewProvider({ children }: PropsWithChildren) {
     const [view, setView] = useState<TabView>({ status: "connecting" });
 
     useEffect(() => watchActiveTabState(setView), []);
 
-    return view;
+    return <TabViewContextProvider value={view}>{children}</TabViewContextProvider>;
 }
 
 export function watchActiveTabState(onChange: (view: TabView) => void): Unsubscribe {

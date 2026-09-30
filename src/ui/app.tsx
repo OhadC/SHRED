@@ -1,9 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { StrictMode } from "react";
 import { cn } from "~/util/tailwind/cn";
 import type { PropsWithClassName } from "./models/with-class-name";
 import { SongsView } from "./songs-view/SongsView";
-import type { TabView } from "./state/active-tab-state";
 import { LocaleContextProvider } from "./state/Locale.context";
 
 export const queryClient = new QueryClient({
@@ -15,28 +13,26 @@ export const queryClient = new QueryClient({
     },
 });
 
-type AppProps = PropsWithClassName & { tabView: TabView };
-
-export function App(appProps: AppProps) {
+export function App({ className }: PropsWithClassName) {
     return (
-        <StrictMode>
+        <>
             <QueryClientProvider client={queryClient}>
                 <LocaleContextProvider>
-                    <AppWithProviders {...appProps} />
+                    <AppWithProviders className={className} />
                 </LocaleContextProvider>
             </QueryClientProvider>
 
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
             <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
-        </StrictMode>
+        </>
     );
 }
 
-function AppWithProviders({ className, tabView }: AppProps) {
+function AppWithProviders({ className }: PropsWithClassName) {
     return (
         <div className={cn("flex flex-col justify-between pb-2", className)}>
-            <SongsView tabView={tabView} />
+            <SongsView />
 
             <Footer className="mb-1 mt-5" />
         </div>
