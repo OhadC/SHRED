@@ -1,8 +1,10 @@
-import { useCallback, useRef, type RefCallback } from "react";
+import { useCallback, useLayoutEffect, useRef, type RefCallback } from "react";
 
 export function useOutsideClick(callback: () => void, enabled = true) {
     const callbackRef = useRef(callback);
-    callbackRef.current = callback;
+    useLayoutEffect(() => {
+        callbackRef.current = callback;
+    });
 
     return useCallback<RefCallback<HTMLElement>>(
         node => {

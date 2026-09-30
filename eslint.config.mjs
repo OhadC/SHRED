@@ -16,7 +16,7 @@ export default tseslint.config(
             ...tseslint.configs.stylistic,
             eslintPluginReact.configs.flat.recommended,
             ...pluginQuery.configs["flat/recommended"],
-            reactHooks.configs["recommended-latest"],
+            reactHooks.configs.flat.recommended,
         ],
         settings: {
             react: {
