@@ -16,7 +16,7 @@ export function serveFetch() {
 
         fetchJson(...message.body)
             .then(result => sendResponse({ result }))
-            .catch((error: BackgroundFetchError) =>
+            .catch((error: Partial<BackgroundFetchError>) =>
                 sendResponse({ error: { message: String(error?.message ?? error), status: error?.status } }),
             );
 

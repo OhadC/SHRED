@@ -17,7 +17,7 @@ export async function promiseResult<TData, TError = Error>(promise: Promise<TDat
         }
 
         if (!error) {
-            return [("" + error || new Error(String(error))) as TError, null];
+            return [new Error(String(error)) as TError, null];
         }
 
         return [error as TError, null];
