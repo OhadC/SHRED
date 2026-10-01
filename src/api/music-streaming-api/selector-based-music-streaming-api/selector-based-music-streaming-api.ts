@@ -1,5 +1,4 @@
 import { combineLatest, debounceTime, distinctUntilChanged, from, Observable, of, startWith, switchMap, throttleTime } from "rxjs";
-import { type AsyncState } from "~/ui/models/async-state.model";
 import { fromMutation } from "~/util/rxjs/from-mutation";
 import { fromUrl } from "~/util/rxjs/from-url";
 import { switchMapAsyncState } from "~/util/rxjs/switch-map-async-state";
@@ -17,7 +16,7 @@ export function getTabState$(config: SelectorBasedMusicStreamingServiceConfig): 
     });
 }
 
-function getCurrentPlayingSong$(config: SelectorBasedMusicStreamingServiceConfig): Observable<AsyncState<StreamingServiceSong>> {
+function getCurrentPlayingSong$(config: SelectorBasedMusicStreamingServiceConfig): Observable<TabState["currentPlayingSong"]> {
     return of(null).pipe(
         switchMapAsyncState(() =>
             from(waitForElementToDisplay(config.currentPlayingSong.selectors.containerDomElement)).pipe(
@@ -37,7 +36,7 @@ function getCurrentPlayingSong$(config: SelectorBasedMusicStreamingServiceConfig
     );
 }
 
-function getCurrentViewSongs$(config: SelectorBasedMusicStreamingServiceConfig): Observable<AsyncState<StreamingServiceSong[]>> {
+function getCurrentViewSongs$(config: SelectorBasedMusicStreamingServiceConfig): Observable<TabState["currentViewSongs"]> {
     return fromUrl().pipe(
         switchMapAsyncState(() =>
             from(getCurrentViewSongsContainerElement(config)).pipe(

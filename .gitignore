@@ -35,4 +35,4 @@ dist/
 .wxt
 
 # typescript
-.tsbuildinfo
+*.tsbuildinfo

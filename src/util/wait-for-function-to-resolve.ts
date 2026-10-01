@@ -1,5 +1,5 @@
-export function waitForFunctionToResolve<T>(callback: () => T, maxTimeoutInMs = 10 * 1000): Promise<T> {
-    return new Promise<T>((resolve, reject) => {
+export function waitForFunctionToResolve<T>(callback: () => T, maxTimeoutInMs = 10 * 1000): Promise<NonNullable<T>> {
+    return new Promise<NonNullable<T>>((resolve, reject) => {
         const startTimeInMs = Date.now();
 
         loopSearch();
@@ -11,7 +11,7 @@ export function waitForFunctionToResolve<T>(callback: () => T, maxTimeoutInMs = 
                 return;
             }
 
-            const timeoutPassed: boolean = maxTimeoutInMs && Date.now() - startTimeInMs > maxTimeoutInMs;
+            const timeoutPassed = !!maxTimeoutInMs && Date.now() - startTimeInMs > maxTimeoutInMs;
             if (timeoutPassed) {
                 reject();
                 return;

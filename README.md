@@ -1,6 +1,6 @@
 <a href="https://chromewebstore.google.com/detail/shred/lkdhepgfcenmcehhjiongbcokflijana">
     <p align="center">
-        <img src="assets/icon.png" alt="Extension Icon" width="100" height="100">
+        <img src="src/assets/icon.png" alt="Extension Icon" width="100" height="100">
     </p>
 </a>
 

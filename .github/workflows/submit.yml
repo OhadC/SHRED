@@ -3,22 +3,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  submit:
+    needs: ci
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: latest
-      - name: Use Node.js 22.x
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22.x
           cache: "pnpm"
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - name: Package the extension into a zip artifact
-        run: pnpm package
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm package
       - name: Submit to Chrome Web Store
         run: pnpm wxt submit --chrome-zip .output/*-chrome.zip
         env:

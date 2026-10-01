@@ -33,7 +33,7 @@ function getSongInfoSimilarity(songsterrSongInfo: SongsterrSongInfo, title: stri
 }
 
 async function fetchSongInfo(title: string, artist?: string): Promise<SongsterrSongInfo[]> {
-    const byArtist: SongsterrSongInfo[] | undefined = artist && (await fetchPattern(`${artist} ${title}`));
+    const byArtist: SongsterrSongInfo[] | undefined = artist ? await fetchPattern(`${artist} ${title}`) : undefined;
     if (byArtist) {
         return byArtist;
     }

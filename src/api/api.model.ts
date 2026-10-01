@@ -6,8 +6,8 @@ export type StreamingServiceSong = {
 };
 
 export type TabState = {
-    currentPlayingSong: AsyncState<StreamingServiceSong>;
-    currentViewSongs: AsyncState<StreamingServiceSong[]>;
+    currentPlayingSong: AsyncState<StreamingServiceSong | undefined>;
+    currentViewSongs: AsyncState<StreamingServiceSong[] | undefined>;
 };
 
 export const PENDING_TAB_STATE: TabState = {

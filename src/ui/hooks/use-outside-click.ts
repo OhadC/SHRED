@@ -13,11 +13,11 @@ export function useOutsideClick(callback: () => void, enabled = true) {
                 return;
             }
 
-            function handleClick(event: MouseEvent) {
+            const handleClick = (event: MouseEvent) => {
                 if (!node.contains(event.target as Node)) {
                     callbackRef.current();
                 }
-            }
+            };
 
             ownerDocument.addEventListener("mousedown", handleClick);
 

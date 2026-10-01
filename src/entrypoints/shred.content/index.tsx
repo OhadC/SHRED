@@ -1,3 +1,4 @@
+import fontStyles from "@fontsource-variable/figtree/wght.css?inline";
 import { useState } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { serveTabState } from "~/api/tab-state";
@@ -41,7 +42,7 @@ const PipTriggerUi = () => {
     const [showButton, setShowButton] = useState<boolean>(!!window?.documentPictureInPicture);
 
     const openPipContainer = async () => {
-        const pipWindow: Window = await window.documentPictureInPicture?.requestWindow({
+        const pipWindow = await window.documentPictureInPicture?.requestWindow({
             width: 360,
             height: 700,
         });
@@ -79,7 +80,7 @@ const PipTriggerUi = () => {
 function appendStylesToPip(pipDocument: Document) {
     // https://developer.mozilla.org/en-US/docs/Web/API/Document_Picture-in-Picture_API/Using#copy_style_sheets_to_the_picture-in-picture_window
     const style = pipDocument.createElement("style");
-    style.textContent = appStyles;
+    style.textContent = appStyles + fontStyles;
     pipDocument.head.appendChild(style);
 }
 
@@ -91,7 +92,7 @@ function disableExternalStyles(pipDocument: Document): Unsubscribe {
         }
 
         for (const styleSheet of pipDocument.styleSheets) {
-            const isValid = !styleSheet.href && styleSheet.cssRules.item(0).cssText.startsWith("shred-css-file");
+            const isValid = !styleSheet.href && styleSheet.cssRules.item(0)?.cssText.startsWith("shred-css-file");
             if (!isValid) {
                 styleSheet.disabled = true;
             }

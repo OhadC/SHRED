@@ -5,7 +5,7 @@ const playlistShelfRendererSelector = "ytmusic-playlist-shelf-renderer .ytmusic-
 const responsiveListItemRendererSelectors = {
     songRowDomElements: "ytmusic-responsive-list-item-renderer",
     titleDomElement: ".ytmusic-responsive-list-item-renderer.title-column",
-    artistDomElement: ".ytmusic-responsive-list-item-renderer.secondary-flex-columns:nth-child(0)",
+    artistDomElement: ".ytmusic-responsive-list-item-renderer.secondary-flex-columns > .flex-column:first-child",
 };
 
 export const YOUTUBE_MUSIC_CONFIG: SelectorBasedMusicStreamingServiceConfig = {

@@ -3,7 +3,7 @@ import { type SongsterrSongInfo, type SongsterrTrackInfo } from "./songsterr.mod
 
 export function songsterrSongInfoToSongInfo(innerSongInfo: SongsterrSongInfo): SongInfo {
     const defaultTrackIndex = getDefaultTrackIndex(innerSongInfo.tracks);
-    const defaultTrack = innerSongInfo.tracks[defaultTrackIndex];
+    const defaultTrack = defaultTrackIndex === undefined ? undefined : innerSongInfo.tracks[defaultTrackIndex];
 
     const url = getSongUrl(innerSongInfo.songId, innerSongInfo.artist, innerSongInfo.title);
 

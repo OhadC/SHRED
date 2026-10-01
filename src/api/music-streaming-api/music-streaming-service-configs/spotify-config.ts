@@ -32,7 +32,7 @@ export const SPOTIFY_CONFIG: SelectorBasedMusicStreamingServiceConfig = {
                 selectors: { ...sharedTableSelectors },
             },
             {
-                urlMatch: "/collection/", // Liked Songs playlist
+                urlMatch: "/collection/tracks", // Liked Songs playlist
                 selectors: { ...sharedTableSelectors },
             },
             {

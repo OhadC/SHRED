@@ -6,7 +6,8 @@ import { useSongsViewTranslations } from "../SongsView.translations";
 export function DifficultyBar({ songDifficulty, className }: PropsWithClassName & { songDifficulty: SongDifficulty }) {
     const translations = useSongsViewTranslations();
 
-    const difficultyAsString: string = songDifficulty && translations.SongDifficulty[SongDifficulty[songDifficulty]];
+    const difficultyAsString: string =
+        songDifficulty && translations.SongDifficulty[SongDifficulty[songDifficulty] as keyof typeof translations.SongDifficulty];
 
     return (
         <div title={difficultyAsString} className={cn("grid grid-cols-8 gap-0.5 border border-foreground-light p-0.5", className)}>
