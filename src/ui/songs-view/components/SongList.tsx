@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { useMemo, useState, type PropsWithChildren } from "react";
 import type { StreamingServiceSong } from "~/api/api.model";
 import { useIsSticky } from "~/ui/hooks/use-is-sticky";
@@ -19,7 +18,7 @@ type SongListProps = {
 export function SongList({ title, songList, isPending, emptyListText, skeletonCount, searchable }: SongListProps) {
     const [searchText, setSearchText] = useState("");
 
-    const uniqSongList = useMemo(() => _.uniqBy(songList, song => `${song.artist}__${song.title}`), [songList]);
+    const uniqSongList = useMemo(() => [...new Map(songList?.map(song => [`${song.artist}__${song.title}`, song])).values()], [songList]);
 
     const filteredSongList = useMemo(
         () => uniqSongList?.filter(song => [song.artist, song.title].some(text => text?.toLowerCase().includes(searchText.toLowerCase()))),
@@ -43,7 +42,7 @@ export function SongList({ title, songList, isPending, emptyListText, skeletonCo
 
             <div className="flex flex-col px-2 pt-1">
                 {isPending ? (
-                    _.times(skeletonCount ?? 1, num => <SongItem key={num} />)
+                    Array.from({ length: skeletonCount ?? 1 }, (_, num) => <SongItem key={num} />)
                 ) : filteredSongList?.length ? (
                     filteredSongList.map(song => <StreamingServiceSongItem song={song} key={`${song.artist}__${song.title}`} />)
                 ) : (

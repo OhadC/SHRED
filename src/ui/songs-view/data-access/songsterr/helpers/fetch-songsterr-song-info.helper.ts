@@ -1,14 +1,11 @@
-import _ from "lodash";
-import { getUiLogger } from "~/ui/util/ui-logger";
 import { getStringsSimilarity } from "~/util/get-strings-similarity";
 import { fetchByBackground } from "../../../../util/fetch-by-background";
 import { type SongsterrSongInfo } from "./songsterr.model";
 
-const logger = getUiLogger("getSongInfoFromSongsterr");
-
 const MIN_ACCEPTABLE_SIMILARITY = 0.5;
 
-export async function fetchSongsterrSongInfo(title: string, artist?: string): Promise<SongsterrSongInfo | undefined> {
+export async function fetchSongsterrSongInfo(rawTitle: string, artist?: string): Promise<SongsterrSongInfo | undefined> {
+    const title = leanTitle(rawTitle);
     const fetchedSongInfos = await fetchSongInfo(title, artist);
 
     const songInfosWithSimilarity = fetchedSongInfos.map(songsterrSongInfo => ({
@@ -16,10 +13,12 @@ export async function fetchSongsterrSongInfo(title: string, artist?: string): Pr
         similarity: getSongInfoSimilarity(songsterrSongInfo, title, artist),
     }));
 
-    const bestMatch = _.maxBy(songInfosWithSimilarity, info => info.similarity);
+    const bestMatch = songInfosWithSimilarity.reduce<(typeof songInfosWithSimilarity)[number] | undefined>(
+        (best, info) => (!best || info.similarity > best.similarity ? info : best),
+        undefined,
+    );
 
-    if (bestMatch?.similarity < MIN_ACCEPTABLE_SIMILARITY) {
-        logger.info("best match similarity is too low", { title, artist, bestMatch });
+    if (!bestMatch || bestMatch.similarity < MIN_ACCEPTABLE_SIMILARITY) {
         return undefined;
     }
 
@@ -47,3 +46,10 @@ async function fetchPattern(pattern: string, numberOfResults = 5): Promise<Songs
 
     return fetchByBackground(`https://www.songsterr.com/api/songs?pattern=${encodedPattern}&size=${numberOfResults}`);
 }
+
+function leanTitle(title: string): string {
+    return title.replace(remasteredMatch, "").replace(albumMatch, "");
+}
+
+const remasteredMatch = /(\(.*remaster.*\))|(remaster(ed)?)/i;
+const albumMatch = /(\(.*Album.*\))/i;

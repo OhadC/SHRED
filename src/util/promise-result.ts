@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export type PromiseResult<TData, TError = Error> = [error: TError, data: null] | [error: null, data: TData];
 
 /**
@@ -14,7 +12,7 @@ export async function promiseResult<TData, TError = Error>(promise: Promise<TDat
 
         return [null, result];
     } catch (error) {
-        if (_.isNil(error)) {
+        if (error == null) {
             return [new Error() as TError, null];
         }
 

@@ -6,6 +6,7 @@ const enUS = {
         playingNowEmpty: "Not playing any song at the moment",
         currentView: "Current View",
         currentViewEmpty: "There are no songs in the current view",
+        noContentScript: "Open Spotify, Tidal or YouTube Music. Already open? Reload the tab.",
     },
     songList: {
         loading: "Loading...",

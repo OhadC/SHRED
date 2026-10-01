@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { useCallback, useState } from "react";
 
 export function useIsSticky() {

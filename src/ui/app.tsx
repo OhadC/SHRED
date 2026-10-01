@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { StrictMode, type ComponentProps, type PropsWithChildren } from "react";
 import { cn } from "~/util/tailwind/cn";
 import type { PropsWithClassName } from "./models/with-class-name";
 import { SongsView } from "./songs-view/SongsView";
@@ -14,24 +13,19 @@ export const queryClient = new QueryClient({
     },
 });
 
-export function App({
-    ApiHooksProvider,
-    ...appProps
-}: { ApiHooksProvider: React.FunctionComponent<PropsWithChildren> } & ComponentProps<typeof AppWithProviders>) {
+export function App({ className }: PropsWithClassName) {
     return (
-        <StrictMode>
+        <>
             <QueryClientProvider client={queryClient}>
                 <LocaleContextProvider>
-                    <ApiHooksProvider>
-                        <AppWithProviders {...appProps} />
-                    </ApiHooksProvider>
+                    <AppWithProviders className={className} />
                 </LocaleContextProvider>
             </QueryClientProvider>
 
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
             <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
-        </StrictMode>
+        </>
     );
 }
 

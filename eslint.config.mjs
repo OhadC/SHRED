@@ -8,7 +8,7 @@ import tseslint from "typescript-eslint";
 // const customHooksWithDeps = [];
 
 export default tseslint.config(
-    { ignores: ["dist/", "node_modules/", "auto-generated/", ".plasmo/"] },
+    { ignores: ["dist/", "node_modules/", "auto-generated/", ".output/", ".wxt/"] },
     {
         extends: [
             eslint.configs.recommended,
@@ -16,7 +16,7 @@ export default tseslint.config(
             ...tseslint.configs.stylistic,
             eslintPluginReact.configs.flat.recommended,
             ...pluginQuery.configs["flat/recommended"],
-            reactHooks.configs["recommended-latest"],
+            reactHooks.configs.flat.recommended,
         ],
         settings: {
             react: {
@@ -45,7 +45,7 @@ export default tseslint.config(
 
             "no-extra-boolean-cast": "off",
             "prefer-const": "warn",
-            "no-console": ["warn", { allow: ["groupCollapsed", "groupEnd"] }],
+            "no-console": ["warn", { allow: ["error", "groupCollapsed", "groupEnd"] }],
 
             "no-var": "error",
             "no-global-assign": "error",

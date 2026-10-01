@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export function waitForFunctionToResolve<T>(callback: () => T, maxTimeoutInMs = 10 * 1000): Promise<T> {
     return new Promise<T>((resolve, reject) => {
         const startTimeInMs = Date.now();
@@ -8,7 +6,7 @@ export function waitForFunctionToResolve<T>(callback: () => T, maxTimeoutInMs = 
 
         function loopSearch() {
             const result: T = callback();
-            if (!_.isNil(result)) {
+            if (result != null) {
                 resolve(result);
                 return;
             }

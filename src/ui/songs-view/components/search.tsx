@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { IconButton } from "~/ui/components/button";
 import { CloseIcon, FilterListIcon, IconsSwitcher } from "~/ui/components/icons";
@@ -18,20 +18,20 @@ export function Search({
 }) {
     const translations = useSongsViewTranslations();
     const [open, setOpen] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
+    const [input, setInput] = useState<HTMLInputElement | null>(null);
 
     const openSearch = () => {
         setOpen(true);
-        inputRef.current?.focus();
+        input?.focus();
     };
 
     const closeSearch = () => {
         setOpen(false);
         setSearchText("");
-        inputRef.current?.blur();
+        input?.blur();
     };
 
-    useHotkeys("ctrl+f", openSearch, { preventDefault: true, document: inputRef.current?.ownerDocument });
+    useHotkeys("ctrl+f", openSearch, { preventDefault: true, document: input?.ownerDocument, enabled: !!input });
     const escRef = useHotkeys<HTMLDivElement>("esc", closeSearch, { preventDefault: true, enableOnFormTags: true });
     const clickOutsideRef = useOutsideClick(closeSearch, open && !searchText);
 
@@ -40,7 +40,7 @@ export function Search({
     return (
         <div className={cn("flex justify-end", className)} ref={listenersRef}>
             <input
-                ref={inputRef}
+                ref={setInput}
                 type="text"
                 placeholder={translations.songList.searchPlaceholder}
                 className={cn("size-8 rounded-lg bg-background p-2 outline-none transition-all", open && "w-full", !open && "opacity-0")}

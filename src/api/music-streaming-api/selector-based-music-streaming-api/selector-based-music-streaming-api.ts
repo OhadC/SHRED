@@ -1,173 +1,128 @@
-import _ from "lodash";
-import { debounceTime, distinctUntilChanged, from, Observable, of, share, startWith, switchMap, tap, throttleTime } from "rxjs";
-import { inject, singleton } from "tsyrinx";
+import { combineLatest, debounceTime, distinctUntilChanged, from, Observable, of, startWith, switchMap, throttleTime } from "rxjs";
 import { type AsyncState } from "~/ui/models/async-state.model";
 import { fromMutation } from "~/util/rxjs/from-mutation";
 import { fromUrl } from "~/util/rxjs/from-url";
 import { switchMapAsyncState } from "~/util/rxjs/switch-map-async-state";
 import { waitForFunctionToResolve } from "~/util/wait-for-function-to-resolve";
-import { getApiLogger } from "../../api-logger";
-import { type StreamingServiceSong } from "../../api.model";
-import { MusicStreamingClassBasedConfigToken, type IMusicStreamingApi } from "../music-streaming-api.model";
+import { type StreamingServiceSong, type TabState } from "../../api.model";
 import {
     type MusicStreamingServiceConfigCurrentViewSongsSelectors,
     type SelectorBasedMusicStreamingServiceConfig,
 } from "./selector-based-music-streaming-api.model";
 
-const logger = getApiLogger("SelectorBasedMusicStreamingApi");
+export function getTabState$(config: SelectorBasedMusicStreamingServiceConfig): Observable<TabState> {
+    return combineLatest({
+        currentPlayingSong: getCurrentPlayingSong$(config),
+        currentViewSongs: getCurrentViewSongs$(config),
+    });
+}
 
-@singleton()
-export class SelectorBasedMusicStreamingApi implements IMusicStreamingApi {
-    private readonly config = inject<SelectorBasedMusicStreamingServiceConfig>(MusicStreamingClassBasedConfigToken);
-
-    public readonly currentPlayingSong$ = this.getCurrentPlayingSong$();
-    private _currentPlayingSongState: AsyncState<StreamingServiceSong> = {
-        isPending: true,
-    };
-    public get currentPlayingSongState() {
-        return this._currentPlayingSongState;
-    }
-
-    public readonly currentViewSongs$ = this.getCurrentViewSongs$();
-    private _currentViewSongsState: AsyncState<StreamingServiceSong[]> = {
-        isPending: true,
-    };
-    public get currentViewSongsState() {
-        return this._currentViewSongsState;
-    }
-
-    private getCurrentPlayingSong$(): Observable<AsyncState<StreamingServiceSong>> {
-        return of(null).pipe(
-            switchMapAsyncState(() =>
-                from(this.getCurrentPlayingSongContainerElement()).pipe(
-                    switchMap(element =>
-                        element
-                            ? fromMutation(element, { childList: true, subtree: true }).pipe(
-                                  startWith(null),
-                                  debounceTime(100),
-                                  switchMap(() => this.getCurrentPlayingSong()),
-                              )
-                            : of(undefined),
-                    ),
+function getCurrentPlayingSong$(config: SelectorBasedMusicStreamingServiceConfig): Observable<AsyncState<StreamingServiceSong>> {
+    return of(null).pipe(
+        switchMapAsyncState(() =>
+            from(waitForElementToDisplay(config.currentPlayingSong.selectors.containerDomElement)).pipe(
+                switchMap(element =>
+                    element
+                        ? fromMutation(element, { childList: true, subtree: true }).pipe(
+                              startWith(null),
+                              debounceTime(100),
+                              switchMap(() => getCurrentPlayingSong(config)),
+                          )
+                        : of(undefined),
                 ),
             ),
-            throttleTime(200, undefined, { leading: true, trailing: true }),
-            distinctUntilChanged(_.isEqual),
-            tap(currentPlayingSong => (this._currentPlayingSongState = currentPlayingSong)),
-            share(),
-        );
-    }
+        ),
+        throttleTime(200, undefined, { leading: true, trailing: true }),
+        distinctUntilChanged(isJsonEqual),
+    );
+}
 
-    private getCurrentViewSongs$(): Observable<AsyncState<StreamingServiceSong[]>> {
-        return fromUrl().pipe(
-            switchMapAsyncState(() =>
-                from(this.getCurrentViewSongsContainerElement()).pipe(
-                    switchMap(element =>
-                        element
-                            ? fromMutation(element, { childList: true, subtree: true }).pipe(
-                                  startWith(null),
-                                  debounceTime(100),
-                                  switchMap(() => this.getCurrentViewSongs()),
-                              )
-                            : of([]),
-                    ),
+function getCurrentViewSongs$(config: SelectorBasedMusicStreamingServiceConfig): Observable<AsyncState<StreamingServiceSong[]>> {
+    return fromUrl().pipe(
+        switchMapAsyncState(() =>
+            from(getCurrentViewSongsContainerElement(config)).pipe(
+                switchMap(element =>
+                    element
+                        ? fromMutation(element, { childList: true, subtree: true }).pipe(
+                              startWith(null),
+                              debounceTime(100),
+                              switchMap(() => getCurrentViewSongs(config)),
+                          )
+                        : of([]),
                 ),
             ),
-            throttleTime(200, undefined, { leading: true, trailing: true }),
-            distinctUntilChanged(_.isEqual),
-            tap(currentViewSongs => (this._currentViewSongsState = currentViewSongs)),
-            share(),
-        );
+        ),
+        throttleTime(200, undefined, { leading: true, trailing: true }),
+        distinctUntilChanged(isJsonEqual),
+    );
+}
+
+async function getCurrentPlayingSong(config: SelectorBasedMusicStreamingServiceConfig): Promise<StreamingServiceSong | undefined> {
+    const selectors = config.currentPlayingSong.selectors;
+    const containerDomElement = await waitForElementToDisplay(selectors.containerDomElement);
+    const titleDomElement = containerDomElement?.querySelector<HTMLElement>(selectors.titleDomElement);
+    const title = titleDomElement?.innerText;
+    if (!title) {
+        return;
     }
 
-    public async getCurrentPlayingSong(): Promise<StreamingServiceSong | undefined> {
-        const selectors = this.config.currentPlayingSong.selectors;
-        const containerDomElement = await waitForElementToDisplay(selectors.containerDomElement);
-        const titleDomElement = containerDomElement?.querySelector<HTMLElement>(selectors.titleDomElement);
-        const title = this.leanTitle(titleDomElement?.innerText);
+    const artistsDomElement = containerDomElement?.querySelector<HTMLElement>(selectors.artistsDomElement);
+    const artist = artistsDomElement?.innerText;
+
+    return {
+        title,
+        artist,
+    };
+}
+
+async function getCurrentViewSongs(config: SelectorBasedMusicStreamingServiceConfig): Promise<StreamingServiceSong[] | undefined> {
+    const selectors = getCurrentViewSongsSelectors(config);
+    if (!selectors) {
+        return;
+    }
+
+    await waitForElementToDisplay(`${selectors.songsTable} ${selectors.songRowDomElements}`);
+
+    const songRowDomElements = Array.from(document.querySelectorAll(`${selectors.songsTable} ${selectors.songRowDomElements}`) ?? []);
+    if (!songRowDomElements.length) {
+        return;
+    }
+
+    return songRowDomElements.flatMap(songRowDomElement => {
+        const titleDomElement = songRowDomElement.querySelector<HTMLElement>(selectors.titleDomElement);
+        const title = titleDomElement?.innerText;
         if (!title) {
-            return;
+            return [];
         }
 
-        const artistsDomElement = containerDomElement?.querySelector<HTMLElement>(selectors.artistsDomElement);
+        const artistElementParent = (selectors.isArtistFromRow ?? true) ? songRowDomElement : document;
+        const artistsDomElement = artistElementParent.querySelector<HTMLElement>(selectors.artistDomElement);
         const artist = artistsDomElement?.innerText;
 
         return {
             title,
             artist,
         };
-    }
-
-    public async getCurrentViewSongs(): Promise<StreamingServiceSong[] | undefined> {
-        const selectors = this.getCurrentViewSongsSelectors();
-        if (!selectors) {
-            return;
-        }
-
-        await waitForElementToDisplay(`${selectors.songsTable} ${selectors.songRowDomElements}`);
-
-        const songRowDomElements = Array.from(document.querySelectorAll(`${selectors.songsTable} ${selectors.songRowDomElements}`) ?? []);
-        if (!songRowDomElements.length) {
-            return;
-        }
-
-        return songRowDomElements.flatMap(songRowDomElement => {
-            const titleDomElement = songRowDomElement.querySelector<HTMLElement>(selectors.titleDomElement);
-            const title = this.leanTitle(titleDomElement?.innerText);
-            if (!title) {
-                return [];
-            }
-
-            const artistElementParent = (selectors.isArtistFromRow ?? true) ? songRowDomElement : document;
-            const artistsDomElement = artistElementParent.querySelector<HTMLElement>(selectors.artistDomElement);
-            const artist = artistsDomElement?.innerText;
-
-            return {
-                title,
-                artist,
-            };
-        });
-    }
-
-    private async getCurrentPlayingSongContainerElement(): Promise<Element | undefined> {
-        const selectors = this.config.currentPlayingSong.selectors;
-
-        return waitForElementToDisplay(selectors.containerDomElement);
-    }
-
-    private async getCurrentViewSongsContainerElement(): Promise<Element | undefined> {
-        const selectors = this.getCurrentViewSongsSelectors();
-
-        return selectors && waitForElementToDisplay(selectors.songsTable);
-    }
-
-    private getCurrentViewSongsSelectors(): MusicStreamingServiceConfigCurrentViewSongsSelectors | undefined {
-        const currentViewConfig = this.config.currentViewSongs.views.find(
-            view => document.URL.includes(view.urlMatch) && (!view.predicate || view.predicate()),
-        );
-
-        return currentViewConfig?.selectors;
-    }
-
-    private leanTitle(title?: string): string | undefined {
-        if (!title) {
-            return;
-        }
-
-        const removeMatches = _.flow(removeMatch(remasteredMatch), removeMatch(AlbumMatch));
-
-        return removeMatches(title);
-    }
+    });
 }
 
-const remasteredMatch = /(\(.*remaster.*\))|(remaster(ed)?)/gi;
-const AlbumMatch = /(\(.*Album.*\))/gi;
+async function getCurrentViewSongsContainerElement(config: SelectorBasedMusicStreamingServiceConfig): Promise<Element | undefined> {
+    const selectors = getCurrentViewSongsSelectors(config);
 
-const removeMatch = _.curry((regexp: string | RegExp, text: string): string => {
-    const stringContainRemaster = text.match(regexp);
+    return selectors && waitForElementToDisplay(selectors.songsTable);
+}
 
-    return stringContainRemaster?.length ? text!.replace(stringContainRemaster[0], "") : text;
-});
+function getCurrentViewSongsSelectors(
+    config: SelectorBasedMusicStreamingServiceConfig,
+): MusicStreamingServiceConfigCurrentViewSongsSelectors | undefined {
+    const currentViewConfig = config.currentViewSongs.views.find(
+        view => document.URL.includes(view.urlMatch) && (!view.predicate || view.predicate()),
+    );
+
+    return currentViewConfig?.selectors;
+}
+
+const isJsonEqual = <T>(a: T, b: T) => JSON.stringify(a) === JSON.stringify(b);
 
 const waitForElementToDisplay = (selector: string) =>
     waitForFunctionToResolve(() => document.querySelector(selector)).catch(() => {
